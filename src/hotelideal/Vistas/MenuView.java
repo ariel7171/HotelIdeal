@@ -6,6 +6,9 @@
 package hotelideal.Vistas;
 
 import java.awt.Dimension;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JInternalFrame;
 
 /**
@@ -160,7 +163,17 @@ public class MenuView extends javax.swing.JFrame {
     }//GEN-LAST:event_menuHuespedActionPerformed
 
     private void menuHabitacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuHabitacionActionPerformed
-
+        try {
+            jDesktopPane1.removeAll();
+            jDesktopPane1.repaint();
+            FormularioHabitacionView fhv = new FormularioHabitacionView();
+            centrarInternalFrame(fhv);
+            fhv.setVisible(true);
+            jDesktopPane1.add(fhv);
+            jDesktopPane1.moveToFront(fhv);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }//GEN-LAST:event_menuHabitacionActionPerformed
 
     private void menuReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuReservaActionPerformed
@@ -168,13 +181,7 @@ public class MenuView extends javax.swing.JFrame {
     }//GEN-LAST:event_menuReservaActionPerformed
 
     private void menuTipoHabitacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuTipoHabitacionActionPerformed
-        jDesktopPane1.removeAll();
-        jDesktopPane1.repaint();
-        FormularioTipoHabitacionView frmTH = new FormularioTipoHabitacionView();
-        centrarInternalFrame(frmTH);
-        frmTH.setVisible(true);
-        jDesktopPane1.add(frmTH);
-        jDesktopPane1.moveToFront(frmTH);
+        // TODO add your handling code here:
     }//GEN-LAST:event_menuTipoHabitacionActionPerformed
 
     private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSalirActionPerformed

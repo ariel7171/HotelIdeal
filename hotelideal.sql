@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-10-2023 a las 00:08:25
+-- Tiempo de generación: 06-10-2023 a las 23:22:51
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -136,28 +136,10 @@ ALTER TABLE `tipodehabitacion`
 --
 
 --
--- AUTO_INCREMENT de la tabla `habitacion`
---
-ALTER TABLE `habitacion`
-  MODIFY `id_habitacion` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de la tabla `huesped`
 --
 ALTER TABLE `huesped`
   MODIFY `id_huesped` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT de la tabla `reserva`
---
-ALTER TABLE `reserva`
-  MODIFY `idReserva` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `tipodehabitacion`
---
-ALTER TABLE `tipodehabitacion`
-  MODIFY `id_tipoDeHabitacion` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
