@@ -8,7 +8,7 @@ modificación-> entidad-> huesped:
 	nuevo metodo toString()
 
 modificación-> entidad-> reserva:
-	nuevo atributo boolean ingreo
+	nuevo atributo boolean ingreso
 	nuevo atributo LocalDate salida
 
 modificación-> interfaz-> Main:
