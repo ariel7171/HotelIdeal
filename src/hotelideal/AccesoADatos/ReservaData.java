@@ -5,6 +5,7 @@
  */
 package hotelideal.AccesoADatos;
 
+import static hotelideal.AccesoADatos.Conexion.getConnection;
 import hotelideal.Entidades.Reserva;
 import java.sql.Connection;
 import java.sql.Date;
@@ -12,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +45,75 @@ public class ReservaData {
         }
         return rHuespedes;
     }
+    
+    public List<Reserva> buscarTodos_Activos() {
+        List<Reserva> rHuespedes = new ArrayList<>();
+        String sql = "SELECT * FROM reserva WHERE estado=1";
 
+        try (
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery();) {
+            while (rs.next()) {
+                Reserva rHue = crearReservaHuesped(rs);
+                rHuespedes.add(rHue);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return rHuespedes;
+    }
+    
+    public List<Reserva> buscarTodos_InActivos() {
+        List<Reserva> rHuespedes = new ArrayList<>();
+        String sql = "SELECT * FROM reserva WHERE estado=0";
+
+        try (
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery();) {
+            while (rs.next()) {
+                Reserva rHue = crearReservaHuesped(rs);
+                rHuespedes.add(rHue);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return rHuespedes;
+    }
+    
+    public List<Reserva> buscarPorFecha_inicioFin_Activos(LocalDate f1,LocalDate f2) {
+        List<Reserva> res =  new ArrayList<>();
+        String sql = "SELECT * FROM reserva WHERE estado=1 AND fechaIngreso>='"+f1+"' AND fechaSalida<='"+f2+"'";
+        
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery();) {
+                 
+            while (rs.next()) {
+                Reserva rHue = crearReservaHuesped(rs);
+                res.add(rHue);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return res;
+    }
+    
+    public List<Reserva> buscarPorFecha_inicioFin_InActivos(LocalDate f1,LocalDate f2) {
+        List<Reserva> res = new ArrayList<>();
+        String sql = "SELECT * FROM reserva WHERE estado=0 AND fechaIngreso>='"+f1+"' AND fechaSalida<='"+f2+"'";
+        
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery();) {
+                 
+            while (rs.next()) {
+                Reserva rHue = crearReservaHuesped(rs);
+                res.add(rHue);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return res;
+    }
+    
     public Reserva buscarPorId(int id) {
         Reserva res = null;
         String sql = "SELECT * FROM reserva WHERE idReserva   = ?";
@@ -64,9 +134,9 @@ public class ReservaData {
     public Reserva guardar(Reserva rHuesped) {
         String sql;
         if (rHuesped.getIdReserva() > 0) {
-            sql = "UPDATE reserva SET id_habitacion = ?, id_huesped = ?, fechaIngreso = ?, fechaSalida = ?, precio = ?, cant_personas = ?, estado = ? WHERE idReserva  = ?";
+            sql = "UPDATE reserva SET id_habitacion = ?, id_huesped = ?, fechaIngreso = ?, fechaSalida = ?, precio = ?, cant_personas = ?, estado = ? WHERE idReserva  = ?, ingreso=? , salida=?";
         } else {
-            sql = "INSERT INTO reserva (id_habitacion, id_huesped, fechaIngreso, fechaSalida, precio, cant_personas, estado) VALUES(?,?,?,?,?,?,?)";
+            sql = "INSERT INTO reserva (id_habitacion, id_huesped, fechaIngreso, fechaSalida, precio, cant_personas, estado, ingreso , salida) VALUES(?,?,?,?,?,?,?,?,?)";
         }
         try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, rHuesped.getHabitacion().getId_habitacion());
@@ -76,6 +146,8 @@ public class ReservaData {
             ps.setDouble(5, rHuesped.getPrecio());
             ps.setInt(6, rHuesped.getCant_personas());
             ps.setBoolean(7, rHuesped.isEstado());
+            ps.setBoolean(8, rHuesped.isIngreso());
+            ps.setDate(9, Date.valueOf(rHuesped.getSalida()));
 
             if (rHuesped.getIdReserva() > 0) {
                 ps.setInt(8, rHuesped.getIdReserva());
@@ -100,11 +172,13 @@ public class ReservaData {
         HabitacionData habR = new HabitacionData();
         HuespedData hueR = new HuespedData();
 
-        rHuesped.setIdReserva(rs.getInt("idReserva "));
-        rHuesped.setHabitacion(habR.buscarPorId(rs.getInt("id_habitacion ")));
-        rHuesped.setHuesped(hueR.buscarPorId(rs.getInt("id_huesped ")));
+        rHuesped.setIdReserva(rs.getInt("idReserva"));
+        rHuesped.setHabitacion(habR.buscarPorId(rs.getInt("id_habitacion")));
+        rHuesped.setHuesped(hueR.buscarPorId(rs.getInt("id_huesped")));
         rHuesped.setF_ingreso(rs.getDate("fechaIngreso").toLocalDate());
+        rHuesped.setIngreso(rs.getBoolean("ingreso"));
         rHuesped.setF_salida(rs.getDate("fechaSalida").toLocalDate());
+        rHuesped.setSalida(rs.getDate("salida").toLocalDate());
         rHuesped.setPrecio(rs.getDouble("precio"));
         rHuesped.setCant_personas(rs.getInt("cant_personas"));
         rHuesped.setEstado(rs.getBoolean("estado"));
@@ -112,5 +186,4 @@ public class ReservaData {
         return rHuesped;
 
     }
-
 }

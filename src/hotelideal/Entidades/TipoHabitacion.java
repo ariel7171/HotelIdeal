@@ -40,7 +40,6 @@ public class TipoHabitacion {
         this.estado = estado;
     }
 
-
     public int getId_tipoDeHabitacion() {
         return id_tipoDeHabitacion;
     }
@@ -103,11 +102,6 @@ public class TipoHabitacion {
 
     public void setEstado(boolean estado) {
         this.estado = estado;
-    }
-    
-    @Override
-    public String toString() {
-        return descripcion;
     }
 
 }

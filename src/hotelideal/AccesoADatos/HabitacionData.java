@@ -7,12 +7,16 @@ package hotelideal.AccesoADatos;
 
 import hotelideal.Entidades.Habitacion;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -22,13 +26,22 @@ import javax.swing.JOptionPane;
 public class HabitacionData {
 
     private Connection conn;
-
+    private Habitacion hab=new Habitacion();
+    
     public HabitacionData() throws SQLException {
         conn = Conexion.getConnection();
     }
 
-    
-    
+    public boolean consultasBooleanSimple(String sql,String columna){
+        try(PreparedStatement ps=conn.prepareStatement(sql);
+            ResultSet resultado=ps.executeQuery();){
+            resultado.next();
+            return resultado.getBoolean(columna);
+        } catch (SQLException ex) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Error \"SQL\" - "+ex.getMessage());
+        }
+        return false;
+    }
     
     public List<Habitacion> buscarTodos() {
         List<Habitacion> habitaciones = new ArrayList<>();
@@ -45,9 +58,38 @@ public class HabitacionData {
         }
         return habitaciones;
     }
+    
+    public List<Habitacion> listarPorCapitaYfecha(int cantP, LocalDate fecha1, LocalDate fecha2) {
+        
+        Date f1= Date.valueOf(fecha1);
+        Date f2=Date.valueOf(fecha2);
+         
+        List<Habitacion> habitaciones=new ArrayList<>();
+        String sql = "SELECT * FROM habitacion JOIN tipodehabitacion ON(tipodehabitacion.id_tipoDeHabitacion=habitacion.id_tipoDeHabitacion) WHERE tipodehabitacion.cantPersonas>="+cantP+" ORDER BY tipodehabitacion.cantPersonas,habitacion.piso,habitacion.nroHabitacion";
 
+        try (PreparedStatement ps = conn.prepareStatement(sql);ResultSet rs = ps.executeQuery();) {
+             
+                while (rs.next()) { 
+                    hab = crearHabitacion(rs);
+                    if(consultasBooleanSimple("SELECT COUNT(*) FROM reserva WHERE reserva.id_habitacion="+hab.getId_habitacion(), "COUNT(*)")){
+                        if(consultasBooleanSimple("SELECT COUNT(*) FROM habitacion JOIN reserva ON(reserva.id_habitacion="+hab.getId_habitacion()+") WHERE (reserva.fechaIngreso>='"+f2+"' AND reserva.fechaSalida>reserva.fechaIngreso) OR (reserva.fechaSalida<='"+f1+"' AND reserva.fechaIngreso<reserva.fechaSalida)", "COUNT(*)")){
+                          habitaciones.add(hab);  
+                        }
+                    }else{
+                       habitaciones.add(hab); 
+                    }
+                }
+                return habitaciones;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return habitaciones;
+    }
+    
+    
+    
     public Habitacion buscarPorId(int id) {
-        Habitacion hab = null;
+        Habitacion hab=new Habitacion();
         String sql = "SELECT * FROM habitacion WHERE id_habitacion = ?";
 
         try (PreparedStatement ps = conn.prepareStatement(sql);) {
@@ -98,15 +140,20 @@ public class HabitacionData {
         }
     }
 
-    public Habitacion crearHabitacion(ResultSet rs) throws SQLException {
-        Habitacion hab = new Habitacion();
-        TipoHabitacionData thr = new TipoHabitacionData();
-        hab.setId_habitacion(rs.getInt("id_habitacion"));
-        hab.setNroHabitacion(rs.getInt("nroHabitacion"));
-        hab.setDescripcion(rs.getString("descripcion"));
-        hab.setTipoHabitacion(thr.buscarPorId(rs.getInt("id_tipoDeHabitacion ")));
-        hab.setPiso(rs.getInt("piso"));
-        hab.setEstado(rs.getBoolean("estado"));
-        return hab;
+    public Habitacion crearHabitacion(ResultSet rs){
+        try {
+            Habitacion hab = new Habitacion();
+            TipoHabitacionData thr = new TipoHabitacionData();
+            hab.setId_habitacion(rs.getInt("id_habitacion"));
+            hab.setNroHabitacion(rs.getInt("nroHabitacion"));
+            hab.setDescripcion(rs.getString("descripcion"));
+            hab.setTipoHabitacion(thr.buscarPorId(rs.getInt("id_tipoDeHabitacion")));
+            hab.setPiso(rs.getInt("piso"));
+            hab.setEstado(rs.getBoolean("estado"));
+            return hab;
+        } catch (SQLException ex) {
+            Logger.getLogger(HabitacionData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }
