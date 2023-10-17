@@ -119,7 +119,7 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
     }
 
     private boolean validarCorreo(String correo) {
-        return correo.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
+        return correo.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.]+\\.[a-zA-Z]{2,6}$");
     }
 
     public static void addSelectAllOnFocusToTextFields(Container container) {

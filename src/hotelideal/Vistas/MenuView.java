@@ -168,7 +168,13 @@ public class MenuView extends javax.swing.JFrame {
     }//GEN-LAST:event_menuReservaActionPerformed
 
     private void menuTipoHabitacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuTipoHabitacionActionPerformed
-        // TODO add your handling code here:
+        jDesktopPane1.removeAll();
+        jDesktopPane1.repaint();
+        FormularioTipoHabitacionView frmTH = new FormularioTipoHabitacionView();
+        centrarInternalFrame(frmTH);
+        frmTH.setVisible(true);
+        jDesktopPane1.add(frmTH);
+        jDesktopPane1.moveToFront(frmTH);
     }//GEN-LAST:event_menuTipoHabitacionActionPerformed
 
     private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSalirActionPerformed
