@@ -46,7 +46,7 @@ public class TipoHabitacionData{
 
     public TipoHabitacion buscarPorId(int id) {
         TipoHabitacion tipoh = null;
-        String sql = "SELECT * FROM tipodehabitacion WHERE id_tipoDeHabitacion   = ?";
+        String sql = "SELECT * FROM tipodehabitacion WHERE id_tipoDeHabitacion = ?";
         
         try (PreparedStatement ps = conn.prepareStatement(sql);) {
             ps.setInt(1, id);
@@ -98,7 +98,7 @@ public class TipoHabitacionData{
     public TipoHabitacion crearTipoHabitacion(ResultSet rs) throws SQLException {
         TipoHabitacion tipoh = new TipoHabitacion();
         
-        tipoh.setId_tipoDeHabitacion(rs.getInt("id_tipoDeHabitacion "));
+        tipoh.setId_tipoDeHabitacion(rs.getInt("id_tipoDeHabitacion"));
         tipoh.setDescripcion(rs.getString("descripcion"));
         tipoh.setPrecioNoche(rs.getDouble("precioNoche"));
         tipoh.setCantKing(rs.getInt("cantKing"));

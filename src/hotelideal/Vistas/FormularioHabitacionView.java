@@ -19,6 +19,7 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
 
     private HabitacionData hdata;
     private Habitacion habitacion;
+    
     private boolean isNew;
 
     public FormularioHabitacionView() throws SQLException {
@@ -29,8 +30,8 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
         //nuevo, editar, eliminar, guardar, cancelar, buscar
         estadosBotones(true, false, false, false, false, true);
         limpiarCampos();
-        //habitacion, piso, numero, descripcion, estado
-        estadoCampos(true, false, false, false, false);
+        //habitacion, piso, numero, descripcion, estado, tipo
+        estadoCampos(true, false, false, false, false, false);
 
         isNew = false;
 
@@ -50,12 +51,13 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
         jbEliminar.setEnabled(bEliminar);
     }
 
-    public void estadoCampos(boolean habitacion, boolean piso, boolean numero, boolean descripcion, boolean estado) {
+    public void estadoCampos(boolean habitacion, boolean piso, boolean numero, boolean descripcion, boolean estado, boolean combo) {
         jtCodHabitacion.setEnabled(habitacion);
         jtPiso.setEnabled(piso);
         jtNumero.setEnabled(numero);
         jtDescripcion.setEnabled(descripcion);
         jcEstado.setEnabled(estado);
+        jComboTipo.setEnabled(combo);
     }
 
     public void limpiarCampos() {
@@ -67,15 +69,15 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
     }
 
     public boolean validarCod_Hab(String codigo) {
-        return codigo.matches("^[1-9][0-9]*$");
+        return codigo.matches("^[0-9]\\d{0,5}$");
     }
 
     public boolean validarPiso(String piso) {
-        return piso.matches("^[1-4]*$");
+        return piso.matches("^[0-4]\\d{0,5}$");
     }
 
     public boolean validarNumero(String numero) {
-        return numero.matches("^[1-4][0][1-5]*$");
+        return numero.matches("^[0-9]\\d{0,6}$");
     }
 
     public boolean validarDescripcion(String descripcion) {
@@ -110,7 +112,7 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
         jtCodHabitacion = new javax.swing.JTextField();
         jbEliminar = new javax.swing.JButton();
-        jtTipo = new javax.swing.JTextField();
+        jComboTipo = new javax.swing.JComboBox<>();
 
         jbNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/New_16.png"))); // NOI18N
         jbNuevo.setText("Nuevo");
@@ -185,12 +187,6 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
             }
         });
 
-        jtTipo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtTipoActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -209,18 +205,18 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel5)
                                 .addComponent(jLabel6))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addComponent(jtCodHabitacion, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jbBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(jtPiso, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jtNumero, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jtDescripcion, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jtTipo, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jcEstado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jtCodHabitacion, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jbBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jtPiso)
+                                .addComponent(jtNumero)
+                                .addComponent(jtDescripcion)
+                                .addComponent(jcEstado)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jComboTipo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGap(108, 108, 108)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jbGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
@@ -266,8 +262,8 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                    .addComponent(jComboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbNuevo)
                     .addComponent(jbEditar)
@@ -291,11 +287,13 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
 
             if (habitacion != null) {
                 restaurarDatosHabitacion();
+                pasarFoco(jbCancelar);
             } else {
+                jtCodHabitacion.setText("");
                 JOptionPane.showConfirmDialog(this, "la habitacion no existe", "codigo inexistente", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
                 pasarFoco(jtCodHabitacion);
             }
-
+            
         } else {
             JOptionPane.showConfirmDialog(this, "Ingrese un codigo valido", "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             pasarFoco(jtCodHabitacion);
@@ -310,7 +308,7 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
         //nuevo, editar, eliminar, guardar, cancelar, buscar
         estadosBotones(false, false, false, true, true, false);
         //habitacion, piso, numero, descripcion, estado
-        estadoCampos(true, true, true, true, true);
+        estadoCampos(true, true, true, true, true, true);
 
     }//GEN-LAST:event_jbNuevoActionPerformed
 
@@ -323,7 +321,7 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
         if (isNew) {
             limpiarCampos();
             //habitacion, piso, numero, descripcion, estado
-            estadoCampos(true, false, false, false, false);
+            estadoCampos(true, false, false, false, false, false);
             //nuevo, editar, eliminar, guardar, cancelar, buscar
             estadosBotones(true, false, false, false, false, true);
             pasarFoco(jtCodHabitacion);
@@ -331,13 +329,12 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
 
             if (habitacion != null) {
                 restaurarDatosHabitacion();
-                jbCancelar.setEnabled(isNew);
                 pasarFoco(jbEditar);
             } else {
                 limpiarCampos();
                 estadosBotones(true, false, false, false, false, true);
-                estadoCampos(true, false, false, false, false);
-                pasarFoco(this);
+                estadoCampos(true, false, false, false, false, false);
+                pasarFoco(jbBuscar);
             }
         }
 
@@ -347,7 +344,7 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
 
         isNew = true;
         estadosBotones(false, false, true, true, true, false);
-        estadoCampos(true, true, true, true, true);
+        estadoCampos(true, true, true, true, true, true);
 
     }//GEN-LAST:event_jbEditarActionPerformed
 
@@ -362,8 +359,9 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
                 JOptionPane.showConfirmDialog(this, "La Materia ya estaba eliminada", "Materia Inactiva", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
             }
             limpiarCampos();
-            estadoCampos(true, false, false, false, false);
+            estadoCampos(true, false, false, false, false, false);
             estadosBotones(true, false, false, false, false, true);
+            
             pasarFoco(jtCodHabitacion);
         }
 
@@ -391,26 +389,43 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
             pasarFoco(jtPiso);
         }
         
+         TipoHabitacion habitacionSeleccionada = (TipoHabitacion) jComboTipo.getSelectedItem();
+         
+         if(isNew){
+             habitacion = new Habitacion(
+                     Integer.parseInt(jtPiso.getText()), 
+                     Integer.parseInt(jtNumero.getText()), 
+                     jtDescripcion.getText(), 
+                     jcEstado.isSelected(), 
+                     habitacionSeleccionada);
+         }else{
+            habitacion = new Habitacion(
+                     Integer.parseInt(jtCodHabitacion.getText()),
+                     Integer.parseInt(jtPiso.getText()), 
+                     Integer.parseInt(jtNumero.getText()), 
+                     jtDescripcion.getText(), 
+                     jcEstado.isSelected(), 
+                     habitacionSeleccionada);
+         }
+        
         habitacion = hdata.guardar(habitacion);
+        
         if (isNew) {
             JOptionPane.showConfirmDialog(this, "Habitacion agregada correctamente", "Habitacion Creada", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showConfirmDialog(this, "Habitacion modificada correctamente", "Habitacion Modificada", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
         }
         limpiarCampos();
-        estadoCampos(true, false, false, false, false);
+        estadoCampos(true, false, false, false, false, false);
         estadosBotones(true, false, false, false, false, true);
+        
         pasarFoco(jtCodHabitacion);
     }//GEN-LAST:event_jbGuardarActionPerformed
-
-    private void jtTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtTipoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jtTipoActionPerformed
 
     public void restaurarDatosHabitacion() {
 
         estadosBotones(true, true, true, false, true, false);
-        estadoCampos(false, false, false, false, false);
+        estadoCampos(false, false, false, false, false, false);
         jtCodHabitacion.setText("" + habitacion.getId_habitacion());
         jtPiso.setText("" + habitacion.getPiso());
         jtNumero.setText("" + habitacion.getNroHabitacion());
@@ -431,6 +446,7 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<TipoHabitacion> jComboTipo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -450,6 +466,5 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
     private javax.swing.JTextField jtDescripcion;
     private javax.swing.JTextField jtNumero;
     private javax.swing.JTextField jtPiso;
-    private javax.swing.JTextField jtTipo;
     // End of variables declaration//GEN-END:variables
 }

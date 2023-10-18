@@ -102,7 +102,7 @@ public class HabitacionData {
         hab.setId_habitacion(rs.getInt("id_habitacion"));
         hab.setNroHabitacion(rs.getInt("nroHabitacion"));
         hab.setDescripcion(rs.getString("descripcion"));
-        hab.setTipoHabitacion(thr.buscarPorId(rs.getInt("id_tipoDeHabitacion ")));
+        hab.setTipoHabitacion(thr.buscarPorId(rs.getInt("id_tipoDeHabitacion")));
         hab.setPiso(rs.getInt("piso"));
         hab.setEstado(rs.getBoolean("estado"));
         return hab;
