@@ -15,33 +15,37 @@ public class Reserva {
 
     private int idReserva, cant_personas;
     private double precio;
-    private boolean estado;
+    private boolean estado,ingreso;
     private Habitacion habitacion;
     private Huesped huesped;
-    private LocalDate f_ingreso, f_salida;
+    private LocalDate f_ingreso, f_salida,salida;
 
     public Reserva() {
     }
 
-    public Reserva(int idReserva, int cant_personas, double precio, boolean estado, Habitacion habitacion, Huesped huesped, LocalDate f_ingreso, LocalDate f_salida) {
+    public Reserva(int cant_personas, double precio, boolean estado, boolean ingreso, Habitacion habitacion, Huesped huesped, LocalDate f_ingreso, LocalDate f_salida, LocalDate salida) {
+        this.cant_personas = cant_personas;
+        this.precio = precio;
+        this.estado = estado;
+        this.ingreso = ingreso;
+        this.habitacion = habitacion;
+        this.huesped = huesped;
+        this.f_ingreso = f_ingreso;
+        this.f_salida = f_salida;
+        this.salida = salida;
+    }
+
+    public Reserva(int idReserva, int cant_personas, double precio, boolean estado, boolean ingreso, Habitacion habitacion, Huesped huesped, LocalDate f_ingreso, LocalDate f_salida, LocalDate salida) {
         this.idReserva = idReserva;
         this.cant_personas = cant_personas;
         this.precio = precio;
         this.estado = estado;
+        this.ingreso = ingreso;
         this.habitacion = habitacion;
         this.huesped = huesped;
         this.f_ingreso = f_ingreso;
         this.f_salida = f_salida;
-    }
-
-    public Reserva(int cant_personas, double precio, boolean estado, Habitacion habitacion, Huesped huesped, LocalDate f_ingreso, LocalDate f_salida) {
-        this.cant_personas = cant_personas;
-        this.precio = precio;
-        this.estado = estado;
-        this.habitacion = habitacion;
-        this.huesped = huesped;
-        this.f_ingreso = f_ingreso;
-        this.f_salida = f_salida;
+        this.salida = salida;
     }
 
     public int getIdReserva() {
@@ -76,6 +80,14 @@ public class Reserva {
         this.estado = estado;
     }
 
+    public boolean isIngreso() {
+        return ingreso;
+    }
+
+    public void setIngreso(boolean ingreso) {
+        this.ingreso = ingreso;
+    }
+
     public Habitacion getHabitacion() {
         return habitacion;
     }
@@ -108,4 +120,14 @@ public class Reserva {
         this.f_salida = f_salida;
     }
 
+    public LocalDate getSalida() {
+        return salida;
+    }
+
+    public void setSalida(LocalDate salida) {
+        this.salida = salida;
+    }
+
+    
+   
 }
