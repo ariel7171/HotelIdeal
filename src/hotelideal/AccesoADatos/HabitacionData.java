@@ -156,4 +156,17 @@ public class HabitacionData {
         }
         return null;
     }
+    
+        public int desactivarHabitacion(int id){
+        try (PreparedStatement stmt = conn.prepareStatement("UPDATE habitacion SET estado = 0 WHERE estado = 1 AND id_habitacion = ?")){
+            stmt.setInt(1, id);
+            
+            return stmt.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
 }
