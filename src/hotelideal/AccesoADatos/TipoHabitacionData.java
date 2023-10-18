@@ -98,7 +98,7 @@ public class TipoHabitacionData{
     public TipoHabitacion crearTipoHabitacion(ResultSet rs) throws SQLException {
         TipoHabitacion tipoh = new TipoHabitacion();
         
-        tipoh.setId_tipoDeHabitacion(rs.getInt("id_tipoDeHabitacion"));
+        tipoh.setId_tipoDeHabitacion(rs.getInt("id_tipoDeHabitacion "));
         tipoh.setDescripcion(rs.getString("descripcion"));
         tipoh.setPrecioNoche(rs.getDouble("precioNoche"));
         tipoh.setCantKing(rs.getInt("cantKing"));

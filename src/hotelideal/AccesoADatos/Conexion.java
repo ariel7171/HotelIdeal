@@ -31,7 +31,6 @@ public class Conexion {
             } catch (ClassNotFoundException ex) {
                 JOptionPane.showMessageDialog(null, "Error al cargar los drivers "+ex.getMessage());
             }
-        }else{
         }
         return connection;
     }

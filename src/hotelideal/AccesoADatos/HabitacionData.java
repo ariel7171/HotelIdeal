@@ -26,8 +26,6 @@ public class HabitacionData {
     public HabitacionData() throws SQLException {
         conn = Conexion.getConnection();
     }
-
-    
     
     
     public List<Habitacion> buscarTodos() {
@@ -108,5 +106,17 @@ public class HabitacionData {
         hab.setPiso(rs.getInt("piso"));
         hab.setEstado(rs.getBoolean("estado"));
         return hab;
+    }
+    
+    public int desactivarHabitacion(int id){
+        try (PreparedStatement stmt = conn.prepareStatement("UPDATE habitacion SET estado = 0 WHERE estado = 1 AND id_habitacion = ?")){
+            stmt.setInt(1, id);
+            
+            return stmt.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }
