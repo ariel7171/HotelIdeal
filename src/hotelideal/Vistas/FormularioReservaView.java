@@ -300,7 +300,6 @@ private Huesped huesped;
             modelo.setRowCount(0);
             prsns=(int) jSpinnerCapita.getValue();
             dias=(int) ChronoUnit.DAYS.between(f1, f2);
-            
             habitaciones = hData.listarPorCapitaYfecha(prsns,f1,f2);
             
             if(habitaciones!=null){

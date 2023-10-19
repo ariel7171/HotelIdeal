@@ -28,7 +28,23 @@ public class ReservaData {
     public ReservaData() throws SQLException {
         conn = Conexion.getConnection();
     }
-
+    
+    public void eliminar(int id, boolean fisico){
+        if(fisico){
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM `reserva` WHERE idReserva="+id)) {
+                ps.executeUpdate();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }else{
+            try (PreparedStatement ps = conn.prepareStatement("UPDATE `reserva` SET `estado`=0 WHERE idReserva="+id)) {
+                ps.executeUpdate();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+    
     public List<Reserva> buscarTodos() {
         List<Reserva> rHuespedes = new ArrayList<>();
         String sql = "SELECT * FROM reserva";
@@ -134,9 +150,9 @@ public class ReservaData {
     public Reserva guardar(Reserva rHuesped) {
         String sql;
         if (rHuesped.getIdReserva() > 0) {
-            sql = "UPDATE reserva SET id_habitacion = ?, id_huesped = ?, fechaIngreso = ?, fechaSalida = ?, precio = ?, cant_personas = ?, estado = ? WHERE idReserva  = ?, ingreso=? , salida=?";
+            sql = "UPDATE reserva SET id_habitacion = ?, id_huesped = ?, fechaIngreso = ?, fechaSalida = ?, precio = ?, cant_personas = ?, estado = ? , ingreso=? , salida=? WHERE idReserva  = ?";
         } else {
-            sql = "INSERT INTO reserva (id_habitacion, id_huesped, fechaIngreso, fechaSalida, precio, cant_personas, estado, ingreso , salida) VALUES(?,?,?,?,?,?,?,?,?)";
+            sql = "INSERT INTO reserva (id_habitacion, id_huesped, fechaIngreso, fechaSalida, precio, cant_personas, estado, ingreso , salida) VALUES(?,?,?,?,?,?,?,?,?,?)";
         }
         try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, rHuesped.getHabitacion().getId_habitacion());
@@ -150,7 +166,7 @@ public class ReservaData {
             ps.setDate(9, Date.valueOf(rHuesped.getSalida()));
 
             if (rHuesped.getIdReserva() > 0) {
-                ps.setInt(8, rHuesped.getIdReserva());
+                ps.setInt(10, rHuesped.getIdReserva());
                 ps.executeUpdate();
             } else {
                 ps.executeUpdate();

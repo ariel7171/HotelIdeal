@@ -5,9 +5,15 @@
  */
 package hotelideal.Vistas;
 
+import hotelideal.AccesoADatos.ReservaData;
 import hotelideal.Entidades.Reserva;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -15,10 +21,18 @@ import java.time.LocalDate;
  */
 public class ReservaAvanzado extends javax.swing.JInternalFrame {
 private Reserva reserva;
+private ReservaData rData;
+private GestionReservas gestR;
+private LocalDate fout;
     /**
      * Creates new form ReservaAvanzado
      */
     public ReservaAvanzado() {
+    try {
+        rData=new ReservaData();
+    } catch (SQLException ex) {
+        Logger.getLogger(ReservaAvanzado.class.getName()).log(Level.SEVERE, null, ex);
+    }
         initComponents();
         jDateChooserF1.setDateFormatString("dd MMMM yyyy");
         jDateChooserF2.setDateFormatString("dd MMMM yyyy");
@@ -253,17 +267,39 @@ private Reserva reserva;
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
         // TODO add your handling code here:
+        if(jCheckBoxConfirmado.isSelected()||jCheckBoxActivo.isSelected()){
+            habilitarCampos(true, true, true, true, true, true);
+            habilitarBotones(false, false, true, true, false);
+        }
         habilitarCampos(true, true, true, true, true, true);
         habilitarBotones(false, false, true, true, false);
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
     private void jButtonFinReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFinReservaActionPerformed
         // TODO add your handling code here:
+        if(jCheckBoxActivo.isSelected()){
+            jCheckBoxActivo.setSelected(false);
+            habilitarCampos(false, false, true, false, false, false);
+            habilitarBotones(false, false, true, true, false);
+        }else{
+            Object[] botones={"Cancelar","Modificar"};
+            if(1==(javax.swing.JOptionPane.showOptionDialog(this, "La Reserva ya esta definida como inactiva.\nComprendida como una reserva\nfinalizada o cancelada.\nComo desea continuar?", "Alerta", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.ERROR_MESSAGE,null,botones,botones[0]))){
+                habilitarCampos(false, false, true, true, false, false);
+                habilitarBotones(false, false, true, true, false);
+            }
+        }
     }//GEN-LAST:event_jButtonFinReservaActionPerformed
 
     private void jButtonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirActionPerformed
         // TODO add your handling code here:
-        dispose();
+        if(jButtonGuardar.isEnabled()){
+            Object[] botones={"Cancelar","Aceptar"};
+            if(1==(javax.swing.JOptionPane.showOptionDialog(this, "Al salir, se perderan todos los datos no gurdados.\nDesea continuar?", "Alerta", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.ERROR_MESSAGE,null,botones,botones[0]))){
+                dispose();
+            } 
+        }else{
+            dispose();
+        }
     }//GEN-LAST:event_jButtonSalirActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
@@ -275,10 +311,54 @@ private Reserva reserva;
 
     private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
         // TODO add your handling code here:
+        Object[] botones={"Cancelar","Guardar"};
+        
+        if(jDateChooserFout.isEnabled()&&!todosLosCampos()){
+            LocalDate hoy=LocalDate.now();
+            LocalDate f1=jDateChooserFout.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            if((f1.compareTo(hoy))<0){
+                javax.swing.JOptionPane.showMessageDialog(this, "La fecha ingresada en el campo \"Egreso\"\nno puede ser previa a la actual\n("+hoy+")", "", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }else if((f1.compareTo(reserva.getF_salida()))>0){
+                javax.swing.JOptionPane.showMessageDialog(this, "La fecha ingresada en el campo \"Egreso\"\nno puede ser posterior a "+reserva.getF_salida(), "", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }else{
+                if(1==(javax.swing.JOptionPane.showOptionDialog(this, "Se actualizaran los datos y no se\npodrán revertir los cambios\nDesea guardar?","", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.WARNING_MESSAGE,null,botones,botones[0]))){
+                    capturarDatos();
+                    if((fout.compareTo(reserva.getF_salida()))<=1){
+                        int dias=(int) ChronoUnit.DAYS.between(reserva.getF_salida(), fout);
+                        double monto1=reserva.getHabitacion().getTipoHabitacion().getPrecioNoche();
+                        double monto2=(monto1*dias);
+                        Object[] botones2={"No Actualizar","Actualizar"};
+                        if(1==(javax.swing.JOptionPane.showOptionDialog(this, "El cliente se retirará antes de lo previsto.\nDesea actualizar el monto final?\n\nMonto Actual: "+reserva.getPrecio()+"$\nNuevo Monto: "+monto2+"$","", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.WARNING_MESSAGE,null,botones,botones[0]))){
+                            reserva.setPrecio(monto2);
+                            rData.guardar(reserva);
+                            gestR.cargarTabla();
+                            dispose();
+                        }else{
+                            rData.guardar(reserva);
+                            gestR.cargarTabla();
+                            dispose();
+                        }
+                    }  
+                }
+            }
+        }else{
+            if(1==(javax.swing.JOptionPane.showOptionDialog(this, "Se actualizaran los datos y no se\npodrán revertir los cambios\nDesea guardar?","", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.WARNING_MESSAGE,null,botones,botones[0]))){
+                
+            }
+        }
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 
     private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
         // TODO add your handling code here:
+        Object[] botones={"Cancelar","Continuar"};
+        if(1==(javax.swing.JOptionPane.showOptionDialog(this, "Este procedimiento eliminará los\ndatos y ya no se podran recuperar.\nComprende este procedimiento y\ndesea continuar?", "Alerta", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.ERROR_MESSAGE,null,botones,botones[0]))){
+            Object[] botones2={"Cancelar","Confirmar"};
+            if(1==(javax.swing.JOptionPane.showOptionDialog(this, "Confirme proceso de eliminacion", "Confirmacion", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.WARNING_MESSAGE,null,botones2,botones2[0]))){
+                rData.eliminar(reserva.getIdReserva(), true);
+                gestR.cargarTabla();
+                dispose();
+            }
+        }
     }//GEN-LAST:event_jButtonEliminarActionPerformed
 
 
@@ -315,6 +395,11 @@ private Reserva reserva;
         this.reserva = reserva;
         inicializarCampos();
     }
+
+    public void setGestR(GestionReservas gestR) {
+        this.gestR = gestR;
+    }
+    
     
     public void inicializarCampos(){
         jLabelID.setText(""+reserva.getIdReserva());
@@ -334,6 +419,20 @@ private Reserva reserva;
         }
     }
     
+    public void capturarDatos(){
+        fout=jDateChooserFout.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        boolean actv=jCheckBoxActivo.isSelected();
+        boolean cnfrmd=jCheckBoxConfirmado.isSelected();
+        String monto=jTextFieldMontoFin.getText();
+        if(monto.contains("$")||monto.contains(",")){
+            monto.replace("$", "");
+            monto.replace(",", ".");
+        }
+        reserva.setSalida(fout);
+        reserva.setEstado(actv);
+        reserva.setIngreso(cnfrmd);
+    }
+    
     public void habilitarCampos(boolean f1, boolean f2, boolean fout, boolean activo, boolean confirmado, boolean monto){
         jDateChooserF1.setEnabled(f1);
         jDateChooserF2.setEnabled(f2);
@@ -349,5 +448,8 @@ private Reserva reserva;
         jButtonCancelar.setEnabled(cancelar);
         jButtonGuardar.setEnabled(guardar);
         jButtonEliminar.setEnabled(eliminar);
+    }
+    public boolean todosLosCampos(){
+        return jDateChooserF1.isEnabled()&&jDateChooserF2.isEnabled()&&jDateChooserFout.isEnabled()&&jCheckBoxActivo.isEnabled()&&jCheckBoxConfirmado.isEnabled()&&jTextFieldMontoFin.isEnabled();
     }
 }

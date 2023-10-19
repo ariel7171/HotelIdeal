@@ -71,7 +71,7 @@ public class HabitacionData {
              
                 while (rs.next()) { 
                     hab = crearHabitacion(rs);
-                    if(consultasBooleanSimple("SELECT COUNT(*) FROM reserva WHERE reserva.id_habitacion="+hab.getId_habitacion(), "COUNT(*)")){
+                    if(consultasBooleanSimple("SELECT COUNT(*) FROM reserva WHERE reserva.estado=1 AND reserva.id_habitacion="+hab.getId_habitacion(), "COUNT(*)")){
                         if(consultasBooleanSimple("SELECT COUNT(*) FROM habitacion JOIN reserva ON(reserva.id_habitacion="+hab.getId_habitacion()+") WHERE (reserva.fechaIngreso>='"+f2+"' AND reserva.fechaSalida>reserva.fechaIngreso) OR (reserva.fechaSalida<='"+f1+"' AND reserva.fechaIngreso<reserva.fechaSalida)", "COUNT(*)")){
                           habitaciones.add(hab);  
                         }
