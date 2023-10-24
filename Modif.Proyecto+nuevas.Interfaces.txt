@@ -1,0 +1,45 @@
+Proyecto:
+ 
+Nueva Interfaz-> Reserva
+Nueva Interfaz-> GestionReservas
+Nueva Interfaz-> ReservaAvanzado
+
+modificación-> entidad-> huesped:
+	nuevo metodo toString()
+
+modificación-> entidad-> reserva:
+	nuevo atributo boolean ingreso
+	nuevo atributo LocalDate salida
+
+modificación-> interfaz-> Main:
+	componente jDesktopPane convertido a Static
+	nuevo get jDesktopPane
+
+modificación-> tabla.DB-> reserva:
+	nueva columna boolean ingreso
+	nueva columna date salida
+
+modificación-> AccesoADatos-> HabitacionData:
+	nuevos metodos:
+		booleanSimple => return boolean de una o mas coincidencias en DB
+		ListarPorCapitaYfecha => return List<Habitacion>
+
+modificación-> interfaz-> FormularioHuespedView:
+	nuevo atributo boolean reserva inicializado en false.
+	nuevo atributo tipo => (interfaz) formulario reserva.
+	nuevo set boolean reserva.
+	nuevo set formularioReserva
+	nuevas condiciones logicas agregadas en los eventos:
+	 	-buscar
+		-cancelar
+		-guardar
+
+modificación-> AccesoADatos-> reservaData:
+	correccion campos originales del metodo crearReservaHuesped
+	metodo Guardar => campos actualizados
+	metodo crearReservaHuesped => campos actualizados
+	nuevo metodo buscarTodos_Activos
+	nuevo metodo buscarTodos_InActivos
+	nuevo metodo buscarPorFecha_inicioFin_Activos
+	nuevo metodo buscarPorFecha_inicioFin_InActivos
+	nuevo metodo comprobarFechaIngresoSalida

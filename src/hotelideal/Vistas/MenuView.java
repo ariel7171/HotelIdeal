@@ -228,7 +228,7 @@ public class MenuView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JDesktopPane jDesktopPane1;
+    private static javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu4;
@@ -240,7 +240,7 @@ public class MenuView extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuTipoHabitacion;
     // End of variables declaration//GEN-END:variables
 
-    public javax.swing.JDesktopPane getjDesktopPane1() {
+    public static javax.swing.JDesktopPane getjDesktopPane1() {
         return jDesktopPane1;
     }
 }
