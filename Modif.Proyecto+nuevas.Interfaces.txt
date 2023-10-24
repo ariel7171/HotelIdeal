@@ -42,3 +42,4 @@ modificación-> AccesoADatos-> reservaData:
 	nuevo metodo buscarTodos_InActivos
 	nuevo metodo buscarPorFecha_inicioFin_Activos
 	nuevo metodo buscarPorFecha_inicioFin_InActivos
+	nuevo metodo comprobarFechaIngresoSalida
