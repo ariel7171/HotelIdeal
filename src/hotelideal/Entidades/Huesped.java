@@ -106,4 +106,6 @@ public class Huesped {
     public String toString() {
         return dni+" -  "+apellido+" - "+nombre;
     }
+    
+    
 }

@@ -1,10 +1,11 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package hotelideal.AccesoADatos;
 
+import static hotelideal.AccesoADatos.Conexion.getConnection;
 import hotelideal.Entidades.Reserva;
 import java.sql.Connection;
 import java.sql.Date;
@@ -13,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class ReservaData {
     public ReservaData() throws SQLException {
         conn = Conexion.getConnection();
     }
-
+    
     public boolean comprobarFechaIngresoSalida(int id_habitacion,int idRes,LocalDate n1,LocalDate n2) {
         List<Reserva> rHuespedes = new ArrayList<>();
         String sql = "SELECT * FROM reserva WHERE (estado=1 AND id_habitacion="+id_habitacion+" AND idReserva!="+idRes+")";

@@ -5,7 +5,15 @@
  */
 package hotelideal.Vistas;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import java.awt.Dimension;
+import java.util.Collections;
+import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
 /**
@@ -21,7 +29,7 @@ public class MenuView extends javax.swing.JFrame {
      */
     public MenuView() {
         initComponents();
-        setSize(1280, 720);
+        //setSize(1280, 720);
     }
 
     private void centrarInternalFrame(JInternalFrame form) {
@@ -30,7 +38,6 @@ public class MenuView extends javax.swing.JFrame {
         int x = (desktopSize.width - form.getWidth()) / 2;
         int y = (desktopSize.height - form.getHeight()) / 2;
         form.setLocation(x, y);
-
     }
 
     /**
@@ -49,7 +56,7 @@ public class MenuView extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         menuHabitacion = new javax.swing.JMenuItem();
         menuTipoHabitacion = new javax.swing.JMenuItem();
-        jMenu4 = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
         menuReserva = new javax.swing.JMenuItem();
         NuevaReserva = new javax.swing.JMenuItem();
         menuSalir = new javax.swing.JMenu();
@@ -104,7 +111,12 @@ public class MenuView extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
-        jMenu4.setText("Reserva");
+        jMenu3.setText("Reserva");
+        jMenu3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu3ActionPerformed(evt);
+            }
+        });
 
         menuReserva.setText("Manejo de Reservas");
         menuReserva.addActionListener(new java.awt.event.ActionListener() {
@@ -112,7 +124,7 @@ public class MenuView extends javax.swing.JFrame {
                 menuReservaActionPerformed(evt);
             }
         });
-        jMenu4.add(menuReserva);
+        jMenu3.add(menuReserva);
 
         NuevaReserva.setText("Nueva Reservación");
         NuevaReserva.addActionListener(new java.awt.event.ActionListener() {
@@ -120,9 +132,9 @@ public class MenuView extends javax.swing.JFrame {
                 NuevaReservaActionPerformed(evt);
             }
         });
-        jMenu4.add(NuevaReserva);
+        jMenu3.add(NuevaReserva);
 
-        jMenuBar1.add(jMenu4);
+        jMenuBar1.add(jMenu3);
 
         menuSalir.setText("Salir");
         menuSalir.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -183,13 +195,7 @@ public class MenuView extends javax.swing.JFrame {
     }//GEN-LAST:event_menuReservaActionPerformed
 
     private void menuTipoHabitacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuTipoHabitacionActionPerformed
-        jDesktopPane1.removeAll();
-        jDesktopPane1.repaint();
-        FormularioTipoHabitacionView frmTH = new FormularioTipoHabitacionView();
-        centrarInternalFrame(frmTH);
-        frmTH.setVisible(true);
-        jDesktopPane1.add(frmTH);
-        jDesktopPane1.moveToFront(frmTH);
+        // TODO add your handling code here:
     }//GEN-LAST:event_menuTipoHabitacionActionPerformed
 
     private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSalirActionPerformed
@@ -200,7 +206,12 @@ public class MenuView extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_menuSalirMouseClicked
 
+    private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu3ActionPerformed
+
     private void NuevaReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevaReservaActionPerformed
+        // TODO add your handling code here:
         jDesktopPane1.removeAll();
         jDesktopPane1.repaint();
         FormularioReservaView frmReseva = new FormularioReservaView();
@@ -214,37 +225,12 @@ public class MenuView extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MenuView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MenuView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MenuView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MenuView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
+        FlatRobotoFont.install();
+//        FlatMacDarkLaf.setup();
+//        FlatLightLaf.setup();
+//#BF5AF2 #f00 #00C #6FF #33ffff #6ccff
+        FlatLaf.setGlobalExtraDefaults( Collections.singletonMap( "@accentColor", "#6ccff" ) );
+        FlatDarculaLaf.setup();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MenuView().setVisible(true);
@@ -257,7 +243,7 @@ public class MenuView extends javax.swing.JFrame {
     private static javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem menuHabitacion;
     private javax.swing.JMenuItem menuHuesped;
@@ -266,7 +252,7 @@ public class MenuView extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuTipoHabitacion;
     // End of variables declaration//GEN-END:variables
 
-    public static javax.swing.JDesktopPane getjDesktopPane1() {
+    public static JDesktopPane getjDesktopPane1() {
         return jDesktopPane1;
-    }
+    } 
 }
