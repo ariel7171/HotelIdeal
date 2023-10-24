@@ -5,7 +5,6 @@
  */
 package hotelideal.Vistas;
 
-
 import hotelideal.AccesoADatos.HabitacionData;
 import hotelideal.AccesoADatos.ReservaData;
 import hotelideal.AccesoADatos.TipoHabitacionData;
@@ -27,48 +26,49 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-
 /**
  *
  * @author Melina
  */
 public class FormularioReservaView extends javax.swing.JInternalFrame {
-private JDesktopPane desk;
-private HabitacionData hData;
-private TipoHabitacionData htData;
-private ReservaData rData;
-private List<Habitacion> habitaciones;
-private Habitacion habitacion;
-private DefaultTableModel modelo;
-private TipoHabitacion tipo;
-private LocalDate f1,f2,hoy;
-private int prsns,dias,num;
-private Huesped huesped;
+
+    private JDesktopPane desk;
+    private HabitacionData hData;
+    private TipoHabitacionData htData;
+    private ReservaData rData;
+    private List<Habitacion> habitaciones;
+    private Habitacion habitacion;
+    private DefaultTableModel modelo;
+    private TipoHabitacion tipo;
+    private LocalDate f1, f2, hoy;
+    private int prsns, dias, num;
+    private Huesped huesped;
+
     /**
      * Creates new form FormularioReservaView1
      */
     public FormularioReservaView() {
         try {
-            this.hData=new HabitacionData();
-            this.rData=new ReservaData();
+            this.hData = new HabitacionData();
+            this.rData = new ReservaData();
         } catch (SQLException ex) {
             Logger.getLogger(FormularioReservaView.class.getName()).log(Level.SEVERE, null, ex);
         }
-        hoy=LocalDate.now();
+        hoy = LocalDate.now();
         initComponents();
         setearFormatos();
-        desk=MenuView.getjDesktopPane1();
-       
+        desk = MenuView.getjDesktopPane1();
+
         jTableHabitaciones.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
             @Override
             public void valueChanged(ListSelectionEvent e) {
-             // El evento se ejecuta cuando cambia la selección de fila
+                // El evento se ejecuta cuando cambia la selección de fila
                 if (!e.getValueIsAdjusting()) {
-                    if(jTableHabitaciones.getSelectedRow()>-1){
+                    if (jTableHabitaciones.getSelectedRow() > -1) {
                         jButtonHuesped.setEnabled(true);
-                    }else{
-                         jButtonHuesped.setEnabled(false);
+                    } else {
+                        jButtonHuesped.setEnabled(false);
                     }
                 }
             }
@@ -292,30 +292,10 @@ private Huesped huesped;
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
     private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
         // TODO add your handling code here:
-        if(controlarFecha()){
-            modelo=(DefaultTableModel) jTableHabitaciones.getModel();
-            modelo.setRowCount(0);
-            prsns=(int) jSpinnerCapita.getValue();
-            dias=(int) ChronoUnit.DAYS.between(f1, f2);
-            
-            habitaciones = hData.listarPorCapitaYfecha(prsns,f1,f2);
-            
-            if(habitaciones!=null){
-                for (Habitacion hab : habitaciones) {
-                    tipo=hab.getTipoHabitacion();
-                    num=hab.getNroHabitacion();
-                    double prec=tipo.getPrecioNoche();
-                    modelo.addRow(new Object[]{hab,num,tipo.getDescripcion(),tipo.getCantPersonas(),hab.getPiso(),prec+"$",prec*dias+"$"});
-                    jTableHabitaciones.setModel(modelo);
-                }
-            }
-        }
-        if(jTableHabitaciones.getRowCount()<1){
-            jButtonHuesped.setEnabled(false);
-        }
+        filtrarTabla();
     }//GEN-LAST:event_jButtonFiltrarActionPerformed
 
     private void jButtonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirActionPerformed
@@ -343,22 +323,24 @@ private Huesped huesped;
 
     private void jButtonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConfirmarActionPerformed
         // TODO add your handling code here:
-        int fila=jTableHabitaciones.getSelectedRow();
-        habitacion=(Habitacion) jTableHabitaciones.getValueAt(fila, 0);
-        int num=(int) jTableHabitaciones.getValueAt(fila, 1);
+        int fila = jTableHabitaciones.getSelectedRow();
+        habitacion = (Habitacion) jTableHabitaciones.getValueAt(fila, 0);
+        int num = (int) jTableHabitaciones.getValueAt(fila, 1);
         LocalDate n = LocalDate.parse("0001-01-01");
-        String precio=(String) jTableHabitaciones.getValueAt(fila, 6);
-        precio=precio.replace("$", "");
-        double prec=Double.parseDouble(precio);
-        Object[] botones={"Aceptar","Cancelar"};
-        if(0==(javax.swing.JOptionPane.showOptionDialog(this, "Se reservará la habitacion N°"+num+" \nDesde: "+f1+"\nHasta: "+f2+"\nA solicitud de: "+huesped.toString()+"\nCon un precio final de: "+prec+"$", "", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE,null,botones,botones[0]))){
-            Object[] botones2={"Confirmar","No Confrimar"};
-            if(f1.compareTo(hoy)==0&&0==(javax.swing.JOptionPane.showOptionDialog(this, "Desea confirmar el ingreso del huesped?", "", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE,null,botones,botones[0]))){
-                Reserva reserva=new Reserva(prsns, prec, true, true, habitacion, huesped, f1, f2, n);
+        String precio = (String) jTableHabitaciones.getValueAt(fila, 6);
+        precio = precio.replace("$", "");
+        double prec = Double.parseDouble(precio);
+        Object[] botones = {"Aceptar", "Cancelar"};
+        if (0 == (javax.swing.JOptionPane.showOptionDialog(this, "Se reservará la habitacion N°" + num + " \nDesde: " + f1 + "\nHasta: " + f2 + "\nA solicitud de: " + huesped.toString() + "\nCon un precio final de: " + prec + "$", "", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, botones, botones[0]))) {
+            Object[] botones2 = {"Confirmar", "No Confrimar"};
+            if (f1.compareTo(hoy) == 0 && 0 == (javax.swing.JOptionPane.showOptionDialog(this, "Desea confirmar el ingreso del huesped?", "", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, botones, botones[0]))) {
+                Reserva reserva = new Reserva(prsns, prec, true, true, habitacion, huesped, f1, f2, n);
                 rData.guardar(reserva);
-            }else{
-                Reserva reserva=new Reserva(prsns, prec, true, false, habitacion, huesped, f1, f2, n);
+                filtrarTabla();
+            } else {
+                Reserva reserva = new Reserva(prsns, prec, true, false, habitacion, huesped, f1, f2, n);
                 rData.guardar(reserva);
+                filtrarTabla();
             }
         }
     }//GEN-LAST:event_jButtonConfirmarActionPerformed
@@ -384,52 +366,75 @@ private Huesped huesped;
     private javax.swing.JSpinner jSpinnerCapita;
     private javax.swing.JTable jTableHabitaciones;
     // End of variables declaration//GEN-END:variables
-public boolean controlarFecha(){
-    if(jDateChooserFecha1.getDate()!=null&&jDateChooserFecha2.getDate()!=null){
-        f1=jDateChooserFecha1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        f2=jDateChooserFecha2.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        if(f2.compareTo(f1)<0||f2.compareTo(f1)==0){
-            javax.swing.JOptionPane.showMessageDialog(this, "Alerta!\nEl campo \"Desde\", debe contener\nuna fecha previa a la del\ncampo \"Hasta\" ", "", javax.swing.JOptionPane.ERROR_MESSAGE);
+public boolean controlarFecha() {
+        if (jDateChooserFecha1.getDate() != null && jDateChooserFecha2.getDate() != null) {
+            f1 = jDateChooserFecha1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            f2 = jDateChooserFecha2.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            if (f2.compareTo(f1) < 0 || f2.compareTo(f1) == 0) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Alerta!\nEl campo \"Desde\", debe contener\nuna fecha previa a la del\ncampo \"Hasta\" ", "", javax.swing.JOptionPane.ERROR_MESSAGE);
+                return false;
+            } else if (f2.compareTo(hoy) < 0 || f1.compareTo(hoy) < 0) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Alerta!\nLas fechas ingresadas\nno pueden ser anteriores\na " + hoy, "", javax.swing.JOptionPane.ERROR_MESSAGE);
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Alerta!\nDebe completar los campos\n\"Desde/Hasta\" para filtrar\nhabitaciones disponibles\ndurante aquel periodo", "", javax.swing.JOptionPane.ERROR_MESSAGE);
             return false;
-        }else if(f2.compareTo(hoy)<0||f1.compareTo(hoy)<0){
-            javax.swing.JOptionPane.showMessageDialog(this, "Alerta!\nLas fechas ingresadas\nno pueden ser anteriores\na "+hoy, "", javax.swing.JOptionPane.ERROR_MESSAGE);
-            return false;
-        }else{
-            return true;
         }
-    }else{
-        javax.swing.JOptionPane.showMessageDialog(this, "Alerta!\nDebe completar los campos\n\"Desde/Hasta\" para filtrar\nhabitaciones disponibles\ndurante aquel periodo", "", javax.swing.JOptionPane.ERROR_MESSAGE);
-        return false;
     }
-}
 
-public void setearFormatos(){
-    SpinnerNumberModel numberModel = new SpinnerNumberModel(1, 1, 10, 1); // (valorInicial, valorMínimo, valorMáximo, paso)
-    jSpinnerCapita.setModel(numberModel);
-    modelo=(DefaultTableModel) jTableHabitaciones.getModel();
-    modelo.setRowCount(0);
-    jTableHabitaciones.setModel(modelo);
-    jLabelCliente.setText("Cliente: ");
-    jDateChooserFecha1.setDateFormatString("dd MMMM yyyy");
-    jDateChooserFecha2.setDateFormatString("dd MMMM yyyy");
-    Date n=Date.valueOf(hoy);
-    jDateChooserFecha1.setDate(n);
-    jDateChooserFecha2.setDate(n);
-    jButtonCancelar.setEnabled(false);
-    jButtonConfirmar.setEnabled(false);
-    jButtonHuesped.setEnabled(false);
-}
+    public void setearFormatos() {
+        SpinnerNumberModel numberModel = new SpinnerNumberModel(1, 1, 10, 1); // (valorInicial, valorMínimo, valorMáximo, paso)
+        jSpinnerCapita.setModel(numberModel);
+        modelo = (DefaultTableModel) jTableHabitaciones.getModel();
+        modelo.setRowCount(0);
+        jTableHabitaciones.setModel(modelo);
+        jLabelCliente.setText("Cliente: ");
+        jDateChooserFecha1.setDateFormatString("dd MMMM yyyy");
+        jDateChooserFecha2.setDateFormatString("dd MMMM yyyy");
+        Date n = Date.valueOf(hoy);
+        jDateChooserFecha1.setDate(n);
+        jDateChooserFecha2.setDate(n);
+        jButtonCancelar.setEnabled(false);
+        jButtonConfirmar.setEnabled(false);
+        jButtonHuesped.setEnabled(false);
+    }
+
+    public void filtrarTabla() {
+        if (controlarFecha()) {
+            modelo = (DefaultTableModel) jTableHabitaciones.getModel();
+            modelo.setRowCount(0);
+            prsns = (int) jSpinnerCapita.getValue();
+            dias = (int) ChronoUnit.DAYS.between(f1, f2);
+            habitaciones = hData.listarPorCapitaYfecha(prsns, f1, f2);
+
+            if (habitaciones != null) {
+                for (Habitacion hab : habitaciones) {
+                    tipo = hab.getTipoHabitacion();
+                    num = hab.getNroHabitacion();
+                    double prec = tipo.getPrecioNoche();
+                    modelo.addRow(new Object[]{hab, num, tipo.getDescripcion(), tipo.getCantPersonas(), hab.getPiso(), prec + "$", prec * dias + "$"});
+                    jTableHabitaciones.setModel(modelo);
+                }
+            }
+        }
+        if (jTableHabitaciones.getRowCount() < 1) {
+            jButtonHuesped.setEnabled(false);
+        }
+    }
 
     public void setHuesped(Huesped huesped) {
-        if(huesped!=null){
-          this.huesped = huesped;
-            jLabelCliente.setText("Cliente: "+huesped.toString());
+        if (huesped != null) {
+            this.huesped = huesped;
+            jLabelCliente.setText("Cliente: " + huesped.toString());
             jButtonConfirmar.setEnabled(true);
             jButtonCancelar.setEnabled(true);
-        }else{
+        } else {
             jLabelCliente.setText("Cliente: ");
             jButtonConfirmar.setEnabled(false);
             jButtonCancelar.setEnabled(false);
-        } 
+        }
     }
 }

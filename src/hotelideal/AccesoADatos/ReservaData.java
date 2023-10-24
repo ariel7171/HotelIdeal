@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,87 @@ public class ReservaData {
     public ReservaData() throws SQLException {
         conn = Conexion.getConnection();
     }
-
+    
+    public boolean comprobarFechaIngresoSalida(int id_habitacion,int idRes,LocalDate n1,LocalDate n2) {
+        List<Reserva> rHuespedes = new ArrayList<>();
+        String sql = "SELECT * FROM reserva WHERE (estado=1 AND id_habitacion="+id_habitacion+" AND idReserva!="+idRes+")";
+        LocalDate auxIng=null;
+        LocalDate auxEgr=null;
+        int n=0;
+        try (
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery();) {
+            while (rs.next()) {
+                Reserva rHue = crearReservaHuesped(rs);
+                rHuespedes.add(rHue);
+            }
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------            
+            for (Reserva rHuesped : rHuespedes) {
+                LocalDate F_ingreso=rHuesped.getF_ingreso();
+                LocalDate F_salida=rHuesped.getF_salida();
+                if(((F_ingreso.compareTo(n2))<=0)&&((F_ingreso.compareTo(n1))>0)){
+                    
+                    if(auxIng==null){
+                        auxIng=F_ingreso;
+                    }else if((auxIng.compareTo(F_ingreso))>0){
+                        auxIng=F_ingreso;
+                    }      
+                }
+                if(((n1.compareTo(F_salida))<=0)&&((F_salida.compareTo(n2))<0)){
+                    
+                    if(auxEgr==null){
+                        auxEgr=F_salida;
+                    }else if((auxEgr.compareTo(F_salida))>0){
+                        auxEgr=F_salida;
+                    }
+                }
+                if(   ((n1.compareTo(F_ingreso))>=0&&((n1.compareTo(F_salida))<0))  &&  ((n2.compareTo(F_salida))<=0&&((n2.compareTo(F_ingreso))>0))  ){
+                    n++;
+                    if(auxIng==null){
+                        auxIng=F_ingreso;
+                    }else if((auxIng.compareTo(F_ingreso))<0){
+                        auxIng=F_ingreso;
+                    } 
+                    
+                    if(auxEgr==null){
+                        auxEgr=F_salida;
+                    }else if((auxEgr.compareTo(F_salida))<0){
+                        auxEgr=F_salida;
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        if(auxIng!=null&&auxEgr!=null){
+            javax.swing.JOptionPane.showMessageDialog(null, "Se detectó un conflicto con una reserva\ndonde inicia el dia ->"+auxIng+"\nSe detectó un conflicto con una reserva\ndonde finaliza el dia ->"+auxEgr, "", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return false; 
+        }else if(auxIng!=null&&auxEgr==null){
+            javax.swing.JOptionPane.showMessageDialog(null, "Se detectó un conflicto con una reserva\ndonde inicia el dia ->"+auxIng, "", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return false;
+        }else if(auxIng==null&&auxEgr!=null){
+            javax.swing.JOptionPane.showMessageDialog(null, "Se detectó un conflicto con una reserva\ndonde finaliza el dia ->"+auxEgr, "", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return false;
+        }
+        return true; 
+    }
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------    
+    public void eliminar(int id, boolean fisico){
+        if(fisico){
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM `reserva` WHERE idReserva="+id)) {
+                ps.executeUpdate();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }else{
+            try (PreparedStatement ps = conn.prepareStatement("UPDATE `reserva` SET `estado`=0 WHERE idReserva="+id)) {
+                ps.executeUpdate();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+    
     public List<Reserva> buscarTodos() {
         List<Reserva> rHuespedes = new ArrayList<>();
         String sql = "SELECT * FROM reserva";
@@ -134,7 +215,7 @@ public class ReservaData {
     public Reserva guardar(Reserva rHuesped) {
         String sql;
         if (rHuesped.getIdReserva() > 0) {
-            sql = "UPDATE reserva SET id_habitacion = ?, id_huesped = ?, fechaIngreso = ?, fechaSalida = ?, precio = ?, cant_personas = ?, estado = ? WHERE idReserva  = ?, ingreso=? , salida=?";
+            sql = "UPDATE reserva SET id_habitacion = ?, id_huesped = ?, fechaIngreso = ?, fechaSalida = ?, precio = ?, cant_personas = ?, estado = ? , ingreso=? , salida=? WHERE idReserva  = ?";
         } else {
             sql = "INSERT INTO reserva (id_habitacion, id_huesped, fechaIngreso, fechaSalida, precio, cant_personas, estado, ingreso , salida) VALUES(?,?,?,?,?,?,?,?,?)";
         }
@@ -150,7 +231,7 @@ public class ReservaData {
             ps.setDate(9, Date.valueOf(rHuesped.getSalida()));
 
             if (rHuesped.getIdReserva() > 0) {
-                ps.setInt(8, rHuesped.getIdReserva());
+                ps.setInt(10, rHuesped.getIdReserva());
                 ps.executeUpdate();
             } else {
                 ps.executeUpdate();

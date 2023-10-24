@@ -28,7 +28,7 @@ public class GestionReservas extends javax.swing.JInternalFrame {
 private DefaultTableModel modelo;
 private ReservaData rData;
 private List<Reserva> reservas=new ArrayList<>();
-private Reserva reserva;
+private Reserva reserva,r;
 private LocalDate f1,f2,hoy;
     /**;
      * Creates new form gestionReservas
@@ -44,6 +44,7 @@ private LocalDate f1,f2,hoy;
         jCheckBoxActivas.setSelected(true);
         hoy=LocalDate.now();
         setearFormato();
+        cerrarReservas();
         jTableReservas.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
             @Override
@@ -52,9 +53,14 @@ private LocalDate f1,f2,hoy;
                 if (!e.getValueIsAdjusting()) {
                     
                     if(jTableReservas.getSelectedRow()>-1){
-                        jButtonAvanzado.setEnabled(true);
+                        r=(Reserva) jTableReservas.getValueAt(jTableReservas.getSelectedRow(), 0);
+                        if(r.isEstado()){
+                            jButtonAvanzado.setEnabled(true);
+                        }else{
+                            jButtonAvanzado.setEnabled(false);
+                        }
                     }else{
-                         jButtonAvanzado.setEnabled(false);
+                        jButtonAvanzado.setEnabled(false);
                     }
                 }
             }
@@ -237,6 +243,7 @@ private LocalDate f1,f2,hoy;
         int n=jTableReservas.getSelectedRow();
         reserva=(Reserva) jTableReservas.getValueAt(n, 0);
         gestionReservas.setReserva(reserva);
+        gestionReservas.setGestR(this);
         gestionReservas.setVisible(true);
         desk.add(gestionReservas);
         desk.moveToFront(gestionReservas);
@@ -319,7 +326,7 @@ public void cargarTabla(){
     modelo=(DefaultTableModel) jTableReservas.getModel();
     modelo.setRowCount(0);
     String estado="Inactivo";
-    String ingreso="No";
+    String ingreso;
     String egreso;
     LocalDate n=LocalDate.parse("0001-01-01");
     if(jRadioButtonTodo.isSelected()){
@@ -341,6 +348,8 @@ public void cargarTabla(){
         }
         if(re.isIngreso()){
             ingreso="Si";
+        }else{
+            ingreso="No";
         }
         if(re.getSalida().equals(n)){
             egreso="No";
@@ -350,5 +359,26 @@ public void cargarTabla(){
         modelo.addRow(new Object[]{re,estado,re.getHabitacion().getNroHabitacion(),re.getHuesped(),re.getF_ingreso(),re.getF_salida(),ingreso,egreso,re.getCant_personas(),re.getPrecio()});
     }
     jTableReservas.setModel(modelo);
+}
+public void cerrarReservas(){
+    reservas=rData.buscarTodos_Activos();
+    int sinEgreso=0;
+    int sinIngreso=0;
+    LocalDate n=LocalDate.parse("0001-01-01");
+    for (Reserva res : reservas) {
+        if((res.getF_salida()).compareTo(hoy)<=0){
+            if(res.getF_salida().compareTo(n)==0){
+                res.setSalida(res.getF_salida());
+                sinEgreso+=1;
+            }else if(res.isIngreso()==false){
+                sinIngreso+=1;
+            }
+            res.setEstado(false);
+            rData.guardar(res);
+        }
+    }
+    if(sinEgreso>=1||sinIngreso>=1){
+        javax.swing.JOptionPane.showMessageDialog(this, "Se cerraron "+sinIngreso+" reservas.\nSe cerraron "+sinEgreso+" ocupaciones.\n(nuevo estado = inactivo)", "", javax.swing.JOptionPane.WARNING_MESSAGE);
+    }
 }
 }
