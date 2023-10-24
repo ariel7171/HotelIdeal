@@ -5,6 +5,7 @@
  */
 package hotelideal.AccesoADatos;
 
+import static hotelideal.AccesoADatos.Conexion.getConnection;
 import hotelideal.Entidades.TipoHabitacion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
