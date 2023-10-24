@@ -51,6 +51,7 @@ public class MenuView extends javax.swing.JFrame {
         menuTipoHabitacion = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         menuReserva = new javax.swing.JMenuItem();
+        NuevaReserva = new javax.swing.JMenuItem();
         menuSalir = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -113,6 +114,14 @@ public class MenuView extends javax.swing.JFrame {
         });
         jMenu4.add(menuReserva);
 
+        NuevaReserva.setText("Nueva Reservación");
+        NuevaReserva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NuevaReservaActionPerformed(evt);
+            }
+        });
+        jMenu4.add(NuevaReserva);
+
         jMenuBar1.add(jMenu4);
 
         menuSalir.setText("Salir");
@@ -164,7 +173,13 @@ public class MenuView extends javax.swing.JFrame {
     }//GEN-LAST:event_menuHabitacionActionPerformed
 
     private void menuReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuReservaActionPerformed
-
+        jDesktopPane1.removeAll();
+        jDesktopPane1.repaint();
+        GestionReservas gestionReservas=new GestionReservas();
+        centrarInternalFrame(gestionReservas);
+        gestionReservas.setVisible(true);
+        jDesktopPane1.add(gestionReservas);
+        jDesktopPane1.moveToFront(gestionReservas);
     }//GEN-LAST:event_menuReservaActionPerformed
 
     private void menuTipoHabitacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuTipoHabitacionActionPerformed
@@ -184,6 +199,16 @@ public class MenuView extends javax.swing.JFrame {
     private void menuSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuSalirMouseClicked
         System.exit(0);
     }//GEN-LAST:event_menuSalirMouseClicked
+
+    private void NuevaReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevaReservaActionPerformed
+        jDesktopPane1.removeAll();
+        jDesktopPane1.repaint();
+        FormularioReservaView frmReseva = new FormularioReservaView();
+        centrarInternalFrame(frmReseva);
+        frmReseva.setVisible(true);
+        jDesktopPane1.add(frmReseva);
+        jDesktopPane1.moveToFront(frmReseva);
+    }//GEN-LAST:event_NuevaReservaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -228,6 +253,7 @@ public class MenuView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem NuevaReserva;
     private static javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
