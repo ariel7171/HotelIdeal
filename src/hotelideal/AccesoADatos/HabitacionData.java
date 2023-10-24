@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -26,8 +28,7 @@ public class HabitacionData {
     public HabitacionData() throws SQLException {
         conn = Conexion.getConnection();
     }
-    
-    
+
     public List<Habitacion> buscarTodos() {
         List<Habitacion> habitaciones = new ArrayList<>();
         String sql = "SELECT * FROM habitacion";
@@ -76,10 +77,10 @@ public class HabitacionData {
             ps.setString(2, habitacion.getDescripcion());
             ps.setInt(3, habitacion.getTipoHabitacion().getId_tipoDeHabitacion());
             ps.setInt(4, habitacion.getPiso());
-            ps.setBoolean(7, habitacion.isEstado());
+            ps.setBoolean(5, habitacion.isEstado());
 
             if (habitacion.getId_habitacion() > 0) {
-                ps.setInt(8, habitacion.getId_habitacion());
+                ps.setInt(6, habitacion.getId_habitacion());
                 ps.executeUpdate();
             } else {
                 ps.executeUpdate();
@@ -107,16 +108,49 @@ public class HabitacionData {
         hab.setEstado(rs.getBoolean("estado"));
         return hab;
     }
-    
-    public int desactivarHabitacion(int id){
-        try (PreparedStatement stmt = conn.prepareStatement("UPDATE habitacion SET estado = 0 WHERE estado = 1 AND id_habitacion = ?")){
+
+    public int desactivarHabitacion(int id) {
+        try (PreparedStatement stmt = conn.prepareStatement("UPDATE habitacion SET estado = 0 WHERE estado = 1 AND id_habitacion = ?")) {
             stmt.setInt(1, id);
-            
+
             return stmt.executeUpdate();
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public boolean buscaNumHabitacion(int nro) {
+
+        try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM habitacion WHERE nroHabitacion = ?")) {
+            stmt.setInt(1, nro);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int aux = rs.getInt(1);
+                    //se considera que la habitacion existe
+                    return aux > 0;
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    public List buscaPorDescripcion(String des) {
+        List<Habitacion> habitaciones = new ArrayList<>();
+        try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM habitacion WHERE descripcion = ?")) {
+            stmt.setString(1, des);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Habitacion hb = crearHabitacion(rs);
+                    habitaciones.add(hb);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return habitaciones;
     }
 }
