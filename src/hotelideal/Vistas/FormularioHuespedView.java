@@ -18,9 +18,8 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
 
     private HuespedData hp;
     private Huesped hue;
-    private boolean reserva=false;
+
     private int estado;
-    private FormularioReservaView fReserva;
 
     public FormularioHuespedView() {
 
@@ -31,7 +30,7 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
             ex.printStackTrace();
         }
 
-        //hue = new Huesped();
+        hue = new Huesped();
 
         setFrameIcon(new ImageIcon(getClass().getResource("/icon/logo1.png")));
 
@@ -120,7 +119,7 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
     }
 
     private boolean validarCorreo(String correo) {
-        return correo.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
+        return correo.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.]+\\.[a-zA-Z]{2,6}$");
     }
 
     public static void addSelectAllOnFocusToTextFields(Container container) {
@@ -432,7 +431,6 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
             hue = hp.buscarPorDNI("" + txtDNI.getText());
 
             if (hue != null) {
-               
                 restaurarDatosHuesped();
                 pasarFoco(cmdEditar);
             } else {
@@ -467,10 +465,7 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
         }
 
         estado = 0;
-        
-        if(reserva){       
-            fReserva.setHuesped(null);
-        }         
+
     }//GEN-LAST:event_cmdCancelarActionPerformed
 
     private void cmdGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdGuardarActionPerformed
@@ -528,15 +523,6 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
                 JOptionPane.showConfirmDialog(this, "El Huesped fue modificado correctamente", "Huesped Modificado", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
             }
             restaurarDatosHuesped();
-            if(reserva){       
-                fReserva.setHuesped(null);
-                Object[] botones={"Aceptar","Cancelar"};
-                int op=javax.swing.JOptionPane.showOptionDialog(this, "Desea utilizar los datos del nuevo cliente:\n"+hue, "", JOptionPane.DEFAULT_OPTION, JOptionPane.OK_OPTION,null,botones,botones[0]);
-                if(op==0){
-                    fReserva.setHuesped(hue);
-                    dispose();
-                }
-            }
         }
 
         estado = 0;
@@ -545,36 +531,9 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cmdGuardarActionPerformed
 
     private void cmdSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdSalirActionPerformed
-        if(reserva&&hue!=null){
-            Object[] botones={"Aceptar","Cancelar"};
-            int op=javax.swing.JOptionPane.showOptionDialog(this, "Desea utilizar los datos del cliente:\n"+hue, "", JOptionPane.DEFAULT_OPTION, JOptionPane.OK_OPTION,null,botones,botones[0]);
-            if(op==0){
-                fReserva.setHuesped(hue);
-                dispose();
-            }
-        }else if(reserva&&hue==null){
-            Object[] botones={"Salir","Cancelar"};
-            int op=javax.swing.JOptionPane.showOptionDialog(this, "Desea salir sin datos de un cliente?", "", JOptionPane.DEFAULT_OPTION, JOptionPane.OK_OPTION,null,botones,botones[0]);
-            if(op==0){
-                fReserva.setHuesped(hue);
-                dispose();
-            }else{
-                dispose();
-            }  
-        }else{
-            
-        }
+        dispose();
     }//GEN-LAST:event_cmdSalirActionPerformed
 
-    public void setReserva(boolean reserva) {
-        this.reserva = reserva;
-    }
-
-    public void setfReserva(FormularioReservaView fReserva) {
-        this.fReserva = fReserva;
-    }
-    
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox chkActivo;

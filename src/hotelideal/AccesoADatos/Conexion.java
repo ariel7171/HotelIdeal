@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 public class Conexion {
 
     private static String server = "localhost";
-    private static String database = "hotel_marcos";
+    private static String database = "hotelideal";
     private static String userName = "root";
     private static String password = "";
     private static String driverClassName = "org.mariadb.jdbc.Driver";
@@ -31,6 +31,7 @@ public class Conexion {
             } catch (ClassNotFoundException ex) {
                 JOptionPane.showMessageDialog(null, "Error al cargar los drivers "+ex.getMessage());
             }
+        }else{
         }
         return connection;
     }
