@@ -3,10 +3,13 @@ package hotelideal.Vistas;
 import hotelideal.AccesoADatos.Conexion;
 import static hotelideal.AccesoADatos.Conexion.getConnection;
 import hotelideal.AccesoADatos.HabitacionData;
+import hotelideal.AccesoADatos.TipoHabitacionData;
 import hotelideal.Entidades.Habitacion;
 import hotelideal.Entidades.TipoHabitacion;
 import java.awt.Component;
 import java.sql.SQLException;
+import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -19,14 +22,24 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
 
     private HabitacionData hdata;
     private Habitacion habitacion;
-    
+
+    private TipoHabitacionData thd;
+    private List<TipoHabitacion> listaHabitaciones;
+
     private boolean isNew;
 
     public FormularioHabitacionView() throws SQLException {
         initComponents();
 
         hdata = new HabitacionData();
+        thd = new TipoHabitacionData();
 
+        listaHabitaciones = thd.buscarTodos();
+                
+        setFrameIcon(new ImageIcon(getClass().getResource("/icon/logo1.png")));
+
+        cargaTipo();
+        
         //nuevo, editar, eliminar, guardar, cancelar, buscar
         estadosBotones(true, false, false, false, false, true);
         limpiarCampos();
@@ -69,19 +82,31 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
     }
 
     public boolean validarCod_Hab(String codigo) {
-        return codigo.matches("^[0-9]\\d{0,5}$");
+        return codigo.trim().matches("^[1-9]\\d{0,5}$");
     }
 
     public boolean validarPiso(String piso) {
-        return piso.matches("^[0-4]\\d{0,5}$");
+        return piso.trim().matches("^[0-9]\\d{0,5}$");
     }
 
     public boolean validarNumero(String numero) {
-        return numero.matches("^[0-9]\\d{0,6}$");
+        return numero.trim().matches("^[1-9]\\d{0,6}$");
     }
 
     public boolean validarDescripcion(String descripcion) {
-        return descripcion.matches("^[a-zA-Zñàáü][[a-zA-Zñàáü]]+");
+        return descripcion.trim().matches("^([A-ZÁÉÍÓÚÜÑ]([.]|[a-záéíóüñ]+))([ ][A-ZÁÉÍÓÚÜÑ1-9]([.]|[a-záéíóüñ1-9]*)){0,5}");
+    }
+
+    public void cargaTipo() {
+
+        jComboTipo.removeAllItems();
+
+        for (TipoHabitacion th : listaHabitaciones) {
+            jComboTipo.addItem(th);
+        }
+        if (jComboTipo.getItemCount() > 0) {
+            TipoHabitacion tipohab = (TipoHabitacion) jComboTipo.getSelectedItem();
+        }
     }
 
     /**
@@ -287,13 +312,13 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
 
             if (habitacion != null) {
                 restaurarDatosHabitacion();
-                pasarFoco(jbCancelar);
+                pasarFoco(jbEditar);
             } else {
-                jtCodHabitacion.setText("");
+                jtCodHabitacion.setText(" ");
                 JOptionPane.showConfirmDialog(this, "la habitacion no existe", "codigo inexistente", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
                 pasarFoco(jtCodHabitacion);
             }
-            
+
         } else {
             JOptionPane.showConfirmDialog(this, "Ingrese un codigo valido", "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             pasarFoco(jtCodHabitacion);
@@ -308,7 +333,7 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
         //nuevo, editar, eliminar, guardar, cancelar, buscar
         estadosBotones(false, false, false, true, true, false);
         //habitacion, piso, numero, descripcion, estado
-        estadoCampos(true, true, true, true, true, true);
+        estadoCampos(false, true, true, true, true, true);
 
     }//GEN-LAST:event_jbNuevoActionPerformed
 
@@ -344,7 +369,7 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
 
         isNew = true;
         estadosBotones(false, false, true, true, true, false);
-        estadoCampos(true, true, true, true, true, true);
+        estadoCampos(false, true, true, true, true, true);
 
     }//GEN-LAST:event_jbEditarActionPerformed
 
@@ -361,7 +386,7 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
             limpiarCampos();
             estadoCampos(true, false, false, false, false, false);
             estadosBotones(true, false, false, false, false, true);
-            
+
             pasarFoco(jtCodHabitacion);
         }
 
@@ -369,47 +394,52 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
 
     private void jbGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGuardarActionPerformed
 
-        if (!validarCod_Hab(jtCodHabitacion.getText())) {
-            JOptionPane.showConfirmDialog(this, "codigo correcto", "codigo invalido", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+        if (!isNew && !validarCod_Hab(jtCodHabitacion.getText())) {
+            JOptionPane.showConfirmDialog(this, "codigo Incorrecto", "codigo invalido", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             pasarFoco(jtCodHabitacion);
+            return;
         }
 
         if (!validarPiso(jtPiso.getText())) {
-            JOptionPane.showConfirmDialog(this, "piso correcto", "el piso no existe", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showConfirmDialog(this, "piso Incorrecto", "el piso no existe", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             pasarFoco(jtPiso);
+            return;
         }
 
-        if (!validarNumero(jtNumero.getText())) {
-            JOptionPane.showConfirmDialog(this, "numero correcto", "numero invalido", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+        //tengo que buscar que el numero de habitacion ya existe o no con el metodo buscaNumHabitacion
+        if (!validarNumero(jtNumero.getText()) && !hdata.buscaNumHabitacion(habitacion.getNroHabitacion())){
+            JOptionPane.showConfirmDialog(this, "numero Incorrecto o ya existe una habitacion", "numero invalido", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             pasarFoco(jtPiso);
+            return;
         }
 
         if (!validarDescripcion(jtDescripcion.getText())) {
-            JOptionPane.showConfirmDialog(this, "descrpcion correcta", "descripcion invalida", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showConfirmDialog(this, "descrpcion Incorrecta", "descripcion invalida", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             pasarFoco(jtPiso);
+            return;
         }
-        
-         TipoHabitacion habitacionSeleccionada = (TipoHabitacion) jComboTipo.getSelectedItem();
-         
-         if(isNew){
-             habitacion = new Habitacion(
-                     Integer.parseInt(jtPiso.getText()), 
-                     Integer.parseInt(jtNumero.getText()), 
-                     jtDescripcion.getText(), 
-                     jcEstado.isSelected(), 
-                     habitacionSeleccionada);
-         }else{
+
+        TipoHabitacion tipohab = (TipoHabitacion) jComboTipo.getSelectedItem();
+
+        if (isNew) {
             habitacion = new Habitacion(
-                     Integer.parseInt(jtCodHabitacion.getText()),
-                     Integer.parseInt(jtPiso.getText()), 
-                     Integer.parseInt(jtNumero.getText()), 
-                     jtDescripcion.getText(), 
-                     jcEstado.isSelected(), 
-                     habitacionSeleccionada);
-         }
-        
+                    Integer.parseInt(jtPiso.getText().trim()),
+                    Integer.parseInt(jtNumero.getText().trim()),
+                    jtDescripcion.getText(),
+                    jcEstado.isSelected(),
+                    tipohab);
+        } else {
+            habitacion = new Habitacion(
+                    Integer.parseInt(jtCodHabitacion.getText().trim()),
+                    Integer.parseInt(jtPiso.getText().trim()),
+                    Integer.parseInt(jtNumero.getText().trim()),
+                    jtDescripcion.getText(),
+                    jcEstado.isSelected(),
+                    tipohab);
+        }
+
         habitacion = hdata.guardar(habitacion);
-        
+
         if (isNew) {
             JOptionPane.showConfirmDialog(this, "Habitacion agregada correctamente", "Habitacion Creada", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
         } else {
@@ -418,7 +448,7 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
         limpiarCampos();
         estadoCampos(true, false, false, false, false, false);
         estadosBotones(true, false, false, false, false, true);
-        
+
         pasarFoco(jtCodHabitacion);
     }//GEN-LAST:event_jbGuardarActionPerformed
 
@@ -430,7 +460,16 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
         jtPiso.setText("" + habitacion.getPiso());
         jtNumero.setText("" + habitacion.getNroHabitacion());
         jtDescripcion.setText(habitacion.getDescripcion());
-
+        jcEstado.setSelected(habitacion.isEstado());
+        
+        TipoHabitacion n = habitacion.getTipoHabitacion();
+        
+        int cont = jComboTipo.getItemCount();
+        for (int i = 0; i<=cont; i++) {
+            if(n.equals(jComboTipo.getItemAt(i))){
+                jComboTipo.setSelectedIndex(i);
+            }
+        }
     }
 
     public void pasarFoco(Component com) {

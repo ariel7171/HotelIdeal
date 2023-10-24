@@ -52,6 +52,7 @@ public class MenuView extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         menuHabitacion = new javax.swing.JMenuItem();
         menuTipoHabitacion = new javax.swing.JMenuItem();
+        planilla = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         menuReserva = new javax.swing.JMenuItem();
         menuSalir = new javax.swing.JMenu();
@@ -87,6 +88,11 @@ public class MenuView extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Habitacion");
+        jMenu2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu2ActionPerformed(evt);
+            }
+        });
 
         menuHabitacion.setText("Formulario Habitacion");
         menuHabitacion.addActionListener(new java.awt.event.ActionListener() {
@@ -103,6 +109,14 @@ public class MenuView extends javax.swing.JFrame {
             }
         });
         jMenu2.add(menuTipoHabitacion);
+
+        planilla.setText("Planilla De Habitaciones");
+        planilla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                planillaActionPerformed(evt);
+            }
+        });
+        jMenu2.add(planilla);
 
         jMenuBar1.add(jMenu2);
 
@@ -192,6 +206,24 @@ public class MenuView extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_menuSalirMouseClicked
 
+    private void planillaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_planillaActionPerformed
+       try {
+            jDesktopPane1.removeAll();
+            jDesktopPane1.repaint();
+            PlanillaHabitaciones ph = new PlanillaHabitaciones();
+            centrarInternalFrame(ph);
+            ph.setVisible(true);
+            jDesktopPane1.add(ph);
+            jDesktopPane1.moveToFront(ph);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_planillaActionPerformed
+
+    private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -245,6 +277,7 @@ public class MenuView extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuReserva;
     private javax.swing.JMenu menuSalir;
     private javax.swing.JMenuItem menuTipoHabitacion;
+    private javax.swing.JMenuItem planilla;
     // End of variables declaration//GEN-END:variables
 
     public javax.swing.JDesktopPane getjDesktopPane1() {

@@ -104,4 +104,8 @@ public class TipoHabitacion {
         this.estado = estado;
     }
 
+    @Override
+    public String toString() {
+        return descripcion;
+    }
 }
