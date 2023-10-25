@@ -12,7 +12,10 @@ import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import java.awt.Dimension;
+import java.sql.SQLException;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
@@ -56,6 +59,7 @@ public class MenuView extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         menuHabitacion = new javax.swing.JMenuItem();
         menuTipoHabitacion = new javax.swing.JMenuItem();
+        planilla = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         menuReserva = new javax.swing.JMenuItem();
         NuevaReserva = new javax.swing.JMenuItem();
@@ -108,6 +112,14 @@ public class MenuView extends javax.swing.JFrame {
             }
         });
         jMenu2.add(menuTipoHabitacion);
+
+        planilla.setText("Planilla De Habitaciones");
+        planilla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                planillaActionPerformed(evt);
+            }
+        });
+        jMenu2.add(planilla);
 
         jMenuBar1.add(jMenu2);
 
@@ -181,13 +193,23 @@ public class MenuView extends javax.swing.JFrame {
     }//GEN-LAST:event_menuHuespedActionPerformed
 
     private void menuHabitacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuHabitacionActionPerformed
-
+        try {
+            jDesktopPane1.removeAll();
+            jDesktopPane1.repaint();
+            FormularioHabitacionView fhv = new FormularioHabitacionView();
+            centrarInternalFrame(fhv);
+            fhv.setVisible(true);
+            jDesktopPane1.add(fhv);
+            jDesktopPane1.moveToFront(fhv);
+        } catch (SQLException ex) {
+            Logger.getLogger(MenuView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_menuHabitacionActionPerformed
 
     private void menuReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuReservaActionPerformed
         jDesktopPane1.removeAll();
         jDesktopPane1.repaint();
-        GestionReservas gestionReservas=new GestionReservas();
+        GestionReservas gestionReservas = new GestionReservas();
         centrarInternalFrame(gestionReservas);
         gestionReservas.setVisible(true);
         jDesktopPane1.add(gestionReservas);
@@ -196,6 +218,13 @@ public class MenuView extends javax.swing.JFrame {
 
     private void menuTipoHabitacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuTipoHabitacionActionPerformed
         // TODO add your handling code here:
+        jDesktopPane1.removeAll();
+        jDesktopPane1.repaint();
+        FormularioTipoHabitacionView frmTH = new FormularioTipoHabitacionView();
+        centrarInternalFrame(frmTH);
+        frmTH.setVisible(true);
+        jDesktopPane1.add(frmTH);
+        jDesktopPane1.moveToFront(frmTH);
     }//GEN-LAST:event_menuTipoHabitacionActionPerformed
 
     private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSalirActionPerformed
@@ -221,15 +250,30 @@ public class MenuView extends javax.swing.JFrame {
         jDesktopPane1.moveToFront(frmReseva);
     }//GEN-LAST:event_NuevaReservaActionPerformed
 
+    private void planillaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_planillaActionPerformed
+        try {
+            jDesktopPane1.removeAll();
+            jDesktopPane1.repaint();
+            PlanillaHabitaciones ph = new PlanillaHabitaciones();
+            centrarInternalFrame(ph);
+            ph.setVisible(true);
+            jDesktopPane1.add(ph);
+            jDesktopPane1.moveToFront(ph);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_planillaActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         FlatRobotoFont.install();
+        FlatLaf.registerCustomDefaultsSource("theme");
 //        FlatMacDarkLaf.setup();
 //        FlatLightLaf.setup();
 //#BF5AF2 #f00 #00C #6FF #33ffff #6ccff
-        FlatLaf.setGlobalExtraDefaults( Collections.singletonMap( "@accentColor", "#6ccff" ) );
+        //FlatLaf.setGlobalExtraDefaults(Collections.singletonMap("@accentColor", "#6ccff"));
         FlatDarculaLaf.setup();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -250,9 +294,10 @@ public class MenuView extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuReserva;
     private javax.swing.JMenu menuSalir;
     private javax.swing.JMenuItem menuTipoHabitacion;
+    private javax.swing.JMenuItem planilla;
     // End of variables declaration//GEN-END:variables
 
     public static JDesktopPane getjDesktopPane1() {
         return jDesktopPane1;
-    } 
+    }
 }
