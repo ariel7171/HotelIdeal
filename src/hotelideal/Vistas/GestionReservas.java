@@ -367,7 +367,7 @@ public void cerrarReservas(){
     LocalDate n=LocalDate.parse("0001-01-01");
     for (Reserva res : reservas) {
         if((res.getF_salida()).compareTo(hoy)<=0){
-            if(res.getF_salida().compareTo(n)==0){
+            if(res.isIngreso()){
                 res.setSalida(res.getF_salida());
                 sinEgreso+=1;
             }else if(res.isIngreso()==false){

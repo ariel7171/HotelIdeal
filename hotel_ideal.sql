@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-10-2023 a las 00:30:00
+-- Tiempo de generación: 27-10-2023 a las 01:45:33
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -37,6 +37,13 @@ CREATE TABLE `habitacion` (
   `estado` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `habitacion`
+--
+
+INSERT INTO `habitacion` (`id_habitacion`, `nroHabitacion`, `descripcion`, `id_tipoDeHabitacion`, `piso`, `estado`) VALUES
+(1, 10, 0, 2, 1, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -54,6 +61,13 @@ CREATE TABLE `huesped` (
   `correo` varchar(255) NOT NULL,
   `estado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `huesped`
+--
+
+INSERT INTO `huesped` (`id_huesped`, `dni`, `apellido`, `nombre`, `domicilio`, `celular`, `correo`, `estado`) VALUES
+(1, '45321789', 'Gonzales', 'Matias', 'Vega 412', '1523412631', 'matiasg@gmail.com', 1);
 
 -- --------------------------------------------------------
 
@@ -75,6 +89,13 @@ CREATE TABLE `reserva` (
   `estado` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `reserva`
+--
+
+INSERT INTO `reserva` (`idReserva`, `id_habitacion`, `id_huesped`, `fechaIngreso`, `ingreso`, `fechaSalida`, `salida`, `precio`, `cant_personas`, `estado`) VALUES
+(1, 1, 1, '2023-10-27', 0, '2023-10-31', '0001-01-01', 400, 2, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -92,6 +113,65 @@ CREATE TABLE `tipodehabitacion` (
   `cantPersonas` int(11) NOT NULL,
   `estado` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tipodehabitacion`
+--
+
+INSERT INTO `tipodehabitacion` (`id_tipoDeHabitacion`, `descripcion`, `precioNoche`, `cantKing`, `cantQueen`, `cantSimple`, `cantPersonas`, `estado`) VALUES
+(1, 'Simple', 60, 0, 0, 1, 1, 1),
+(2, 'Doble', 100, 0, 1, 0, 2, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipousuario`
+--
+
+DROP TABLE IF EXISTS `tipousuario`;
+CREATE TABLE `tipousuario` (
+  `idtipousuario` int(11) NOT NULL,
+  `descripcion` varchar(255) NOT NULL,
+  `admin` tinyint(1) NOT NULL,
+  `crud` tinyint(1) NOT NULL,
+  `queries` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tipousuario`
+--
+
+INSERT INTO `tipousuario` (`idtipousuario`, `descripcion`, `admin`, `crud`, `queries`) VALUES
+(1, 'ADMIN', 1, 0, 0),
+(2, 'CRUD', 0, 1, 0),
+(3, 'QUERIES', 0, 0, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario`
+--
+
+DROP TABLE IF EXISTS `usuario`;
+CREATE TABLE `usuario` (
+  `idUsuario` int(11) NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `apellido` varchar(255) NOT NULL,
+  `genero` tinyint(1) NOT NULL,
+  `idtipousuario` int(11) NOT NULL,
+  `usuario` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `remember` tinyint(1) NOT NULL,
+  `estado` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`idUsuario`, `nombre`, `apellido`, `genero`, `idtipousuario`, `usuario`, `password`, `remember`, `estado`) VALUES
+(1, 'ARIEL', 'AYALA', 1, 1, 'admin', '12345', 1, 1),
+(2, 'GUSTAVO', 'LOPEZ', 1, 2, 'gustavo', '12345', 0, 1);
 
 --
 -- Índices para tablas volcadas
@@ -126,6 +206,19 @@ ALTER TABLE `tipodehabitacion`
   ADD PRIMARY KEY (`id_tipoDeHabitacion`);
 
 --
+-- Indices de la tabla `tipousuario`
+--
+ALTER TABLE `tipousuario`
+  ADD PRIMARY KEY (`idtipousuario`);
+
+--
+-- Indices de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  ADD PRIMARY KEY (`idUsuario`),
+  ADD KEY `idtipousuario` (`idtipousuario`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -133,25 +226,37 @@ ALTER TABLE `tipodehabitacion`
 -- AUTO_INCREMENT de la tabla `habitacion`
 --
 ALTER TABLE `habitacion`
-  MODIFY `id_habitacion` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_habitacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `huesped`
 --
 ALTER TABLE `huesped`
-  MODIFY `id_huesped` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_huesped` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `reserva`
 --
 ALTER TABLE `reserva`
-  MODIFY `idReserva` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idReserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `tipodehabitacion`
 --
 ALTER TABLE `tipodehabitacion`
-  MODIFY `id_tipoDeHabitacion` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_tipoDeHabitacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `tipousuario`
+--
+ALTER TABLE `tipousuario`
+  MODIFY `idtipousuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas
@@ -169,6 +274,12 @@ ALTER TABLE `habitacion`
 ALTER TABLE `reserva`
   ADD CONSTRAINT `reserva_ibfk_2` FOREIGN KEY (`id_huesped`) REFERENCES `huesped` (`id_huesped`),
   ADD CONSTRAINT `reserva_ibfk_3` FOREIGN KEY (`id_habitacion`) REFERENCES `habitacion` (`id_habitacion`);
+
+--
+-- Filtros para la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`idtipousuario`) REFERENCES `tipousuario` (`idtipousuario`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

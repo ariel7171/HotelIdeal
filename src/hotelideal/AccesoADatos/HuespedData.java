@@ -111,6 +111,24 @@ public class HuespedData {
             return null;
         }
     }
+    
+    public int eliminarPorDNI(String dni) {
+        
+        String sql = "UPDATE huesped SET estado = 0 WHERE id_huesped = ?";
+       
+        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            
+            ps.setString(1, dni);
+            return ps.executeUpdate();
+            
+        } catch (SQLException ex) {
+            
+            ex.printStackTrace();
+            return 0;
+           
+        }
+        
+    }
 
     private Huesped crearHuesped(ResultSet rs) throws SQLException {
         Huesped hue = new Huesped();

@@ -511,14 +511,16 @@ private LocalDate fout,hoy,f1,f2;
             }else if((fout.compareTo(reserva.getF_salida()))>0){
                 javax.swing.JOptionPane.showMessageDialog(this, "La fecha ingresada en el campo \"Egreso\"\nno puede ser posterior a "+reserva.getF_salida(), "", javax.swing.JOptionPane.ERROR_MESSAGE);
                 return false;
+            }else{
+                if(1==(javax.swing.JOptionPane.showInternalConfirmDialog(this, "Al completar el campo \"Egreso\", ya no se podrá editar la reserva,\nDesea continuar?"))){
+                return false;
+                }else{
+                    return true;
+                }
             }
         }else if(tru){
             javax.swing.JOptionPane.showMessageDialog(this, "El campo \"Egreso\" no puede estar vacio.", "", javax.swing.JOptionPane.ERROR_MESSAGE);
             return false;
-        }else{
-            if(1==(javax.swing.JOptionPane.showInternalConfirmDialog(this, "Al completar el campo \"Egreso\", ya no se podrá editar la reserva,\nDesea continuar?"))){
-                return false;
-            }
         }
         return true;
     }

@@ -103,6 +103,8 @@ public class FormularioReservaView extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableHabitaciones = new javax.swing.JTable();
 
+        setPreferredSize(new java.awt.Dimension(550, 675));
+
         jButtonConfirmar.setText("Confirmar Reservacion");
         jButtonConfirmar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

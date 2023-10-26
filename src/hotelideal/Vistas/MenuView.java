@@ -5,34 +5,68 @@
  */
 package hotelideal.Vistas;
 
+
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import hotelideal.AccesoADatos.TipoUsuarioRepositorio;
+import hotelideal.AccesoADatos.UsuarioRepositorio;
+import hotelideal.Entidades.TipoUsuario;
+import hotelideal.Entidades.Usuario;
+import hotelideal.eventos.LoginListener;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 
-/**
- *
- * @author Karim
- */
-public class MenuView extends javax.swing.JFrame {
+public class MenuView extends javax.swing.JFrame implements LoginListener {
 
     static MenuView test;
 
-    /**
-     * Creates new form Test
-     */
-    public MenuView() {
+    private TipoUsuarioRepositorio tr;
+    private UsuarioRepositorio ur;
+
+    private Usuario user;
+    private TipoUsuario userType;
+    private int idSystemUser;
+
+    public MenuView() throws SQLException {
+
+        ur = new UsuarioRepositorio();
+        tr = new TipoUsuarioRepositorio();
+
         initComponents();
-        //setSize(1280, 720);
+        setSize(1280, 720);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+        setIconImage(new ImageIcon(getClass().getResource("/icon/logo1.png")).getImage());
+
+        ImageIcon icon = new ImageIcon(getClass().getResource("/icon/hotel.jpg"));
+        Image image = icon.getImage();
+
+        Image newimage = image.getScaledInstance(1280, 720, Image.SCALE_SMOOTH);
+
+        jDesktopPane1 = new javax.swing.JDesktopPane() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(newimage, 0, 0, this);
+            }
+        };
+
+        setContentPane(jDesktopPane1);
+
     }
 
     private void centrarInternalFrame(JInternalFrame form) {
@@ -43,6 +77,57 @@ public class MenuView extends javax.swing.JFrame {
         form.setLocation(x, y);
     }
 
+    private void createLogin() throws SQLException {
+
+        jDesktopPane1.removeAll();
+        jDesktopPane1.repaint();
+        Login frmLogin = new Login();
+        frmLogin.setLoginListener((LoginListener) this);
+        centrarInternalFrame(frmLogin);
+        frmLogin.setVisible(true);
+        jDesktopPane1.add(frmLogin);
+        jDesktopPane1.moveToFront(frmLogin);
+
+    }
+
+    @Override
+    public void onLoginSuccess(int idUser, String username) {
+
+        setTitle(getTitle() + " - USUARIO: " + username);
+        idSystemUser = idUser;
+
+    }
+
+    @Override
+    public void onMethodExecution() {
+
+        user = ur.buscarPorId(idSystemUser);
+
+        userType = tr.buscarPorId(user.getTipoUsuario().getIdTipoUsuario());
+
+        if (userType.isAdmin()) {
+
+            //estadoMenus(true, true, true, true, true, true);
+        } else if (userType.isCrud()) {
+
+            //estadoMenus(true, true, true, false, false, true);
+        } else if (userType.isQueries()) {
+
+            //estadoMenus(false, false, false, true, false, true);
+        }
+
+    }
+
+//    private void estadoMenus(boolean eMenu1, boolean eMenu2, boolean eMenu3, boolean eMenu4, boolean eMenu5, boolean eMenu6) {
+//
+//        menu1.setEnabled(eMenu1);
+//        menu2.setEnabled(eMenu2);
+//        menu3.setEnabled(eMenu3);
+//        menu4.setEnabled(eMenu4);
+//        menu5.setEnabled(eMenu5);
+//        menu6.setEnabled(eMenu6);
+//
+//    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -180,6 +265,17 @@ public class MenuView extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
 
+        try {
+
+            //estadoMenus(false, false, false, false, false, false);
+            createLogin();
+
+        } catch (SQLException ex) {
+
+            JOptionPane.showConfirmDialog(this, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+
+        }
+
     }//GEN-LAST:event_formWindowOpened
 
     private void menuHuespedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuHuespedActionPerformed
@@ -275,9 +371,20 @@ public class MenuView extends javax.swing.JFrame {
 //#BF5AF2 #f00 #00C #6FF #33ffff #6ccff
         //FlatLaf.setGlobalExtraDefaults(Collections.singletonMap("@accentColor", "#6ccff"));
         FlatDarculaLaf.setup();
+
         java.awt.EventQueue.invokeLater(new Runnable() {
+
             public void run() {
-                new MenuView().setVisible(true);
+
+                try {
+
+                    new MenuView().setVisible(true);
+
+                } catch (SQLException ex) {
+
+                    JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+
+                }
             }
         });
     }
