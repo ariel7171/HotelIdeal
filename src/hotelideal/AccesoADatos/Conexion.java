@@ -13,7 +13,7 @@ public class Conexion {
     private static String password = "";
     private static String driverClassName = "org.mariadb.jdbc.Driver";
     private static String url = "jdbc:mariadb://" + server + "/" + database;
-    private static String port = "3306";
+//    private static String port = "3306";
 //    private static String timeZone = "America/Argentina/Cordoba";
 //    private static String password = "@270Jorge571";
 //    private static String driverClassName = "com.mysql.cj.jdbc.Driver";   
@@ -37,7 +37,7 @@ public class Conexion {
                 JOptionPane.showMessageDialog(null, "Error al cargar los drivers "+ex.getMessage());
             }
         }else{
-        }
+       }
 
 //        if (connection == null || connection.isClosed()) {
 //            // Utilizamos el nuevo nombre de clase del controlador
@@ -53,4 +53,5 @@ public class Conexion {
 
         return connection;
     }
+        
 }

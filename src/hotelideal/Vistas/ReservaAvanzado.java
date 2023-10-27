@@ -7,6 +7,10 @@ package hotelideal.Vistas;
 
 import hotelideal.AccesoADatos.ReservaData;
 import hotelideal.Entidades.Reserva;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.RoundRectangle2D;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -14,6 +18,8 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 /**
  *
@@ -33,12 +39,10 @@ private LocalDate fout,hoy,f1,f2;
     } catch (SQLException ex) {
         Logger.getLogger(ReservaAvanzado.class.getName()).log(Level.SEVERE, null, ex);
     }
+        setBorder(new EmptyBorder(3, 3, 3, 3));
         initComponents();
         hoy=LocalDate.now();
-        jDateChooserF1.setDateFormatString("dd MMMM yyyy");
-        jDateChooserF2.setDateFormatString("dd MMMM yyyy");
-        jDateChooserFout.setDateFormatString("dd MMMM yyyy");
-        jDateChooserFout.setDateFormatString("dd MMMM yyyy");
+        setearFormatos();
         habilitarCampos(false, false, false, false, false, false);
         habilitarBotones(true, true, false, false, true);
     }
@@ -524,7 +528,13 @@ private LocalDate fout,hoy,f1,f2;
         }
         return true;
     }
-    
+    public void setearFormatos(){
+        jTextFieldMontoFin.setHorizontalAlignment(SwingConstants.RIGHT);
+        
+        jDateChooserF1.setDateFormatString("dd MMMM yyyy");
+        jDateChooserF2.setDateFormatString("dd MMMM yyyy");
+        jDateChooserFout.setDateFormatString("dd MMMM yyyy");
+    }
     public boolean todosLosCamposHabilitados(){
         return jDateChooserF1.isEnabled()&&jDateChooserF2.isEnabled()&&jDateChooserFout.isEnabled()&&jCheckBoxActivo.isEnabled()&&jCheckBoxConfirmado.isEnabled();
     }
@@ -535,5 +545,26 @@ private LocalDate fout,hoy,f1,f2;
     public boolean campoFoutNoVacio(){
         
         return jDateChooserFout.getDate()!=null;
+    }
+    @Override
+    protected void paintComponent(Graphics g) {
+
+        int width = getWidth();
+        int height = getHeight();
+        int arc = 20; // Ajusta este valor para controlar el radio de las esquinas
+
+        Graphics2D g2d = (Graphics2D) g.create();
+
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        g2d.setColor(getBackground());
+
+        g2d.fill(new RoundRectangle2D.Float(0, 0, width, height, arc, arc));
+
+        g2d.setColor(getBackground());
+        g2d.draw(new RoundRectangle2D.Float(0, 0, width - 1, height - 1, arc, arc));
+
+        g2d.dispose();
+        super.paintComponent(g);
     }
 }

@@ -1,12 +1,10 @@
 package hotelideal.Vistas;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import static hotelideal.AccesoADatos.Conexion.getConnection;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.sql.Connection;
 import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -14,10 +12,14 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import hotelideal.AccesoADatos.HuespedData;
 import hotelideal.Entidades.Usuario;
 import hotelideal.AccesoADatos.*;
 import hotelideal.eventos.LoginListener;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.RoundRectangle2D;
+import javax.swing.border.EmptyBorder;
 
 public class Login extends javax.swing.JInternalFrame {
 
@@ -25,45 +27,46 @@ public class Login extends javax.swing.JInternalFrame {
     private UsuarioRepositorio ur;
 
     public Login() throws SQLException {
-        
+
         ur = new UsuarioRepositorio();
+
+        setBorder(new EmptyBorder(3, 3, 3, 3));
         
         initComponents();
+
         init();
-        
-        setFrameIcon(new ImageIcon(getClass().getResource("/icon/logo1.png")));
-        
+
+        setFrameIcon(new ImageIcon(getClass().getResource("/icon/hotel_21.png")));
+
         addSelectAllOnFocusToTextFields(this);
         
+        mostrarInfoCampos();
+        
+        pasarFoco(txtUserName);
+
     }
 
     private void init() {
 
         cmdLogin.addActionListener((e) -> {
 
-            //try (Connection conn = getConnection();) {
+            if (ur.login(txtUserName.getText(), new String(txtPassword.getPassword()), chkRememberMe.isSelected()) != null) {
 
-                if (ur.login(txtUserName.getText(), new String(txtPassword.getPassword()), chkRememberMe.isSelected())!= null) {
+                Usuario usu = ur.login(txtUserName.getText(), new String(txtPassword.getPassword()), chkRememberMe.isSelected());
 
-                   Usuario usu = ur.login(txtUserName.getText(), new String(txtPassword.getPassword()), chkRememberMe.isSelected());
+                dispose();
+                notifyLoginSuccess(usu.getIdUsuario(), usu.getUsuario().toUpperCase());
+                notifyMethodExecution();
 
-                    dispose();
-                    notifyLoginSuccess(usu.getIdUsuario(), usu.getUsuario().toUpperCase());
-                    notifyMethodExecution(); 
+            } else {
 
-                } else {
-                    
-                    JOptionPane.showConfirmDialog(this, "Error de Logueo", "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
-                    pasarFoco(txtUserName);
+                JOptionPane.showConfirmDialog(this, "Error de Logueo", "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+                pasarFoco(txtUserName);
 
-                }
-
-            //} catch (SQLException ex) {
-
-            //}
+            }
 
         });
-        
+
         txtUserName.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
@@ -87,42 +90,54 @@ public class Login extends javax.swing.JInternalFrame {
                 buscarUsuario();
             }
         });
-        
+
         txtPassword.putClientProperty(FlatClientProperties.STYLE, ""
                 + "showRevealButton:true");
 
-
     }
-    
+
     private void buscarUsuario() {
 
-        //try (Connection conn = getConnection();) {
+        Usuario usu = ur.buscarPorUsuario(txtUserName.getText());
 
-            Usuario usu = ur.buscarPorUsuario(txtUserName.getText());
-            
-            if (usu != null) {
-           
-                
-                if (usu.isRemember()) {
+        if (usu != null) {
 
-                    chkRememberMe.setSelected(true);
-                    txtPassword.setText(usu.getPassword());
+            if (usu.isRemember()) {
 
-                }
-
-
-            } else {
-
-                chkRememberMe.setSelected(false);
-                txtPassword.setText("");
+                chkRememberMe.setSelected(true);
+                txtPassword.setText(usu.getPassword());
 
             }
 
-        //} catch (SQLException ex) {
+        } else {
 
-            //JOptionPane.showConfirmDialog(this, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+            chkRememberMe.setSelected(false);
+            txtPassword.setText("");
 
-        //}
+        }
+
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+
+        int width = getWidth();
+        int height = getHeight();
+        int arc = 20; // Ajusta este valor para controlar el radio de las esquinas
+
+        Graphics2D g2d = (Graphics2D) g.create();
+
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        g2d.setColor(getBackground());
+
+        g2d.fill(new RoundRectangle2D.Float(0, 0, width, height, arc, arc));
+
+        g2d.setColor(getBackground());
+        g2d.draw(new RoundRectangle2D.Float(0, 0, width - 1, height - 1, arc, arc));
+
+        g2d.dispose();
+        super.paintComponent(g);
 
     }
 
@@ -131,13 +146,14 @@ public class Login extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        lblApe = new javax.swing.JLabel();
-        lblNom = new javax.swing.JLabel();
+        lblUser = new javax.swing.JLabel();
+        lblPass = new javax.swing.JLabel();
         txtUserName = new javax.swing.JTextField();
         cmdLogin = new javax.swing.JButton();
         chkRememberMe = new javax.swing.JCheckBox();
         txtPassword = new javax.swing.JPasswordField();
 
+        setTitle("BIENVENIDO AL GRAN HOTEL");
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
             }
@@ -156,14 +172,14 @@ public class Login extends javax.swing.JInternalFrame {
             }
         });
 
-        lblApe.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblApe.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblApe.setText("USUARIO");
+        lblUser.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblUser.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblUser.setText("USUARIO");
 
-        lblNom.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblNom.setText("PASSWORD");
+        lblPass.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblPass.setText("PASSWORD");
 
-        cmdLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Edit_File_16.png"))); // NOI18N
+        cmdLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/User Locked_16.png"))); // NOI18N
         cmdLogin.setText("Iniciar Sesión");
 
         chkRememberMe.setText("Recordarme");
@@ -173,42 +189,42 @@ public class Login extends javax.swing.JInternalFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addGap(36, 36, 36)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lblApe)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblUser)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lblNom)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblPass)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(chkRememberMe, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(117, 117, 117))
                             .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE))))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(96, Short.MAX_VALUE)
                 .addComponent(cmdLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(87, 87, 87))
+                .addGap(97, 97, 97))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(50, 50, 50)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblApe)
+                    .addComponent(lblUser)
                     .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblNom)
+                    .addComponent(lblPass)
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkRememberMe)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addComponent(cmdLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25))
+                .addGap(22, 22, 22))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -221,41 +237,51 @@ public class Login extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(0, 0, 0))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
-        
+
         pasarFoco(txtUserName);
-        
+
     }//GEN-LAST:event_formInternalFrameOpened
 
-    public static void addSelectAllOnFocusToTextFields(Container container) {
+    private void mostrarInfoCampos() {
         
+        lblUser.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblPass.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+
+        txtUserName.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese su Usuario");
+        txtPassword.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese su Password");
+
+    }
+
+    public static void addSelectAllOnFocusToTextFields(Container container) {
+
         for (Component component : container.getComponents()) {
-            
+
             if (component instanceof JTextField) {
-                
+
                 JTextField textField = (JTextField) component;
-                
+
                 textField.addFocusListener(new FocusAdapter() {
-                    
+
                     @Override
                     public void focusGained(FocusEvent e) {
-                        
+
                         textField.selectAll();
-                        
+
                     }
                 });
-                
+
             } else if (component instanceof Container) {
-                
+
                 // Si es un contenedor, busca campos de texto dentro del contenedor
                 addSelectAllOnFocusToTextFields((Container) component);
-                
+
             }
         }
     }
@@ -283,7 +309,7 @@ public class Login extends javax.swing.JInternalFrame {
 
         if (loginListener != null) {
 
-            loginListener.onLoginSuccess(idUser,Username);
+            loginListener.onLoginSuccess(idUser, Username);
 
         }
 
@@ -299,12 +325,13 @@ public class Login extends javax.swing.JInternalFrame {
 
     }
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox chkRememberMe;
     private javax.swing.JButton cmdLogin;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lblApe;
-    private javax.swing.JLabel lblNom;
+    private javax.swing.JLabel lblPass;
+    private javax.swing.JLabel lblUser;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUserName;
     // End of variables declaration//GEN-END:variables

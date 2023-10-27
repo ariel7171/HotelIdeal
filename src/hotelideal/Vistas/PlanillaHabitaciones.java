@@ -10,13 +10,18 @@ import hotelideal.AccesoADatos.TipoHabitacionData;
 import hotelideal.Entidades.Habitacion;
 import hotelideal.Entidades.TipoHabitacion;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.geom.RoundRectangle2D;
 import java.sql.SQLException;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -35,6 +40,9 @@ public class PlanillaHabitaciones extends javax.swing.JInternalFrame {
     private DefaultTableModel modelo;
 
     public PlanillaHabitaciones() throws SQLException {
+        
+        setBorder(new EmptyBorder(3, 3, 3, 3));
+        
         initComponents();
 
         hdata = new HabitacionData();
@@ -42,7 +50,7 @@ public class PlanillaHabitaciones extends javax.swing.JInternalFrame {
 
         listaHabitaciones = tipoHaDa.buscarTodos();
 
-        setFrameIcon(new ImageIcon(getClass().getResource("/icon/logo1.png")));
+        setFrameIcon(new ImageIcon(getClass().getResource("/icon/hotel_21.png")));
 
         cargaTipo();
 
@@ -56,6 +64,8 @@ public class PlanillaHabitaciones extends javax.swing.JInternalFrame {
         });
 
         dibujaTabla();
+        
+        
     }
 
     public void cargaTipo() {
@@ -99,18 +109,44 @@ public class PlanillaHabitaciones extends javax.swing.JInternalFrame {
         cargarTabla();
     }
 
-    public void cargarTabla() {
+public void cargarTabla() {
         modelo = (DefaultTableModel) jTable.getModel();
         modelo.setRowCount(0);
-        if (habitacion != null) {
-            String descripcion = habitacion.getDescripcion();
-            List<Habitacion> habitaciones = hdata.buscaPorDescripcion(descripcion);
-            for (Habitacion hab : habitaciones) {
-                modelo.addRow(new Object[]{
-                    hab.getNroHabitacion(),
-                    hab.getPiso(),});
-            }
+
+        int descripcionId = tipoHab.getId_tipoDeHabitacion();
+        List<Habitacion> habitaciones = hdata.buscaPorIdTipoHabitacion(descripcionId);
+//        System.out.println(habitaciones.size());
+        for (Habitacion hab : habitaciones) {
+            modelo.addRow(new Object[]{
+                hab.getId_habitacion(),
+                hab.getNroHabitacion(),
+                hab.getPiso()});
         }
+        jTable.setModel(modelo);
+        jtTotalHabitaciones.setText(""+ jTable.getRowCount());
+    }
+    
+    @Override
+    protected void paintComponent(Graphics g) {
+
+        int width = getWidth();
+        int height = getHeight();
+        int arc = 20; // Ajusta este valor para controlar el radio de las esquinas
+
+        Graphics2D g2d = (Graphics2D) g.create();
+
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        g2d.setColor(getBackground());
+
+        g2d.fill(new RoundRectangle2D.Float(0, 0, width, height, arc, arc));
+
+        g2d.setColor(getBackground());
+        g2d.draw(new RoundRectangle2D.Float(0, 0, width - 1, height - 1, arc, arc));
+
+        g2d.dispose();
+        super.paintComponent(g);
+
     }
 
     /**
@@ -130,7 +166,6 @@ public class PlanillaHabitaciones extends javax.swing.JInternalFrame {
         jbSalir = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jtTotalHabitaciones = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
 
         jTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -165,8 +200,9 @@ public class PlanillaHabitaciones extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel2.setText("Planilla De Habitaciones");
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("PLANILLA DE HABITACIONES");
 
         jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Exit_16.png"))); // NOI18N
         jbSalir.setText("Salir");
@@ -185,58 +221,46 @@ public class PlanillaHabitaciones extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel4.setText("Total");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(42, 42, 42)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(154, 154, 154)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jbSalir)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jtTotalHabitaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel1))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(30, Short.MAX_VALUE))
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jtTotalHabitaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addComponent(jComboTipo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(42, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jbSalir)
+                .addGap(30, 30, 30))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addGap(35, 35, 35)
+                .addComponent(jLabel2)
+                .addGap(25, 25, 25)
+                .addComponent(jLabel1)
+                .addGap(2, 2, 2)
+                .addComponent(jComboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jtTotalHabitaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))))
-                .addGap(30, 30, 30)
+                    .addComponent(jtTotalHabitaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(18, 18, 18)
                 .addComponent(jbSalir)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -261,7 +285,6 @@ public class PlanillaHabitaciones extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable;
     private javax.swing.JButton jbSalir;

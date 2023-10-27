@@ -5,8 +5,15 @@
  */
 package hotelideal.Vistas;
 
+
 import hotelideal.AccesoADatos.ReservaData;
 import hotelideal.Entidades.Reserva;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.RoundRectangle2D;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -16,9 +23,16 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 /**
  *
@@ -30,6 +44,7 @@ private ReservaData rData;
 private List<Reserva> reservas=new ArrayList<>();
 private Reserva reserva,r;
 private LocalDate f1,f2,hoy;
+private JDesktopPane desk;
     /**;
      * Creates new form gestionReservas
      */
@@ -39,6 +54,7 @@ private LocalDate f1,f2,hoy;
     } catch (SQLException ex) {
         Logger.getLogger(GestionReservas.class.getName()).log(Level.SEVERE, null, ex);
     }
+        setBorder(new EmptyBorder(3, 3, 3, 3));
         initComponents();
         jButtonAvanzado.setEnabled(false);
         jCheckBoxActivas.setSelected(true);
@@ -65,6 +81,7 @@ private LocalDate f1,f2,hoy;
                 }
             }
         });
+        dibujaTabla();
     }
 
     /**
@@ -237,16 +254,28 @@ private LocalDate f1,f2,hoy;
 
     private void jButtonAvanzadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAvanzadoActionPerformed
         // TODO add your handling code here:
-        JDesktopPane desk=MenuView.getjDesktopPane1();
-        desk.repaint();
-        ReservaAvanzado gestionReservas=new ReservaAvanzado();
-        int n=jTableReservas.getSelectedRow();
-        reserva=(Reserva) jTableReservas.getValueAt(n, 0);
-        gestionReservas.setReserva(reserva);
-        gestionReservas.setGestR(this);
-        gestionReservas.setVisible(true);
-        desk.add(gestionReservas);
-        desk.moveToFront(gestionReservas);
+        boolean recAvanzado=true;
+        desk=MenuView.getjDesktopPane1();
+        
+        for (JInternalFrame frame : desk.getAllFrames()) {
+            if(frame instanceof ReservaAvanzado){
+                recAvanzado=false;
+            }
+        }
+        
+        if(recAvanzado){
+            
+            desk.repaint();
+            ReservaAvanzado gestionReservas=new ReservaAvanzado();
+            int n=jTableReservas.getSelectedRow();
+            reserva=(Reserva) jTableReservas.getValueAt(n, 0);
+            gestionReservas.setReserva(reserva);
+            gestionReservas.setGestR(this);
+            centrarInternalFrame(gestionReservas);
+            gestionReservas.setVisible(true);
+            desk.add(gestionReservas);
+            desk.moveToFront(gestionReservas);
+        } 
     }//GEN-LAST:event_jButtonAvanzadoActionPerformed
 
     private void jRadioButtonTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonTodoActionPerformed
@@ -356,7 +385,7 @@ public void cargarTabla(){
         }else{
             egreso=""+re.getSalida();
         }
-        modelo.addRow(new Object[]{re,estado,re.getHabitacion().getNroHabitacion(),re.getHuesped(),re.getF_ingreso(),re.getF_salida(),ingreso,egreso,re.getCant_personas(),re.getPrecio()});
+        modelo.addRow(new Object[]{re,estado,re.getHabitacion().getNroHabitacion(),re.getHuesped(),re.getF_ingreso(),re.getF_salida(),ingreso,egreso,re.getCant_personas(),re.getPrecio()+"$"});
     }
     jTableReservas.setModel(modelo);
 }
@@ -381,4 +410,72 @@ public void cerrarReservas(){
         javax.swing.JOptionPane.showMessageDialog(this, "Se cerraron "+sinIngreso+" reservas.\nSe cerraron "+sinEgreso+" ocupaciones.\n(nuevo estado = inactivo)", "", javax.swing.JOptionPane.WARNING_MESSAGE);
     }
 }
+private void centrarInternalFrame(JInternalFrame form) {
+
+        Dimension desktopSize = desk.getSize();
+        int x = (desktopSize.width - form.getWidth()) / 2;
+        int y = (desktopSize.height - form.getHeight()) / 2;
+        form.setLocation(x, y-37);
+}
+
+public void dibujaTabla() {
+
+        // Personalizar la alineación y la fuente de la cabecera
+        JTableHeader tableHeader = jTableReservas.getTableHeader();
+        DefaultTableCellRenderer headerRenderer = (DefaultTableCellRenderer) tableHeader.getDefaultRenderer();
+
+        // Cambiar la alineación de la cabecera (izquierda en este caso)
+        headerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Cambiar la fuente de la cabecera
+        jTableReservas.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
+
+        // Crear renderizadores personalizados para diferentes alineaciones
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
+        leftRenderer.setHorizontalAlignment(JLabel.LEFT);
+
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+
+
+        jTableReservas.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        jTableReservas.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);   
+       
+        jTableReservas.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
+        
+        
+        jTableReservas.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
+        jTableReservas.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
+        
+        jTableReservas.getColumnModel().getColumn(6).setCellRenderer(centerRenderer);
+        jTableReservas.getColumnModel().getColumn(7).setCellRenderer(centerRenderer);
+        
+        jTableReservas.getColumnModel().getColumn(8).setCellRenderer(rightRenderer);
+        
+        jTableReservas.getColumnModel().getColumn(9).setCellRenderer(centerRenderer);
+    }
+
+@Override
+    protected void paintComponent(Graphics g) {
+
+        int width = getWidth();
+        int height = getHeight();
+        int arc = 20; // Ajusta este valor para controlar el radio de las esquinas
+
+        Graphics2D g2d = (Graphics2D) g.create();
+
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        g2d.setColor(getBackground());
+
+        g2d.fill(new RoundRectangle2D.Float(0, 0, width, height, arc, arc));
+
+        g2d.setColor(getBackground());
+        g2d.draw(new RoundRectangle2D.Float(0, 0, width - 1, height - 1, arc, arc));
+
+        g2d.dispose();
+        super.paintComponent(g);
+    }
 }

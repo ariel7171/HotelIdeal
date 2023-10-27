@@ -162,21 +162,24 @@ public class HabitacionData {
         return 0;
     }
 
-    public boolean buscaNumHabitacion(int nro) {
+    public Habitacion buscarPorNumHabitacion(int nro) {
 
-        try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM habitacion WHERE nroHabitacion = ?")) {
-            stmt.setInt(1, nro);
-            try (ResultSet rs = stmt.executeQuery()) {
+      Habitacion hab = new Habitacion();
+        String sql = "SELECT * FROM habitacion WHERE nroHabitacion = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql);) {
+            ps.setInt(1, nro);
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    int aux = rs.getInt(1);
-                    //se considera que la habitacion existe
-                    return aux > 0;
+                    hab = crearHabitacion(rs);
+                } else {
+                    hab = null;
                 }
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return false;
+        return hab;
     }
 
     public List buscaPorDescripcion(String des) {
@@ -194,4 +197,21 @@ public class HabitacionData {
         }
         return habitaciones;
     }
+    
+    public List buscaPorIdTipoHabitacion(int idTipoH) {
+        List<Habitacion> habitaciones = new ArrayList<>();
+        try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM habitacion WHERE id_tipoDeHabitacion = " + idTipoH)) {
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Habitacion hb = crearHabitacion(rs);
+                    habitaciones.add(hb);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return habitaciones;
+    }
+    
 }

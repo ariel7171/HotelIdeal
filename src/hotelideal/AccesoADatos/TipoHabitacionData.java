@@ -5,6 +5,7 @@
  */
 package hotelideal.AccesoADatos;
 
+import static hotelideal.AccesoADatos.Conexion.getConnection;
 import hotelideal.Entidades.TipoHabitacion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -92,6 +93,35 @@ public class TipoHabitacionData{
             ex.printStackTrace();
             return null;
         }
+    }
+    
+     public int eliminarPorId(int id) {
+
+//        try (PreparedStatement stmt = getConnection().prepareStatement("DELETE FROM usuario WHERE idUsuario = ?")) {
+//            
+//            stmt.setInt(1, id);
+//            return stmt.executeUpdate();
+//            
+//        } catch (SQLException ex) {
+//            
+//            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.BOTTOM_RIGHT, ex.getMessage());
+//            
+//        }
+//        
+//        return 0;
+        try (PreparedStatement stmt = getConnection().prepareStatement("UPDATE tipodehabitacion SET estado = 0 WHERE id_tipoDeHabitacion = ?")) {
+
+            stmt.setInt(1, id);
+            return stmt.executeUpdate();
+
+        } catch (SQLException ex) {
+
+            ex.getMessage();
+
+        }
+
+        return 0;
+
     }
 
     public TipoHabitacion crearTipoHabitacion(ResultSet rs) throws SQLException {

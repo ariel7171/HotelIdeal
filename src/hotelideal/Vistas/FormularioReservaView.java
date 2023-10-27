@@ -12,6 +12,12 @@ import hotelideal.Entidades.Habitacion;
 import hotelideal.Entidades.Huesped;
 import hotelideal.Entidades.Reserva;
 import hotelideal.Entidades.TipoHabitacion;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.RoundRectangle2D;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -21,10 +27,16 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 /**
  *
@@ -54,6 +66,7 @@ public class FormularioReservaView extends javax.swing.JInternalFrame {
         } catch (SQLException ex) {
             Logger.getLogger(FormularioReservaView.class.getName()).log(Level.SEVERE, null, ex);
         }
+        setBorder(new EmptyBorder(3, 3, 3, 3));
         hoy = LocalDate.now();
         initComponents();
         setearFormatos();
@@ -73,6 +86,8 @@ public class FormularioReservaView extends javax.swing.JInternalFrame {
                 }
             }
         });
+//        mostrarInfoCampos();
+        dibujaTabla();
     }
 
     /**
@@ -87,23 +102,21 @@ public class FormularioReservaView extends javax.swing.JInternalFrame {
         jButtonConfirmar = new javax.swing.JButton();
         jDateChooserFecha1 = new com.toedter.calendar.JDateChooser();
         jDateChooserFecha2 = new com.toedter.calendar.JDateChooser();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblHasta = new javax.swing.JLabel();
+        lblDesde = new javax.swing.JLabel();
         jButtonFiltrar = new javax.swing.JButton();
         jSpinnerCapita = new javax.swing.JSpinner();
-        jLabel3 = new javax.swing.JLabel();
+        lblCapita = new javax.swing.JLabel();
         jButtonHuesped = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabelCliente = new javax.swing.JLabel();
+        lblTitleRequerimientos = new javax.swing.JLabel();
+        lblTitleHabitaciones = new javax.swing.JLabel();
+        lblTitleNombre = new javax.swing.JLabel();
+        lblCliente = new javax.swing.JLabel();
         jButtonCancelar = new javax.swing.JButton();
         jButtonSalir = new javax.swing.JButton();
-        jLabel8 = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableHabitaciones = new javax.swing.JTable();
-
-        setPreferredSize(new java.awt.Dimension(550, 675));
 
         jButtonConfirmar.setText("Confirmar Reservacion");
         jButtonConfirmar.addActionListener(new java.awt.event.ActionListener() {
@@ -112,9 +125,9 @@ public class FormularioReservaView extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel1.setText("Hasta:");
+        lblHasta.setText("Hasta:");
 
-        jLabel2.setText("Desde:");
+        lblDesde.setText("Desde:");
 
         jButtonFiltrar.setText("Filtrar");
         jButtonFiltrar.addActionListener(new java.awt.event.ActionListener() {
@@ -123,7 +136,7 @@ public class FormularioReservaView extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel3.setText("Cápita:");
+        lblCapita.setText("Cápita:");
 
         jButtonHuesped.setText("Determinar");
         jButtonHuesped.addActionListener(new java.awt.event.ActionListener() {
@@ -132,18 +145,18 @@ public class FormularioReservaView extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel4.setText("Requeriminetos del Cliente:");
+        lblTitleRequerimientos.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        lblTitleRequerimientos.setText("Requeriminetos del Cliente:");
 
-        jLabel5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel5.setText("Habitaciones disponibles:");
+        lblTitleHabitaciones.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        lblTitleHabitaciones.setText("Habitaciones disponibles:");
 
-        jLabel6.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel6.setText("Reservar a nombre de:");
+        lblTitleNombre.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        lblTitleNombre.setText("Reservar a nombre de:");
 
-        jLabelCliente.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
-        jLabelCliente.setForeground(new java.awt.Color(0, 0, 0));
-        jLabelCliente.setText("Cliente:");
+        lblCliente.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
+        lblCliente.setForeground(new java.awt.Color(0, 0, 0));
+        lblCliente.setText("Cliente:");
 
         jButtonCancelar.setText("Cancelar");
         jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -159,9 +172,9 @@ public class FormularioReservaView extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel8.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel8.setText("FORMULARIO DE RESERVAS");
+        lblTitle.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        lblTitle.setForeground(new java.awt.Color(0, 0, 0));
+        lblTitle.setText("FORMULARIO DE RESERVAS");
 
         jTableHabitaciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -179,6 +192,8 @@ public class FormularioReservaView extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTableHabitaciones.setToolTipText("");
+        jTableHabitaciones.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jTableHabitaciones.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(jTableHabitaciones);
         if (jTableHabitaciones.getColumnModel().getColumnCount() > 0) {
@@ -209,16 +224,16 @@ public class FormularioReservaView extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblTitleRequerimientos, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jDateChooserFecha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
+                            .addComponent(lblDesde))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel1)
+                                .addComponent(lblHasta)
                                 .addGap(100, 100, 100))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
@@ -229,17 +244,17 @@ public class FormularioReservaView extends javax.swing.JInternalFrame {
                                 .addComponent(jSpinnerCapita, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(21, 21, 21)
                                 .addComponent(jButtonFiltrar))
-                            .addComponent(jLabel3)))
+                            .addComponent(lblCapita)))
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblTitleHabitaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(89, 89, 89)
-                                        .addComponent(jLabel8))
-                                    .addComponent(jLabel6))
+                                        .addComponent(lblTitle))
+                                    .addComponent(lblTitleNombre))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButtonConfirmar)
@@ -254,19 +269,19 @@ public class FormularioReservaView extends javax.swing.JInternalFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jLabel8)
+                .addComponent(lblTitle)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel4)
+                .addComponent(lblTitleRequerimientos)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addComponent(lblDesde)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addComponent(lblCapita, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblHasta, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jDateChooserFecha2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -275,15 +290,15 @@ public class FormularioReservaView extends javax.swing.JInternalFrame {
                         .addComponent(jSpinnerCapita, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jButtonFiltrar)))
                 .addGap(18, 18, 18)
-                .addComponent(jLabel5)
+                .addComponent(lblTitleHabitaciones)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
+                    .addComponent(lblTitleNombre)
                     .addComponent(jButtonHuesped))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabelCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonConfirmar)
@@ -309,13 +324,29 @@ public class FormularioReservaView extends javax.swing.JInternalFrame {
 
     private void jButtonHuespedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHuespedActionPerformed
         // TODO add your handling code here:
-        FormularioHuespedView frmHuesped = new FormularioHuespedView();
-        frmHuesped.setReserva(true);
-        frmHuesped.setVisible(true);
-        desk.add(frmHuesped);
-        desk.moveToFront(frmHuesped);
-        desk.setSelectedFrame(frmHuesped);
-        frmHuesped.setfReserva(this);
+        boolean recAvanzado=true;
+        desk=MenuView.getjDesktopPane1();
+        
+        for (JInternalFrame frame : desk.getAllFrames()) {
+            if(frame instanceof FormularioHuespedView){
+                recAvanzado=false;
+            }
+        }
+        
+        if(recAvanzado){
+            try {
+                FormularioHuespedView frmHuesped = new FormularioHuespedView();
+                centrarInternalFrame(frmHuesped);
+                frmHuesped.setReserva(true);
+                frmHuesped.setVisible(true);
+                desk.add(frmHuesped);
+                desk.moveToFront(frmHuesped);
+                desk.setSelectedFrame(frmHuesped);
+                frmHuesped.setfReserva(this);
+            } catch (SQLException ex) {
+                Logger.getLogger(FormularioReservaView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_jButtonHuespedActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
@@ -356,17 +387,17 @@ public class FormularioReservaView extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButtonSalir;
     private com.toedter.calendar.JDateChooser jDateChooserFecha1;
     private com.toedter.calendar.JDateChooser jDateChooserFecha2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabelCliente;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jSpinnerCapita;
     private javax.swing.JTable jTableHabitaciones;
+    private javax.swing.JLabel lblCapita;
+    private javax.swing.JLabel lblCliente;
+    private javax.swing.JLabel lblDesde;
+    private javax.swing.JLabel lblHasta;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JLabel lblTitleHabitaciones;
+    private javax.swing.JLabel lblTitleNombre;
+    private javax.swing.JLabel lblTitleRequerimientos;
     // End of variables declaration//GEN-END:variables
 public boolean controlarFecha() {
         if (jDateChooserFecha1.getDate() != null && jDateChooserFecha2.getDate() != null) {
@@ -393,7 +424,7 @@ public boolean controlarFecha() {
         modelo = (DefaultTableModel) jTableHabitaciones.getModel();
         modelo.setRowCount(0);
         jTableHabitaciones.setModel(modelo);
-        jLabelCliente.setText("Cliente: ");
+        lblCliente.setText("Cliente: ");
         jDateChooserFecha1.setDateFormatString("dd MMMM yyyy");
         jDateChooserFecha2.setDateFormatString("dd MMMM yyyy");
         Date n = Date.valueOf(hoy);
@@ -430,13 +461,90 @@ public boolean controlarFecha() {
     public void setHuesped(Huesped huesped) {
         if (huesped != null) {
             this.huesped = huesped;
-            jLabelCliente.setText("Cliente: " + huesped.toString());
+            lblCliente.setText("Cliente: " + huesped.toString());
             jButtonConfirmar.setEnabled(true);
             jButtonCancelar.setEnabled(true);
         } else {
-            jLabelCliente.setText("Cliente: ");
+            lblCliente.setText("Cliente: ");
             jButtonConfirmar.setEnabled(false);
             jButtonCancelar.setEnabled(false);
         }
+    }
+    private void centrarInternalFrame(JInternalFrame form) {
+
+        Dimension desktopSize = desk.getSize();
+        int x = (desktopSize.width - form.getWidth()) / 2;
+        int y = (desktopSize.height - form.getHeight()) / 2;
+        form.setLocation(x, y);
+    }
+    @Override
+    protected void paintComponent(Graphics g) {
+
+        int width = getWidth();
+        int height = getHeight();
+        int arc = 20; // Ajusta este valor para controlar el radio de las esquinas
+
+        Graphics2D g2d = (Graphics2D) g.create();
+
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        g2d.setColor(getBackground());
+
+        g2d.fill(new RoundRectangle2D.Float(0, 0, width, height, arc, arc));
+
+        g2d.setColor(getBackground());
+        g2d.draw(new RoundRectangle2D.Float(0, 0, width - 1, height - 1, arc, arc));
+
+        g2d.dispose();
+        super.paintComponent(g);
+    }
+    
+    private void mostrarInfoCampos() {
+
+        lblTitle.putClientProperty( "FlatLaf.style", "font: bold $h1.font" );
+        lblTitleHabitaciones.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblTitleNombre.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblTitleRequerimientos.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblDesde.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblHasta.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblCapita.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblHasta.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        
+//        txtDNI.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese su DNI");
+//        txtApellido.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese su Apellido");
+//        txtNombre.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese su Nombre ");
+//        txtDomicilio.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese su Domicilio");
+//        txtCelular.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "11-11111111");
+//        txtCorreo.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "algun@correo.com");
+    }
+    
+    public void dibujaTabla() {
+
+        // Personalizar la alineación y la fuente de la cabecera
+        JTableHeader tableHeader = jTableHabitaciones.getTableHeader();
+        DefaultTableCellRenderer headerRenderer = (DefaultTableCellRenderer) tableHeader.getDefaultRenderer();
+
+        // Cambiar la alineación de la cabecera (izquierda en este caso)
+        headerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Cambiar la fuente de la cabecera
+        jTableHabitaciones.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
+
+        // Crear renderizadores personalizados para diferentes alineaciones
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
+        leftRenderer.setHorizontalAlignment(JLabel.LEFT);
+
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+
+        jTableHabitaciones.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);   
+       
+        jTableHabitaciones.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);  
+        jTableHabitaciones.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
+        
+        jTableHabitaciones.getColumnModel().getColumn(5).setCellRenderer(centerRenderer);
+        jTableHabitaciones.getColumnModel().getColumn(6).setCellRenderer(centerRenderer);
     }
 }

@@ -1,19 +1,23 @@
 package hotelideal.Vistas;
 
-import static hotelideal.AccesoADatos.Conexion.getConnection;
+import com.formdev.flatlaf.FlatClientProperties;
 import hotelideal.AccesoADatos.HuespedData;
 import hotelideal.Entidades.Huesped;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.sql.Connection;
+import java.awt.geom.RoundRectangle2D;
 import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 
 public class FormularioHuespedView extends javax.swing.JInternalFrame {
 
@@ -23,21 +27,21 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
     private int estado;
     private FormularioReservaView fReserva;
 
-    public FormularioHuespedView() {
+    public FormularioHuespedView() throws SQLException {
+
+        setBorder(new EmptyBorder(3, 3, 3, 3));
 
         initComponents();
-        try {
-            hp = new HuespedData();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
 
-        //hue = new Huesped();
-        setFrameIcon(new ImageIcon(getClass().getResource("/icon/logo1.png")));
+        hp = new HuespedData();
+
+        setFrameIcon(new ImageIcon(getClass().getResource("/icon/hotel_21.png")));
 
         estado = 0;
 
         limpiarDatosHuesped();
+
+        mostrarInfoCampos();
 
         addSelectAllOnFocusToTextFields(this);
 
@@ -104,7 +108,8 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
     }
 
     private boolean validarDNI(String dni) {
-        return dni.matches("^[1-9]\\d{0,8}$");
+        //return dni.matches("^[1-9]\\d{0,8}$");
+        return dni.matches("^[1-9]\\d{6,8}$");
     }
 
     private boolean validarNomApe(String nomApe) {
@@ -112,15 +117,18 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
     }
 
     private boolean validarDomicilio(String domicilio) {
-        return domicilio.matches("^[a-zA-Z0-9.\\s]*$");
+        //return domicilio.matches("^[a-zA-Z0-9.\\s]*$");
+        return domicilio.matches("^([A-ZÁÉÍÓÚÜÑ]([.]|[a-záéíóüñ]+))([ ][A-ZÁÉÍÓÚÜÑ]([.]|[a-záéíóüñ]+)){0,5}([ ](S/N|([1-9]\\d{0,5})))");
     }
 
     private boolean validarCelular(String celular) {
-        return celular.matches("^[+]?[0-9]{10}$");
+        //return celular.matches("^[+]?[0-9]{10}$");
+        return celular.matches("^[1-9]\\d{1}-\\d{8}|[1-9]\\d{2}-\\d{7}|[1-9]\\d{3}-\\d{6}$");
     }
 
     private boolean validarCorreo(String correo) {
-        return correo.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
+        //return correo.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
+        return correo.matches("^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-zA-Z]{2,})$");
     }
 
     public static void addSelectAllOnFocusToTextFields(Container container) {
@@ -154,6 +162,29 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
 
     }
 
+    @Override
+    protected void paintComponent(Graphics g) {
+
+        int width = getWidth();
+        int height = getHeight();
+        int arc = 20; // Ajusta este valor para controlar el radio de las esquinas
+
+        Graphics2D g2d = (Graphics2D) g.create();
+
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        g2d.setColor(getBackground());
+
+        g2d.fill(new RoundRectangle2D.Float(0, 0, width, height, arc, arc));
+
+        g2d.setColor(getBackground());
+        g2d.draw(new RoundRectangle2D.Float(0, 0, width - 1, height - 1, arc, arc));
+
+        g2d.dispose();
+        super.paintComponent(g);
+
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -182,13 +213,13 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
         cmdEliminar = new javax.swing.JButton();
         cmdGuardar = new javax.swing.JButton();
         cmdCancelar = new javax.swing.JButton();
-        lblNom2 = new javax.swing.JLabel();
+        lblDom = new javax.swing.JLabel();
         txtDomicilio = new javax.swing.JTextField();
-        lblNom4 = new javax.swing.JLabel();
+        lblCel = new javax.swing.JLabel();
         txtCelular = new javax.swing.JTextField();
-        lblNom5 = new javax.swing.JLabel();
+        lblMail = new javax.swing.JLabel();
         txtCorreo = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
         cmdNuevo = new javax.swing.JButton();
         cmdSalir = new javax.swing.JButton();
 
@@ -227,7 +258,7 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
         lblEstado.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblEstado.setText("ESTADO");
 
-        chkActivo.setText("ACTIVO");
+        chkActivo.setText("Activo");
 
         cmdEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Edit_File_16.png"))); // NOI18N
         cmdEditar.setText("Editar");
@@ -261,18 +292,18 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
             }
         });
 
-        lblNom2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblNom2.setText("DOMICILIO");
+        lblDom.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblDom.setText("DOMICILIO");
 
-        lblNom4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblNom4.setText("CELULAR");
+        lblCel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblCel.setText("CELULAR");
 
-        lblNom5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblNom5.setText("CORREO");
+        lblMail.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblMail.setText("CORREO");
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("FORMULARIO DE HUESPED");
+        lblTitle.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTitle.setText("FORMULARIO DE HUESPED");
 
         cmdNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/New_16.png"))); // NOI18N
         cmdNuevo.setText("Nuevo");
@@ -294,61 +325,64 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(panelLayout.createSequentialGroup()
-                .addGap(30, 30, 30)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelLayout.createSequentialGroup()
-                        .addComponent(cmdGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(cmdCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(cmdSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(60, 60, 60)
+                        .addComponent(lblEstado)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chkActivo))
                     .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(50, 50, 50)
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblNom5)
-                            .addComponent(lblNom4)
-                            .addComponent(lblNom2))
-                        .addGap(18, 18, 18)
-                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtCelular, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
-                            .addComponent(txtDomicilio)
-                            .addComponent(txtCorreo)))
-                    .addGroup(panelLayout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblNom)
+                            .addComponent(lblApe)
+                            .addComponent(lblDni))
+                        .addGap(6, 6, 6)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(panelLayout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(lblEstado)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(chkActivo))
+                                .addComponent(txtDNI, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmdBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                            .addComponent(txtApellido)))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(panelLayout.createSequentialGroup()
                                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lblApe)
-                                    .addComponent(lblDni)
-                                    .addComponent(lblNom))
-                                .addGap(18, 18, 18)
-                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(lblCel)
+                                    .addComponent(lblDom)
+                                    .addComponent(lblMail))
+                                .addGap(6, 6, 6)
+                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtCelular, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                                    .addComponent(txtDomicilio)
+                                    .addComponent(txtCorreo)))
+                            .addGroup(panelLayout.createSequentialGroup()
+                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(panelLayout.createSequentialGroup()
-                                        .addComponent(txtDNI, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(cmdGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(cmdBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(txtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
-                                    .addComponent(txtApellido)))))
-                    .addGroup(panelLayout.createSequentialGroup()
-                        .addComponent(cmdNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(cmdEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(cmdEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(30, Short.MAX_VALUE))
+                                        .addComponent(cmdCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cmdSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(panelLayout.createSequentialGroup()
+                                        .addComponent(cmdNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cmdEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cmdEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(6, 6, 6)))))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
+                .addGap(37, 37, 37)
+                .addComponent(lblTitle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDni)
                     .addComponent(txtDNI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -363,21 +397,21 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblNom2)
+                    .addComponent(lblDom)
                     .addComponent(txtDomicilio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblNom4)
+                    .addComponent(lblCel)
                     .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblNom5)
+                    .addComponent(lblMail)
                     .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblEstado)
                     .addComponent(chkActivo, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
+                .addGap(15, 15, 15)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmdEliminar)
                     .addComponent(cmdEditar)
@@ -387,7 +421,7 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
                     .addComponent(cmdGuardar)
                     .addComponent(cmdCancelar)
                     .addComponent(cmdSalir))
-                .addGap(16, 16, 16))
+                .addGap(25, 25, 25))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -454,7 +488,7 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
             pasarFoco(txtDNI);
 
         }
-
+        
         estado = 0;
 
         if (reserva) {
@@ -506,7 +540,6 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
             hue = new Huesped("" + txtNombre.getText(), "" + txtApellido.getText(), "" + txtDomicilio.getText(), "" + txtCorreo.getText(), "" + txtCelular.getText(), "" + txtDNI.getText(), Integer.parseInt(txtId.getText()), chkActivo.isSelected());
         }
 
-        limpiarDatosHuesped();
         hue = hp.guardar(hue);
 
         if (hue != null) {
@@ -527,6 +560,7 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
             }
         }
 
+        limpiarDatosHuesped();
         estado = 0;
         pasarFoco(txtDNI);
 
@@ -535,7 +569,6 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
     private void cmdEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdEliminarActionPerformed
 
         String dni = txtDNI.getText();
-        limpiarDatosHuesped();
 
         if (JOptionPane.showConfirmDialog(this, "Esta Seguro que desea eliminar el Alumno?", "Eliminar Alumno", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == 0) {
 
@@ -553,8 +586,8 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
 
         }
 
+        limpiarDatosHuesped();
         estado = 0;
-
         pasarFoco(txtDNI);
 
     }//GEN-LAST:event_cmdEliminarActionPerformed
@@ -602,6 +635,25 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
         this.fReserva = fReserva;
     }
 
+    private void mostrarInfoCampos() {
+
+        lblTitle.putClientProperty( "FlatLaf.style", "font: bold $h1.font" );
+        lblDni.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblApe.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblNom.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblDom.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblMail.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblEstado.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        
+        txtDNI.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese su DNI");
+        txtApellido.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese su Apellido");
+        txtNombre.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese su Nombre ");
+        txtDomicilio.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese su Domicilio");
+        txtCelular.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "11-11111111");
+        txtCorreo.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "algun@correo.com");
+
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox chkActivo;
@@ -612,16 +664,16 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
     private javax.swing.JButton cmdGuardar;
     private javax.swing.JButton cmdNuevo;
     private javax.swing.JButton cmdSalir;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblApe;
+    private javax.swing.JLabel lblCel;
     private javax.swing.JLabel lblDni;
+    private javax.swing.JLabel lblDom;
     private javax.swing.JLabel lblEstado;
+    private javax.swing.JLabel lblMail;
     private javax.swing.JLabel lblNom;
     private javax.swing.JLabel lblNom1;
-    private javax.swing.JLabel lblNom2;
     private javax.swing.JLabel lblNom3;
-    private javax.swing.JLabel lblNom4;
-    private javax.swing.JLabel lblNom5;
+    private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel panel;
     private javax.swing.JTextField txtApellido;
     private javax.swing.JTextField txtCelular;

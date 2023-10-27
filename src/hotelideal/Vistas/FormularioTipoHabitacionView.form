@@ -53,20 +53,12 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="panel" max="32767" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
-          </Group>
+          <Component id="panel" min="-2" pref="426" max="-2" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="panel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
-          </Group>
+          <Component id="panel" min="-2" max="-2" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -78,66 +70,66 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
-                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
-                          <Component id="lblEstado" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="chkActivo" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
-                                  <Component id="lblCantPer" min="-2" max="-2" attributes="0"/>
+                                  <Component id="cmdNuevo" min="-2" pref="100" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="txtCantPer" min="-2" pref="254" max="-2" attributes="0"/>
+                                  <Component id="cmdEditar" min="-2" pref="100" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="cmdSalir" min="-2" pref="100" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
-                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                      <Component id="lblDescripcion" max="32767" attributes="0"/>
-                                      <Component id="lblPrecioNoche" alignment="1" min="-2" max="-2" attributes="0"/>
-                                      <Component id="lblTipo" alignment="1" max="32767" attributes="0"/>
-                                      <Component id="lblCamasKing" min="-2" max="-2" attributes="0"/>
-                                      <Component id="lblCamasQueen" min="-2" max="-2" attributes="0"/>
-                                      <Component id="lblCamasSimples" min="-2" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="cmdGuardar" min="-2" pref="100" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="txtCamasSimples" min="-2" pref="254" max="-2" attributes="0"/>
-                                      <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="txtPrecioNoche" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jcbTipoHabitacion" alignment="0" min="-2" pref="182" max="-2" attributes="0"/>
-                                          <Component id="txtCamasKing" alignment="0" pref="254" max="32767" attributes="0"/>
-                                          <Component id="txtCamasQueen" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="txtDescripcion" alignment="0" max="32767" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
-                                          <Component id="cmdGuardar" min="-2" pref="100" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="cmdCancelar" min="-2" pref="100" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="cmdNuevo" min="-2" pref="100" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="cmdEditar" min="-2" pref="100" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="cmdSalir" min="-2" pref="100" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
+                                  <Component id="cmdCancelar" min="-2" pref="100" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="64" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="lblSimples" alignment="1" pref="100" max="32767" attributes="0"/>
+                              <Component id="lblQueen" alignment="1" max="32767" attributes="0"/>
+                              <Component id="lblKing" alignment="1" max="32767" attributes="0"/>
+                              <Component id="lblPrecio" alignment="1" max="32767" attributes="0"/>
+                              <Component id="lblNom" alignment="1" max="32767" attributes="0"/>
+                              <Component id="lblTipo" alignment="1" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="txtDescripcion" alignment="0" max="32767" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jcbTipoHabitacion" min="-2" pref="234" max="-2" attributes="0"/>
+                                      <Component id="txtCamasKing" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtPrecioNoche" alignment="0" min="-2" pref="86" max="-2" attributes="0"/>
+                                      <Component id="txtCamasQueen" alignment="0" min="-2" pref="64" max="-2" attributes="0"/>
+                                      <Component id="txtCamasSimples" alignment="0" min="-2" pref="64" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="lblEstado" max="32767" attributes="0"/>
+                              <Component id="lblCant" pref="142" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="chkActivo" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtCantPer" min="-2" pref="64" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="170" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
+                  <EmptySpace min="-2" pref="244" max="-2" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="lblTitle" min="-2" pref="424" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -145,60 +137,60 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jLabel1" min="-2" pref="27" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                  <Component id="lblTitle" min="-2" pref="27" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jcbTipoHabitacion" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
                       <Component id="lblTipo" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="lblDescripcion" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblNom" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtDescripcion" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="lblPrecioNoche" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblPrecio" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtPrecioNoche" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="lblCamasKing" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblKing" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtCamasKing" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="lblCamasQueen" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblQueen" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtCamasQueen" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="lblCamasSimples" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblSimples" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtCamasSimples" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="txtCantPer" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblCant" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="lblCantPer" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtCantPer" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="lblEstado" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="chkActivo" alignment="3" min="-2" pref="21" max="-2" attributes="0"/>
+                      <Component id="lblEstado" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="cmdSalir" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="cmdNuevo" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="cmdEditar" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cmdSalir" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="cmdGuardar" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="cmdCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="25" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -210,42 +202,34 @@
               <Font name="Segoe UI" size="12" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="4"/>
-            <Property name="text" type="java.lang.String" value="TIPO DE HAB:"/>
+            <Property name="text" type="java.lang.String" value="TIPO"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblDescripcion">
+        <Component class="javax.swing.JLabel" name="lblNom">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="4"/>
-            <Property name="text" type="java.lang.String" value="NOMBRE"/>
+            <Property name="text" type="java.lang.String" value="DESCRIPCION"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtDescripcion">
         </Component>
-        <Component class="javax.swing.JLabel" name="lblPrecioNoche">
+        <Component class="javax.swing.JLabel" name="lblPrecio">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
             </Property>
+            <Property name="horizontalAlignment" type="int" value="4"/>
             <Property name="text" type="java.lang.String" value="PRECIO NOCHE"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtPrecioNoche">
         </Component>
-        <Component class="javax.swing.JLabel" name="lblEstado">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Segoe UI" size="12" style="1"/>
-            </Property>
-            <Property name="horizontalAlignment" type="int" value="4"/>
-            <Property name="text" type="java.lang.String" value="ESTADO"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JCheckBox" name="chkActivo">
           <Properties>
-            <Property name="text" type="java.lang.String" value="ACTIVO"/>
+            <Property name="text" type="java.lang.String" value="Activo"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="cmdNuevo">
@@ -303,44 +287,45 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmdCancelarActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblCamasKing">
+        <Component class="javax.swing.JLabel" name="lblKing">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
             </Property>
+            <Property name="horizontalAlignment" type="int" value="4"/>
             <Property name="text" type="java.lang.String" value="CAMAS KING"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtCamasKing">
         </Component>
-        <Component class="javax.swing.JLabel" name="lblCamasQueen">
+        <Component class="javax.swing.JLabel" name="lblQueen">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
             </Property>
+            <Property name="horizontalAlignment" type="int" value="4"/>
             <Property name="text" type="java.lang.String" value="CAMAS QUEEN"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtCamasQueen">
         </Component>
-        <Component class="javax.swing.JLabel" name="lblCamasSimples">
+        <Component class="javax.swing.JLabel" name="lblSimples">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
             </Property>
+            <Property name="horizontalAlignment" type="int" value="4"/>
             <Property name="text" type="java.lang.String" value="CAMAS SIMPLES"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtCamasSimples">
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel1">
+        <Component class="javax.swing.JLabel" name="lblTitle">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Dialog" size="18" style="1"/>
             </Property>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="0" green="0" red="0" type="rgb"/>
-            </Property>
+            <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="FORMULARIO TIPO HABITACION"/>
           </Properties>
         </Component>
@@ -357,15 +342,25 @@
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;TipoHabitacion&gt;"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblCantPer">
+        <Component class="javax.swing.JTextField" name="txtCantPer">
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblCant">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="CANT PERSONAS"/>
+            <Property name="horizontalAlignment" type="int" value="4"/>
+            <Property name="text" type="java.lang.String" value="CANT. PERS."/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtCantPer">
+        <Component class="javax.swing.JLabel" name="lblEstado">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
+            <Property name="horizontalAlignment" type="int" value="4"/>
+            <Property name="text" type="java.lang.String" value="ESTADO"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

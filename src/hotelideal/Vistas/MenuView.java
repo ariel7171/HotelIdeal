@@ -5,7 +5,6 @@
  */
 package hotelideal.Vistas;
 
-
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
@@ -17,17 +16,27 @@ import hotelideal.AccesoADatos.UsuarioRepositorio;
 import hotelideal.Entidades.TipoUsuario;
 import hotelideal.Entidades.Usuario;
 import hotelideal.eventos.LoginListener;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
+import java.awt.geom.RoundRectangle2D;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 public class MenuView extends javax.swing.JFrame implements LoginListener {
 
@@ -39,6 +48,7 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
     private Usuario user;
     private TipoUsuario userType;
     private int idSystemUser;
+    private String tipoUser;
 
     public MenuView() throws SQLException {
 
@@ -46,11 +56,14 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
         tr = new TipoUsuarioRepositorio();
 
         initComponents();
+
         setSize(1280, 720);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
-        setIconImage(new ImageIcon(getClass().getResource("/icon/logo1.png")).getImage());
+        setIconImage(new ImageIcon(getClass().getResource("/icon/hotel_21.png")).getImage());
+
+        asignarAccesosMenu();
 
         ImageIcon icon = new ImageIcon(getClass().getResource("/icon/hotel.jpg"));
         Image image = icon.getImage();
@@ -106,28 +119,43 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
         userType = tr.buscarPorId(user.getTipoUsuario().getIdTipoUsuario());
 
         if (userType.isAdmin()) {
-
+            estadoMenus(true, true, true, true, true);
+            tipoUser = "admin";
             //estadoMenus(true, true, true, true, true, true);
         } else if (userType.isCrud()) {
-
+            estadoMenus(true, true, true, false, true);
+            tipoUser = "crud";
             //estadoMenus(true, true, true, false, false, true);
         } else if (userType.isQueries()) {
-
+            estadoMenus(false, true, false, false, true);
+            tipoUser = "queries";
             //estadoMenus(false, false, false, true, false, true);
         }
 
     }
 
-//    private void estadoMenus(boolean eMenu1, boolean eMenu2, boolean eMenu3, boolean eMenu4, boolean eMenu5, boolean eMenu6) {
-//
-//        menu1.setEnabled(eMenu1);
-//        menu2.setEnabled(eMenu2);
-//        menu3.setEnabled(eMenu3);
-//        menu4.setEnabled(eMenu4);
-//        menu5.setEnabled(eMenu5);
-//        menu6.setEnabled(eMenu6);
-//
-//    }
+    @Override
+    public void paintComponents(Graphics g) {
+
+        super.paintComponents(g);
+        Graphics2D g2d = (Graphics2D) g.create();
+
+        int arc = 20; // Radio del arco para redondear las esquinas
+
+        int width = getWidth();
+        int height = getHeight();
+
+        RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, width, height, arc, arc);
+        g2d.setClip(roundedRectangle);
+
+        // Puedes personalizar el fondo del JFrame aquí
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, width, height);
+
+        g2d.dispose();
+
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -139,16 +167,21 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
 
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        mHuesped = new javax.swing.JMenu();
         menuHuesped = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        mHabitacion = new javax.swing.JMenu();
         menuHabitacion = new javax.swing.JMenuItem();
         menuTipoHabitacion = new javax.swing.JMenuItem();
-        planilla = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
-        menuReserva = new javax.swing.JMenuItem();
-        NuevaReserva = new javax.swing.JMenuItem();
-        menuSalir = new javax.swing.JMenu();
+        menuPlanilla = new javax.swing.JMenuItem();
+        mReserva = new javax.swing.JMenu();
+        menuManejoReserva = new javax.swing.JMenuItem();
+        menuNuevaReserva = new javax.swing.JMenuItem();
+        mAdministrar = new javax.swing.JMenu();
+        menuTipoUsuario = new javax.swing.JMenuItem();
+        menuUsuario = new javax.swing.JMenuItem();
+        mAyuda = new javax.swing.JMenu();
+        menuSalir = new javax.swing.JMenuItem();
+        menuAcerca = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -168,83 +201,131 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
             .addGap(0, 602, Short.MAX_VALUE)
         );
 
-        jMenu1.setText("Huesped");
+        mHuesped.setText("Huesped");
+        mHuesped.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
+        menuHuesped.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Guest_16.png"))); // NOI18N
         menuHuesped.setText("Formulario Huesped");
         menuHuesped.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuHuespedActionPerformed(evt);
             }
         });
-        jMenu1.add(menuHuesped);
+        mHuesped.add(menuHuesped);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(mHuesped);
 
-        jMenu2.setText("Habitacion");
+        mHabitacion.setText("Habitacion");
 
+        menuHabitacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Room_16.png"))); // NOI18N
         menuHabitacion.setText("Formulario Habitacion");
         menuHabitacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuHabitacionActionPerformed(evt);
             }
         });
-        jMenu2.add(menuHabitacion);
+        mHabitacion.add(menuHabitacion);
 
+        menuTipoHabitacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/RoomType_16.png"))); // NOI18N
         menuTipoHabitacion.setText("Formulario Tipo de Habitacion");
         menuTipoHabitacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuTipoHabitacionActionPerformed(evt);
             }
         });
-        jMenu2.add(menuTipoHabitacion);
+        mHabitacion.add(menuTipoHabitacion);
 
-        planilla.setText("Planilla De Habitaciones");
-        planilla.addActionListener(new java.awt.event.ActionListener() {
+        menuPlanilla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/RoomList_16.png"))); // NOI18N
+        menuPlanilla.setText("Planilla De Habitaciones");
+        menuPlanilla.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                planillaActionPerformed(evt);
+                menuPlanillaActionPerformed(evt);
             }
         });
-        jMenu2.add(planilla);
+        mHabitacion.add(menuPlanilla);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(mHabitacion);
 
-        jMenu3.setText("Reserva");
-        jMenu3.addActionListener(new java.awt.event.ActionListener() {
+        mReserva.setText("Reserva");
+        mReserva.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu3ActionPerformed(evt);
+                mReservaActionPerformed(evt);
             }
         });
 
-        menuReserva.setText("Manejo de Reservas");
-        menuReserva.addActionListener(new java.awt.event.ActionListener() {
+        menuManejoReserva.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/CheckOut_16.png"))); // NOI18N
+        menuManejoReserva.setText("Manejo de Reservas");
+        menuManejoReserva.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuReservaActionPerformed(evt);
+                menuManejoReservaActionPerformed(evt);
             }
         });
-        jMenu3.add(menuReserva);
+        mReserva.add(menuManejoReserva);
 
-        NuevaReserva.setText("Nueva Reservación");
-        NuevaReserva.addActionListener(new java.awt.event.ActionListener() {
+        menuNuevaReserva.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/CheckIn_16.png"))); // NOI18N
+        menuNuevaReserva.setText("Nueva Reservación");
+        menuNuevaReserva.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NuevaReservaActionPerformed(evt);
+                menuNuevaReservaActionPerformed(evt);
             }
         });
-        jMenu3.add(NuevaReserva);
+        mReserva.add(menuNuevaReserva);
 
-        jMenuBar1.add(jMenu3);
+        jMenuBar1.add(mReserva);
 
-        menuSalir.setText("Salir");
-        menuSalir.addMouseListener(new java.awt.event.MouseAdapter() {
+        mAdministrar.setText("Administrar");
+
+        menuTipoUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/UserType_16.png"))); // NOI18N
+        menuTipoUsuario.setText("Formulario Tipo Usuario");
+        menuTipoUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuTipoUsuarioActionPerformed(evt);
+            }
+        });
+        mAdministrar.add(menuTipoUsuario);
+
+        menuUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/User_16.png"))); // NOI18N
+        menuUsuario.setText("Formulario Usuario");
+        menuUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuUsuarioActionPerformed(evt);
+            }
+        });
+        mAdministrar.add(menuUsuario);
+
+        jMenuBar1.add(mAdministrar);
+
+        mAyuda.setText("Ayuda");
+        mAyuda.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                menuSalirMouseClicked(evt);
+                mAyudaMouseClicked(evt);
             }
         });
+        mAyuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mAyudaActionPerformed(evt);
+            }
+        });
+
+        menuSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/ExitMenu_16.png"))); // NOI18N
+        menuSalir.setText("Salir");
         menuSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuSalirActionPerformed(evt);
             }
         });
-        jMenuBar1.add(menuSalir);
+        mAyuda.add(menuSalir);
+
+        menuAcerca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/About_16.png"))); // NOI18N
+        menuAcerca.setText("Acerca de...");
+        menuAcerca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAcercaActionPerformed(evt);
+            }
+        });
+        mAyuda.add(menuAcerca);
+
+        jMenuBar1.add(mAyuda);
 
         setJMenuBar(jMenuBar1);
 
@@ -267,7 +348,7 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
 
         try {
 
-            //estadoMenus(false, false, false, false, false, false);
+            estadoMenus(false, false, false, false, false);
             createLogin();
 
         } catch (SQLException ex) {
@@ -279,30 +360,54 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
     }//GEN-LAST:event_formWindowOpened
 
     private void menuHuespedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuHuespedActionPerformed
-        jDesktopPane1.removeAll();
-        jDesktopPane1.repaint();
-        FormularioHuespedView frmHuesped = new FormularioHuespedView();
-        centrarInternalFrame(frmHuesped);
-        frmHuesped.setVisible(true);
-        jDesktopPane1.add(frmHuesped);
-        jDesktopPane1.moveToFront(frmHuesped);
+
+        try {
+
+            jDesktopPane1.removeAll();
+            jDesktopPane1.repaint();
+            FormularioHuespedView frmHuesped;
+            frmHuesped = new FormularioHuespedView();
+            centrarInternalFrame(frmHuesped);
+            frmHuesped.setVisible(true);
+            jDesktopPane1.add(frmHuesped);
+            jDesktopPane1.moveToFront(frmHuesped);
+
+        } catch (SQLException ex) {
+
+            JOptionPane.showConfirmDialog(this, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+
+        }
+
+
     }//GEN-LAST:event_menuHuespedActionPerformed
 
     private void menuHabitacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuHabitacionActionPerformed
-        try {
-            jDesktopPane1.removeAll();
-            jDesktopPane1.repaint();
-            FormularioHabitacionView fhv = new FormularioHabitacionView();
-            centrarInternalFrame(fhv);
-            fhv.setVisible(true);
-            jDesktopPane1.add(fhv);
-            jDesktopPane1.moveToFront(fhv);
-        } catch (SQLException ex) {
-            Logger.getLogger(MenuView.class.getName()).log(Level.SEVERE, null, ex);
+        if (tipoUser.equals("admin") || tipoUser.equals("crud")) {
+
+            try {
+
+                jDesktopPane1.removeAll();
+                jDesktopPane1.repaint();
+                FormularioHabitacionView fhv = new FormularioHabitacionView();
+                centrarInternalFrame(fhv);
+                fhv.setVisible(true);
+                jDesktopPane1.add(fhv);
+                jDesktopPane1.moveToFront(fhv);
+
+            } catch (SQLException ex) {
+
+                JOptionPane.showConfirmDialog(this, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+
+            }
+
+        } else {
+
+            JOptionPane.showConfirmDialog(this, "No tiene acceso a esta opcion", "Error", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+
         }
     }//GEN-LAST:event_menuHabitacionActionPerformed
 
-    private void menuReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuReservaActionPerformed
+    private void menuManejoReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManejoReservaActionPerformed
         jDesktopPane1.removeAll();
         jDesktopPane1.repaint();
         GestionReservas gestionReservas = new GestionReservas();
@@ -310,32 +415,37 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
         gestionReservas.setVisible(true);
         jDesktopPane1.add(gestionReservas);
         jDesktopPane1.moveToFront(gestionReservas);
-    }//GEN-LAST:event_menuReservaActionPerformed
+    }//GEN-LAST:event_menuManejoReservaActionPerformed
 
     private void menuTipoHabitacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuTipoHabitacionActionPerformed
         // TODO add your handling code here:
-        jDesktopPane1.removeAll();
-        jDesktopPane1.repaint();
-        FormularioTipoHabitacionView frmTH = new FormularioTipoHabitacionView();
-        centrarInternalFrame(frmTH);
-        frmTH.setVisible(true);
-        jDesktopPane1.add(frmTH);
-        jDesktopPane1.moveToFront(frmTH);
+        if (tipoUser.equals("admin") || tipoUser.equals("crud")) {
+            jDesktopPane1.removeAll();
+            jDesktopPane1.repaint();
+            FormularioTipoHabitacionView frmTH = new FormularioTipoHabitacionView();
+            centrarInternalFrame(frmTH);
+            frmTH.setVisible(true);
+            jDesktopPane1.add(frmTH);
+            jDesktopPane1.moveToFront(frmTH);
+        } else {
+            JOptionPane.showConfirmDialog(this, "No tiene acceso a esta opcion", "Error", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_menuTipoHabitacionActionPerformed
 
-    private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSalirActionPerformed
+    private void mAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mAyudaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_menuSalirActionPerformed
 
-    private void menuSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuSalirMouseClicked
-        System.exit(0);
-    }//GEN-LAST:event_menuSalirMouseClicked
+    }//GEN-LAST:event_mAyudaActionPerformed
 
-    private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu3ActionPerformed
+    private void mAyudaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mAyudaMouseClicked
+
+    }//GEN-LAST:event_mAyudaMouseClicked
+
+    private void mReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mReservaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenu3ActionPerformed
+    }//GEN-LAST:event_mReservaActionPerformed
 
-    private void NuevaReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevaReservaActionPerformed
+    private void menuNuevaReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuNuevaReservaActionPerformed
         // TODO add your handling code here:
         jDesktopPane1.removeAll();
         jDesktopPane1.repaint();
@@ -344,21 +454,79 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
         frmReseva.setVisible(true);
         jDesktopPane1.add(frmReseva);
         jDesktopPane1.moveToFront(frmReseva);
-    }//GEN-LAST:event_NuevaReservaActionPerformed
+    }//GEN-LAST:event_menuNuevaReservaActionPerformed
 
-    private void planillaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_planillaActionPerformed
-        try {
-            jDesktopPane1.removeAll();
-            jDesktopPane1.repaint();
-            PlanillaHabitaciones ph = new PlanillaHabitaciones();
-            centrarInternalFrame(ph);
-            ph.setVisible(true);
-            jDesktopPane1.add(ph);
-            jDesktopPane1.moveToFront(ph);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+    private void menuPlanillaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPlanillaActionPerformed
+        if (tipoUser.equals("admin") || tipoUser.equals("queries")) {
+            try {
+                jDesktopPane1.removeAll();
+                jDesktopPane1.repaint();
+                PlanillaHabitaciones ph = new PlanillaHabitaciones();
+                centrarInternalFrame(ph);
+                ph.setVisible(true);
+                jDesktopPane1.add(ph);
+                jDesktopPane1.moveToFront(ph);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            JOptionPane.showConfirmDialog(this, "No tiene acceso a esta opcion", "Error", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
         }
-    }//GEN-LAST:event_planillaActionPerformed
+    }//GEN-LAST:event_menuPlanillaActionPerformed
+
+    private void menuTipoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuTipoUsuarioActionPerformed
+        // TODO add your handling code here:
+        if (tipoUser.equals("admin")) {
+            try {
+                jDesktopPane1.removeAll();
+                jDesktopPane1.repaint();
+                TiposUsuario frmTipoUsuario = new TiposUsuario();
+                centrarInternalFrame(frmTipoUsuario);
+                frmTipoUsuario.setVisible(true);
+                jDesktopPane1.add(frmTipoUsuario);
+                jDesktopPane1.moveToFront(frmTipoUsuario);
+            } catch (SQLException ex) {
+                JOptionPane.showConfirmDialog(this, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showConfirmDialog(this, "No tiene acceso a esta opcion", "Error", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_menuTipoUsuarioActionPerformed
+
+    private void menuUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuUsuarioActionPerformed
+        // TODO add your handling code here:
+        if (tipoUser.equals("admin")) {
+            try {
+                jDesktopPane1.removeAll();
+                jDesktopPane1.repaint();
+                ABMUsuarios frmUsuario = new ABMUsuarios();
+                centrarInternalFrame(frmUsuario);
+                frmUsuario.setVisible(true);
+                jDesktopPane1.add(frmUsuario);
+                jDesktopPane1.moveToFront(frmUsuario);
+            } catch (SQLException ex) {
+                JOptionPane.showConfirmDialog(this, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showConfirmDialog(this, "No tiene acceso a esta opcion", "Error", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_menuUsuarioActionPerformed
+
+    private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSalirActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_menuSalirActionPerformed
+
+    private void menuAcercaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAcercaActionPerformed
+        // TODO add your handling code here:
+        jDesktopPane1.removeAll();
+        jDesktopPane1.repaint();
+        AcercaDe frmAcerca = new AcercaDe();
+        centrarInternalFrame(frmAcerca);
+        frmAcerca.setVisible(true);
+        jDesktopPane1.add(frmAcerca);
+        jDesktopPane1.moveToFront(frmAcerca);
+    }//GEN-LAST:event_menuAcercaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -390,21 +558,55 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem NuevaReserva;
     private static javax.swing.JDesktopPane jDesktopPane1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu mAdministrar;
+    private javax.swing.JMenu mAyuda;
+    private javax.swing.JMenu mHabitacion;
+    private javax.swing.JMenu mHuesped;
+    private javax.swing.JMenu mReserva;
+    private javax.swing.JMenuItem menuAcerca;
     private javax.swing.JMenuItem menuHabitacion;
     private javax.swing.JMenuItem menuHuesped;
-    private javax.swing.JMenuItem menuReserva;
-    private javax.swing.JMenu menuSalir;
+    private javax.swing.JMenuItem menuManejoReserva;
+    private javax.swing.JMenuItem menuNuevaReserva;
+    private javax.swing.JMenuItem menuPlanilla;
+    private javax.swing.JMenuItem menuSalir;
     private javax.swing.JMenuItem menuTipoHabitacion;
-    private javax.swing.JMenuItem planilla;
+    private javax.swing.JMenuItem menuTipoUsuario;
+    private javax.swing.JMenuItem menuUsuario;
     // End of variables declaration//GEN-END:variables
 
     public static JDesktopPane getjDesktopPane1() {
         return jDesktopPane1;
     }
+
+    private void estadoMenus(boolean b, boolean b0, boolean b1, boolean b2, boolean b3) {
+        mHuesped.setEnabled(b);
+        mHabitacion.setEnabled(b0);
+        mReserva.setEnabled(b1);
+        mAdministrar.setEnabled(b2);
+        mAyuda.setEnabled(b3);
+    }
+
+    private void asignarAccesosMenu() {
+
+        mHuesped.setMnemonic(KeyEvent.VK_H);
+        menuHuesped.setMnemonic(KeyEvent.VK_E);
+        mHabitacion.setMnemonic(KeyEvent.VK_B);
+        menuHabitacion.setMnemonic(KeyEvent.VK_I);
+        menuTipoHabitacion.setMnemonic(KeyEvent.VK_T);
+        menuPlanilla.setMnemonic(KeyEvent.VK_P);
+        mReserva.setMnemonic(KeyEvent.VK_E);
+        menuManejoReserva.setMnemonic(KeyEvent.VK_M);
+        menuNuevaReserva.setMnemonic(KeyEvent.VK_N);
+        mAdministrar.setMnemonic(KeyEvent.VK_A);
+        menuUsuario.setMnemonic(KeyEvent.VK_U);
+        menuTipoUsuario.setMnemonic(KeyEvent.VK_O);
+        mAyuda.setMnemonic(KeyEvent.VK_Y);
+        menuSalir.setMnemonic(KeyEvent.VK_S);
+        menuAcerca.setMnemonic(KeyEvent.VK_D);
+
+    }
+
 }

@@ -1,17 +1,24 @@
 package hotelideal.Vistas;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import hotelideal.AccesoADatos.TipoHabitacionData;
 import hotelideal.Entidades.TipoHabitacion;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
+import java.awt.geom.RoundRectangle2D;
 import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 
 public class FormularioTipoHabitacionView extends javax.swing.JInternalFrame {
 
@@ -21,6 +28,8 @@ public class FormularioTipoHabitacionView extends javax.swing.JInternalFrame {
     private int estado;
 
     public FormularioTipoHabitacionView() {
+        
+        setBorder(new EmptyBorder(3, 3, 3, 3));
 
         initComponents();
         try {
@@ -31,15 +40,17 @@ public class FormularioTipoHabitacionView extends javax.swing.JInternalFrame {
 
         th = new TipoHabitacion();
 
-        setFrameIcon(new ImageIcon(getClass().getResource("/icon/logo1.png")));
+        setFrameIcon(new ImageIcon(getClass().getResource("/icon/hotel_21.png")));
 
         estado = 0;
-
+        
         limpiarDatosTipoHabitacion();
 
         addSelectAllOnFocusToTextFields(this);
 
         cargarTipoHabitacion();
+        
+        mostrarInfoCampos();
 
         pasarFoco(jcbTipoHabitacion);
 
@@ -101,11 +112,16 @@ public class FormularioTipoHabitacionView extends javax.swing.JInternalFrame {
     private void limpiarCampos() {
 
         txtDescripcion.setText("");
-        txtPrecioNoche.setText("");
-        txtCamasKing.setText("");
-        txtCamasQueen.setText("");
-        txtCamasSimples.setText("");
-        txtCantPer.setText("");
+        txtPrecioNoche.setHorizontalAlignment(SwingConstants.RIGHT);
+        txtPrecioNoche.setText("0.00");
+        txtCamasKing.setHorizontalAlignment(SwingConstants.RIGHT);
+        txtCamasKing.setText("0");
+        txtCamasQueen.setHorizontalAlignment(SwingConstants.RIGHT);
+        txtCamasQueen.setText("0");
+        txtCamasSimples.setHorizontalAlignment(SwingConstants.RIGHT);
+        txtCamasSimples.setText("0");
+        txtCantPer.setHorizontalAlignment(SwingConstants.RIGHT);
+        txtCantPer.setText("0");
         chkActivo.setSelected(true);
 
     }
@@ -124,6 +140,29 @@ public class FormularioTipoHabitacionView extends javax.swing.JInternalFrame {
 
     private boolean validarCantidad(String cantidad) {
         return cantidad.matches("^[1-9]$");
+    }
+    
+    @Override
+    protected void paintComponent(Graphics g) {
+
+        int width = getWidth();
+        int height = getHeight();
+        int arc = 20; // Ajusta este valor para controlar el radio de las esquinas
+
+        Graphics2D g2d = (Graphics2D) g.create();
+
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        g2d.setColor(getBackground());
+
+        g2d.fill(new RoundRectangle2D.Float(0, 0, width, height, arc, arc));
+
+        g2d.setColor(getBackground());
+        g2d.draw(new RoundRectangle2D.Float(0, 0, width - 1, height - 1, arc, arc));
+
+        g2d.dispose();
+        super.paintComponent(g);
+
     }
 
     public static void addSelectAllOnFocusToTextFields(Container container) {
@@ -173,27 +212,27 @@ public class FormularioTipoHabitacionView extends javax.swing.JInternalFrame {
         txtNombre3 = new javax.swing.JTextField();
         panel = new javax.swing.JPanel();
         lblTipo = new javax.swing.JLabel();
-        lblDescripcion = new javax.swing.JLabel();
+        lblNom = new javax.swing.JLabel();
         txtDescripcion = new javax.swing.JTextField();
-        lblPrecioNoche = new javax.swing.JLabel();
+        lblPrecio = new javax.swing.JLabel();
         txtPrecioNoche = new javax.swing.JTextField();
-        lblEstado = new javax.swing.JLabel();
         chkActivo = new javax.swing.JCheckBox();
         cmdNuevo = new javax.swing.JButton();
         cmdEditar = new javax.swing.JButton();
         cmdSalir = new javax.swing.JButton();
         cmdGuardar = new javax.swing.JButton();
         cmdCancelar = new javax.swing.JButton();
-        lblCamasKing = new javax.swing.JLabel();
+        lblKing = new javax.swing.JLabel();
         txtCamasKing = new javax.swing.JTextField();
-        lblCamasQueen = new javax.swing.JLabel();
+        lblQueen = new javax.swing.JLabel();
         txtCamasQueen = new javax.swing.JTextField();
-        lblCamasSimples = new javax.swing.JLabel();
+        lblSimples = new javax.swing.JLabel();
         txtCamasSimples = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
         jcbTipoHabitacion = new javax.swing.JComboBox<>();
-        lblCantPer = new javax.swing.JLabel();
         txtCantPer = new javax.swing.JTextField();
+        lblCant = new javax.swing.JLabel();
+        lblEstado = new javax.swing.JLabel();
 
         txtId.setText("jTextField1");
 
@@ -208,20 +247,17 @@ public class FormularioTipoHabitacionView extends javax.swing.JInternalFrame {
 
         lblTipo.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblTipo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblTipo.setText("TIPO DE HAB:");
+        lblTipo.setText("TIPO");
 
-        lblDescripcion.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblDescripcion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblDescripcion.setText("NOMBRE");
+        lblNom.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblNom.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblNom.setText("DESCRIPCION");
 
-        lblPrecioNoche.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblPrecioNoche.setText("PRECIO NOCHE");
+        lblPrecio.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblPrecio.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblPrecio.setText("PRECIO NOCHE");
 
-        lblEstado.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblEstado.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblEstado.setText("ESTADO");
-
-        chkActivo.setText("ACTIVO");
+        chkActivo.setText("Activo");
 
         cmdNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/New_16.png"))); // NOI18N
         cmdNuevo.setText("Nuevo");
@@ -263,18 +299,21 @@ public class FormularioTipoHabitacionView extends javax.swing.JInternalFrame {
             }
         });
 
-        lblCamasKing.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblCamasKing.setText("CAMAS KING");
+        lblKing.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblKing.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblKing.setText("CAMAS KING");
 
-        lblCamasQueen.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblCamasQueen.setText("CAMAS QUEEN");
+        lblQueen.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblQueen.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblQueen.setText("CAMAS QUEEN");
 
-        lblCamasSimples.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblCamasSimples.setText("CAMAS SIMPLES");
+        lblSimples.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblSimples.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblSimples.setText("CAMAS SIMPLES");
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("FORMULARIO TIPO HABITACION");
+        lblTitle.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTitle.setText("FORMULARIO TIPO HABITACION");
 
         jcbTipoHabitacion.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -282,8 +321,13 @@ public class FormularioTipoHabitacionView extends javax.swing.JInternalFrame {
             }
         });
 
-        lblCantPer.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblCantPer.setText("CANT PERSONAS");
+        lblCant.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblCant.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblCant.setText("CANT. PERS.");
+
+        lblEstado.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblEstado.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblEstado.setText("ESTADO");
 
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
@@ -291,118 +335,112 @@ public class FormularioTipoHabitacionView extends javax.swing.JInternalFrame {
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelLayout.createSequentialGroup()
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                                .addComponent(cmdNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(cmdEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(cmdSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                                .addComponent(cmdGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(cmdCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(64, 64, 64))))
                     .addGroup(panelLayout.createSequentialGroup()
                         .addGap(42, 42, 42)
-                        .addComponent(jLabel1))
-                    .addGroup(panelLayout.createSequentialGroup()
-                        .addGap(55, 55, 55)
-                        .addComponent(lblEstado)
-                        .addGap(18, 18, 18)
-                        .addComponent(chkActivo))
-                    .addGroup(panelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(lblSimples, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                            .addComponent(lblQueen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblKing, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblPrecio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblNom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblTipo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtDescripcion)
                             .addGroup(panelLayout.createSequentialGroup()
-                                .addComponent(lblCantPer)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtCantPer, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(panelLayout.createSequentialGroup()
-                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(lblDescripcion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(lblPrecioNoche)
-                                    .addComponent(lblTipo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(lblCamasKing)
-                                    .addComponent(lblCamasQueen)
-                                    .addComponent(lblCamasSimples))
-                                .addGap(18, 18, 18)
                                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtCamasSimples, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtPrecioNoche)
-                                        .addComponent(jcbTipoHabitacion, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtCamasKing, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
-                                        .addComponent(txtCamasQueen)
-                                        .addComponent(txtDescripcion))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelLayout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(panelLayout.createSequentialGroup()
-                                        .addGap(60, 60, 60)
-                                        .addComponent(cmdGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(cmdCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(panelLayout.createSequentialGroup()
-                                        .addComponent(cmdNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(cmdEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(cmdSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                                    .addComponent(jcbTipoHabitacion, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtCamasKing, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtPrecioNoche, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtCamasQueen, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtCamasSimples, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblEstado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblCant, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(chkActivo)
+                            .addComponent(txtCantPer, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(170, 170, 170)))
+                .addGap(244, 244, 244))
+            .addGroup(panelLayout.createSequentialGroup()
+                .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 424, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(35, 35, 35)
+                .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jcbTipoHabitacion, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTipo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblDescripcion)
+                    .addComponent(lblNom)
                     .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPrecioNoche)
+                    .addComponent(lblPrecio)
                     .addComponent(txtPrecioNoche, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCamasKing)
+                    .addComponent(lblKing)
                     .addComponent(txtCamasKing, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCamasQueen)
+                    .addComponent(lblQueen)
                     .addComponent(txtCamasQueen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCamasSimples)
+                    .addComponent(lblSimples)
                     .addComponent(txtCamasSimples, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(3, 3, 3)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCantPer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCant))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCantPer)
-                    .addComponent(txtCantPer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblEstado)
-                    .addComponent(chkActivo, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(chkActivo, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblEstado))
                 .addGap(18, 18, 18)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmdSalir)
                     .addComponent(cmdNuevo)
-                    .addComponent(cmdEditar))
+                    .addComponent(cmdEditar)
+                    .addComponent(cmdSalir))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmdGuardar)
                     .addComponent(cmdCancelar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, 426, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         getAccessibleContext().setAccessibleName("TipoHabitacion");
@@ -520,17 +558,39 @@ public class FormularioTipoHabitacionView extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_cmdGuardarActionPerformed
 
-    private void cmdSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdSalirActionPerformed
-        dispose();
-    }//GEN-LAST:event_cmdSalirActionPerformed
-
     private void jcbTipoHabitacionItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcbTipoHabitacionItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             th = (TipoHabitacion) jcbTipoHabitacion.getSelectedItem();
             if (th != null) {
                 restaurarDatosTipoHabitacion();
             }
+        }
     }//GEN-LAST:event_jcbTipoHabitacionItemStateChanged
+
+    private void cmdSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdSalirActionPerformed
+        dispose();
+    }//GEN-LAST:event_cmdSalirActionPerformed
+    
+    
+    private void mostrarInfoCampos() {
+
+        lblTitle.putClientProperty( "FlatLaf.style", "font: bold $h1.font" );
+        lblTipo.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblNom.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblNom.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblPrecio.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblQueen.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblSimples.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblCant.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblEstado.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        
+        txtDescripcion.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese la descripción");
+        txtPrecioNoche.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "0.00");
+        txtCamasKing.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "0");
+        txtCamasQueen.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "0");
+        txtCamasSimples.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "0");
+        txtCantPer.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "0");
+       
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -540,18 +600,18 @@ public class FormularioTipoHabitacionView extends javax.swing.JInternalFrame {
     private javax.swing.JButton cmdGuardar;
     private javax.swing.JButton cmdNuevo;
     private javax.swing.JButton cmdSalir;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JComboBox<TipoHabitacion> jcbTipoHabitacion;
-    private javax.swing.JLabel lblCamasKing;
-    private javax.swing.JLabel lblCamasQueen;
-    private javax.swing.JLabel lblCamasSimples;
-    private javax.swing.JLabel lblCantPer;
-    private javax.swing.JLabel lblDescripcion;
+    private javax.swing.JLabel lblCant;
     private javax.swing.JLabel lblEstado;
+    private javax.swing.JLabel lblKing;
+    private javax.swing.JLabel lblNom;
     private javax.swing.JLabel lblNom1;
     private javax.swing.JLabel lblNom3;
-    private javax.swing.JLabel lblPrecioNoche;
+    private javax.swing.JLabel lblPrecio;
+    private javax.swing.JLabel lblQueen;
+    private javax.swing.JLabel lblSimples;
     private javax.swing.JLabel lblTipo;
+    private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel panel;
     private javax.swing.JTextField txtCamasKing;
     private javax.swing.JTextField txtCamasQueen;
