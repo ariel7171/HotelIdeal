@@ -42,6 +42,8 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
         setBorder(new EmptyBorder(3, 3, 3, 3));
 
         initComponents();
+        
+         mostrarInfoCampos();
 
         txtId.setText("0");
 
@@ -68,8 +70,9 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
                     dispose();
                 }
         );
-        mostrarInfoCampos();
+        
         pasarFoco(jtNumero);
+       
     }
 
     public void estadosBotones(boolean bNuevo, boolean bEditar, boolean bEliminar, boolean bGuardar, boolean bCancelar, boolean bBuscar) {
@@ -97,7 +100,7 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
         jtPiso.setHorizontalAlignment(SwingConstants.RIGHT);
         jtNumero.setText("0");
         jtNumero.setHorizontalAlignment(SwingConstants.RIGHT);
-        jtDescripcion.setText(" ");
+        jtDescripcion.setText("");
         jcEstado.setSelected(true);
     }
 
@@ -153,18 +156,15 @@ public class FormularioHabitacionView extends javax.swing.JInternalFrame {
     }
 
     private void mostrarInfoCampos() {
-
-        //lblTitle.putClientProperty("FlatLaf.style", "font: bold $h1.font");
-        //lblCod.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+;
         lblNum.putClientProperty("FlatLaf.style", "font: bold $h2.font");
         lblDes.putClientProperty("FlatLaf.style", "font: bold $h2.font");
         lblPiso.putClientProperty("FlatLaf.style", "font: bold $h2.font");
         lblTipo.putClientProperty("FlatLaf.style", "font: bold $h2.font");
         lblEstado.putClientProperty("FlatLaf.style", "font: bold $h2.font");
 
-        //jtCodHabitacion.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese el Cod. Habitacion");
         jtNumero.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese Nº");
-        jtDescripcion.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese la descripción ");
+        jtDescripcion.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese la descripción");
         jtPiso.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese Piso");
 
     }

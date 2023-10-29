@@ -20,6 +20,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import hotelideal.Entidades.Usuario;
 import hotelideal.AccesoADatos.*;
+import hotelideal.Entidades.EnumColor;
 import hotelideal.eventos.LoginListener;
 import java.awt.EventQueue;
 import java.awt.Graphics;
@@ -37,6 +38,8 @@ public class Login extends javax.swing.JInternalFrame {
     private ToolBarAccentColor accent;
     
     private boolean isChange;
+    
+    private EnumColor colorLogin;
 
     public Login() throws SQLException {
         
@@ -71,7 +74,7 @@ public class Login extends javax.swing.JInternalFrame {
                 Usuario usu = ur.login(txtUserName.getText(), new String(txtPassword.getPassword()), chkRememberMe.isSelected());
 
                 dispose();
-                notifyLoginSuccess(usu.getIdUsuario(), usu.getUsuario().toUpperCase());
+                notifyLoginSuccess(usu.getIdUsuario(), usu.getUsuario().toUpperCase(),colorLogin);
                 notifyMethodExecution();
 
             } else {
@@ -142,7 +145,9 @@ public class Login extends javax.swing.JInternalFrame {
                     FlatLaf.updateUI();
                     FlatAnimatedLafChange.hideSnapshotWithAnimation();
                     
-                    accent.colorAccentChanged(usu.getAccent());
+                    String colorAccent = usu.getAccent();
+                    asignarColorEnum(colorAccent);
+                    accent.colorAccentChanged(colorAccent);
                     isChange = true;
 
                 });
@@ -153,12 +158,14 @@ public class Login extends javax.swing.JInternalFrame {
             txtPassword.setText("");
             
             if (isChange) {
+                
+                    asignarColorEnum("App.accent.default");
 
                     EventQueue.invokeLater(() -> {
 
                         FlatAnimatedLafChange.showSnapshot();
                         FlatLaf.registerCustomDefaultsSource("universidadulp/theme");
-                        FlatLaf.setGlobalExtraDefaults(Collections.singletonMap("@accentColor", ("#5856D6").toString()));
+                        FlatLaf.setGlobalExtraDefaults(Collections.singletonMap("@accentColor", ("#4B6EAF").toString()));
                         FlatMacDarkLaf.setup();
                         FlatLaf.updateUI();
                         FlatAnimatedLafChange.hideSnapshotWithAnimation();
@@ -360,11 +367,11 @@ public class Login extends javax.swing.JInternalFrame {
 
     }
 
-    private void notifyLoginSuccess(int idUser, String Username) {
+    private void notifyLoginSuccess(int idUser, String Username, EnumColor color) {
 
         if (loginListener != null) {
 
-            loginListener.onLoginSuccess(idUser, Username);
+            loginListener.onLoginSuccess(idUser, Username, colorLogin);
 
         }
 
@@ -378,6 +385,36 @@ public class Login extends javax.swing.JInternalFrame {
 
         }
 
+    }
+    
+    private void asignarColorEnum(String color){
+        
+        switch (color) {
+            
+            case "App.accent.default":
+                colorLogin = EnumColor.DEFAULT;
+                break;
+            case "App.accent.blue":
+                colorLogin = EnumColor.BLUE;
+                break;
+            case "App.accent.purple":
+                colorLogin = EnumColor.PURPLE;
+                break;
+            case "App.accent.red":
+                colorLogin = EnumColor.RED;
+                break;
+            case "App.accent.orange":
+                colorLogin = EnumColor.ORANGE;
+                break;
+            case "App.accent.yellow":
+                colorLogin = EnumColor.YELLOW;
+                break;
+            case "App.accent.green":
+                colorLogin = EnumColor.GREEN;
+                break;
+            
+        }
+        
     }
 
 

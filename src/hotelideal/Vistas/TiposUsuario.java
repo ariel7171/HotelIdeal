@@ -13,6 +13,9 @@ import hotelideal.Entidades.TipoUsuario;
 import hotelideal.Entidades.Usuario;
 import hotelideal.AccesoADatos.TipoUsuarioRepositorio;
 import hotelideal.AccesoADatos.UsuarioRepositorio;
+import hotelideal.Entidades.EnumColor;
+import hotelideal.eventos.LoginListener;
+import hotelideal.eventos.OptionListener;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Graphics;
@@ -26,6 +29,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 public class TiposUsuario extends javax.swing.JInternalFrame {
+    
+    private OptionListener optionListener;
 
     private TipoUsuarioRepositorio tr;
     private TipoUsuario tipoSeleccionado;
@@ -34,6 +39,7 @@ public class TiposUsuario extends javax.swing.JInternalFrame {
     
     private ToolBarAccentColor accent;
     private int IdSystemUser;
+    private EnumColor colorOption;
 
     private ItemListener radioButtonListener;
 
@@ -139,7 +145,10 @@ public class TiposUsuario extends javax.swing.JInternalFrame {
             usuarioSeleccionado = ur.buscarPorId(IdSystemUser);
 
             ur.guardar(new Usuario(usuarioSeleccionado.getIdUsuario(), usuarioSeleccionado.getNombre(), usuarioSeleccionado.getApellido(), usuarioSeleccionado.isGenero(),usuarioSeleccionado.getTipoUsuario(), usuarioSeleccionado.getUsuario(), usuarioSeleccionado.getPassword(),lightDarkMode1.isDarked(),accent.colorAccentLocated(), usuarioSeleccionado.isRemember(), usuarioSeleccionado.isActivo()));
-
+            
+            asignarColorEnum(accent.colorAccentLocated());
+            notifyOptionSuccess(colorOption);
+            
             JOptionPane.showConfirmDialog(null, "Tipo Usuario Actualizado", "Actualizado", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
             
@@ -265,6 +274,52 @@ public class TiposUsuario extends javax.swing.JInternalFrame {
 
             }
         });
+    }
+    
+    private void asignarColorEnum(String color){
+        
+        switch (color) {
+            
+            case "App.accent.default":
+                colorOption = EnumColor.DEFAULT;
+                break;
+            case "App.accent.blue":
+                colorOption = EnumColor.BLUE;
+                break;
+            case "App.accent.purple":
+                colorOption = EnumColor.PURPLE;
+                break;
+            case "App.accent.red":
+                colorOption = EnumColor.RED;
+                break;
+            case "App.accent.orange":
+                colorOption = EnumColor.ORANGE;
+                break;
+            case "App.accent.yellow":
+                colorOption = EnumColor.YELLOW;
+                break;
+            case "App.accent.green":
+                colorOption = EnumColor.GREEN;
+                break;
+            
+        }
+        
+    }
+    
+    public void setOptionListener(OptionListener listener) {
+
+        this.optionListener = listener;
+
+    }
+
+    private void notifyOptionSuccess(EnumColor color) {
+
+        if (optionListener != null) {
+
+            optionListener.onOptionSuccess(colorOption);
+
+        }
+
     }
 
     /**

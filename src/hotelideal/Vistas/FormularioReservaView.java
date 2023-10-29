@@ -4,6 +4,7 @@ package hotelideal.Vistas;
 import hotelideal.AccesoADatos.HabitacionData;
 import hotelideal.AccesoADatos.ReservaData;
 import hotelideal.AccesoADatos.TipoHabitacionData;
+import hotelideal.Entidades.EnumColor;
 import hotelideal.Entidades.Habitacion;
 import hotelideal.Entidades.Huesped;
 import hotelideal.Entidades.Reserva;
@@ -49,11 +50,15 @@ public class FormularioReservaView extends javax.swing.JInternalFrame {
     private LocalDate f1, f2, hoy;
     private int prsns, dias, num;
     private Huesped huesped;
+    
+    private EnumColor colorReserva;
 
     /**
      * Creates new form FormularioReservaView1
      */
-    public FormularioReservaView() {
+    public FormularioReservaView(EnumColor color) {
+        
+        colorReserva = color;
         
         try {
             this.hData = new HabitacionData();
@@ -81,14 +86,8 @@ public class FormularioReservaView extends javax.swing.JInternalFrame {
                 if (!e.getValueIsAdjusting()) {
                     if (jTableHabitaciones.getSelectedRow() > -1) {
                         jButtonHuesped.setEnabled(true);
-                        if(huesped!=null){
-                            jButtonConfirmar.setEnabled(true);
-                        }
                     } else {
                         jButtonHuesped.setEnabled(false);
-                        if(huesped==null){
-                            jButtonConfirmar.setEnabled(false);
-                        }
                     }
                 }
             }
@@ -375,13 +374,15 @@ public class FormularioReservaView extends javax.swing.JInternalFrame {
             if (f1.compareTo(hoy) == 0 && 0 == (javax.swing.JOptionPane.showOptionDialog(this, "Desea confirmar el ingreso del huesped?", "", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, botones, botones[0]))) {
                 Reserva reserva = new Reserva(prsns, prec, true, true, habitacion, huesped, f1, f2, n);
                 rData.guardar(reserva);
-                filtrarTabla();
+                //filtrarTabla();
                 jButtonConfirmar.setEnabled(false);
+                setearFormatos();
             } else {
                 Reserva reserva = new Reserva(prsns, prec, true, false, habitacion, huesped, f1, f2, n);
                 rData.guardar(reserva);
-                filtrarTabla();
+                //filtrarTabla();
                 jButtonConfirmar.setEnabled(false);
+                setearFormatos();
             }
         }
     }//GEN-LAST:event_jButtonConfirmarActionPerformed
@@ -469,7 +470,7 @@ public boolean controlarFecha() {
     public void setHuesped(Huesped huesped) {
         if (huesped != null) {
             this.huesped = huesped;
-            lblHuesped.setForeground(new Color(75, 110, 175));
+            lblHuesped.setForeground(new Color(colorReserva.getR(), colorReserva.getG(), colorReserva.getB()));
             lblHuesped.setText("" + huesped.toString());
             jButtonConfirmar.setEnabled(true);
             jButtonCancelar.setEnabled(true);

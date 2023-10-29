@@ -6,6 +6,7 @@
 package hotelideal.Vistas;
 
 import hotelideal.AccesoADatos.HabitacionData;
+import hotelideal.AccesoADatos.ReservaData;
 import hotelideal.AccesoADatos.TipoHabitacionData;
 import hotelideal.Entidades.Habitacion;
 import hotelideal.Entidades.TipoHabitacion;
@@ -18,6 +19,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.geom.RoundRectangle2D;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -35,6 +37,7 @@ import javax.swing.table.JTableHeader;
 public class PlanillaHabitaciones extends javax.swing.JInternalFrame {
 
     private HabitacionData hdata;
+    private ReservaData rdata;
     private TipoHabitacionData tipoHaDa;
     private Habitacion habitacion;
     private TipoHabitacion tipoHab;
@@ -49,6 +52,7 @@ public class PlanillaHabitaciones extends javax.swing.JInternalFrame {
         initComponents();
 
         hdata = new HabitacionData();
+        rdata = new ReservaData();
         tipoHaDa = new TipoHabitacionData();
 
         listaHabitaciones = tipoHaDa.buscarTodos();
@@ -112,6 +116,7 @@ public class PlanillaHabitaciones extends javax.swing.JInternalFrame {
 
         jTable.getColumnModel().getColumn(0).setCellRenderer(leftRenderer);   // numero de habitacion
         jTable.getColumnModel().getColumn(1).setCellRenderer(centerRenderer); // piso 
+        jTable.getColumnModel().getColumn(2).setCellRenderer(centerRenderer); // estado 
 
         modelo = (DefaultTableModel) jTable.getModel();
 
@@ -128,9 +133,10 @@ public class PlanillaHabitaciones extends javax.swing.JInternalFrame {
 //        System.out.println(habitaciones.size());
             for (Habitacion hab : habitaciones) {
                 modelo.addRow(new Object[]{
-                    hab.getId_habitacion(),
+                    //hab.getId_habitacion(),
                     hab.getNroHabitacion(),
-                    hab.getPiso()});
+                    hab.getPiso(),
+                    rdata.estadoHab(hab.getId_habitacion(), LocalDate.now())});
             }
         }
         jTable.setModel(modelo);
@@ -200,19 +206,20 @@ public class PlanillaHabitaciones extends javax.swing.JInternalFrame {
 
         setTitle("PLANILLA DE HABITACIONES");
 
+        jTable.setAutoCreateRowSorter(true);
         jTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "NUMERO", "PISO"
+                "NUMERO", "PISO", "ESTADO"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true
+                false, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -223,6 +230,7 @@ public class PlanillaHabitaciones extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable);
 
         lblTipo.setText("Tipo De Habitacion");
@@ -286,7 +294,7 @@ public class PlanillaHabitaciones extends javax.swing.JInternalFrame {
                     .addComponent(lblCantidad))
                 .addGap(15, 15, 15)
                 .addComponent(jbSalir)
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();

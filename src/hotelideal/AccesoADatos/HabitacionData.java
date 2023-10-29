@@ -65,15 +65,17 @@ public class HabitacionData {
         Date f2 = Date.valueOf(fecha2);
 
         List<Habitacion> habitaciones = new ArrayList<>();
-        String sql = "SELECT * FROM habitacion JOIN tipodehabitacion ON(tipodehabitacion.id_tipoDeHabitacion=habitacion.id_tipoDeHabitacion) WHERE tipodehabitacion.cantPersonas>=" + cantP + " ORDER BY tipodehabitacion.cantPersonas,habitacion.piso,habitacion.nroHabitacion";
+        String sql = "SELECT * FROM habitacion JOIN tipodehabitacion ON(tipodehabitacion.id_tipoDeHabitacion=habitacion.id_tipoDeHabitacion) WHERE habitacion.estado = 1 AND tipodehabitacion.cantPersonas>=" + cantP + " ORDER BY tipodehabitacion.cantPersonas,habitacion.piso,habitacion.nroHabitacion";
 
         try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery();) {
 
             while (rs.next()) {
                 hab = crearHabitacion(rs);
                 if (consultasBooleanSimple("SELECT COUNT(*) FROM reserva WHERE reserva.estado=1 AND reserva.id_habitacion=" + hab.getId_habitacion(), "COUNT(*)")) {
-                    if (consultasBooleanSimple("SELECT COUNT(*) FROM habitacion JOIN reserva ON(reserva.id_habitacion=" + hab.getId_habitacion() + ") WHERE (reserva.fechaIngreso>='" + f2 + "' AND reserva.fechaSalida>reserva.fechaIngreso) OR (reserva.fechaSalida<='" + f1 + "' AND reserva.fechaIngreso<reserva.fechaSalida)", "COUNT(*)")) {
-                        habitaciones.add(hab);
+                    if (consultasBooleanSimple("SELECT COUNT(*) FROM habitacion JOIN reserva ON(reserva.id_habitacion=" + hab.getId_habitacion() + ") WHERE (reserva.fechaIngreso>'" + f2 + "' AND reserva.fechaSalida>reserva.fechaIngreso) OR (reserva.fechaSalida<'" + f1 + "' AND reserva.fechaIngreso<reserva.fechaSalida)", "COUNT(*)")) {
+                       if(!consultasBooleanSimple("SELECT COUNT(*) FROM habitacion JOIN reserva ON(reserva.id_habitacion="+ hab.getId_habitacion() + ") WHERE (reserva.fechaIngreso = '" + f1 + "' AND reserva.fechaSalida = '" + f2 + "')", "COUNT(*)")){
+                          habitaciones.add(hab);
+                       }
                     }
                 } else {
                     habitaciones.add(hab);

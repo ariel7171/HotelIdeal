@@ -1,4 +1,4 @@
-    /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -30,94 +30,116 @@ public class ReservaData {
     public ReservaData() throws SQLException {
         conn = Conexion.getConnection();
     }
-    
-    public boolean comprobarFechaIngresoSalida(int id_habitacion,int idRes,LocalDate n1,LocalDate n2) {
+
+    public boolean comprobarFechaIngresoSalida(int id_habitacion, int idRes, LocalDate n1, LocalDate n2) {
         List<Reserva> rHuespedes = new ArrayList<>();
-        String sql = "SELECT * FROM reserva WHERE (estado=1 AND id_habitacion="+id_habitacion+" AND idReserva!="+idRes+")";
-        LocalDate auxIng=null;
-        LocalDate auxEgr=null;
-        int n=0;
+        String sql = "SELECT * FROM reserva WHERE (estado=1 AND id_habitacion=" + id_habitacion + " AND idReserva!=" + idRes + ")";
+        LocalDate auxIng = null;
+        LocalDate auxEgr = null;
+        int n = 0;
         try (
-                PreparedStatement ps = conn.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery();) {
+                PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery();) {
             while (rs.next()) {
                 Reserva rHue = crearReservaHuesped(rs);
                 rHuespedes.add(rHue);
             }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------            
             for (Reserva rHuesped : rHuespedes) {
-                LocalDate F_ingreso=rHuesped.getF_ingreso();
-                LocalDate F_salida=rHuesped.getF_salida();
-                if(((F_ingreso.compareTo(n2))<=0)&&((F_ingreso.compareTo(n1))>0)){
-                    
-                    if(auxIng==null){
-                        auxIng=F_ingreso;
-                    }else if((auxIng.compareTo(F_ingreso))>0){
-                        auxIng=F_ingreso;
-                    }      
-                }
-                if(((n1.compareTo(F_salida))<=0)&&((F_salida.compareTo(n2))<0)){
-                    
-                    if(auxEgr==null){
-                        auxEgr=F_salida;
-                    }else if((auxEgr.compareTo(F_salida))>0){
-                        auxEgr=F_salida;
+                LocalDate F_ingreso = rHuesped.getF_ingreso();
+                LocalDate F_salida = rHuesped.getF_salida();
+                if (((F_ingreso.compareTo(n2)) <= 0) && ((F_ingreso.compareTo(n1)) > 0)) {
+
+                    if (auxIng == null) {
+                        auxIng = F_ingreso;
+                    } else if ((auxIng.compareTo(F_ingreso)) > 0) {
+                        auxIng = F_ingreso;
                     }
                 }
-                if(   ((n1.compareTo(F_ingreso))>=0&&((n1.compareTo(F_salida))<0))  &&  ((n2.compareTo(F_salida))<=0&&((n2.compareTo(F_ingreso))>0))  ){
+                if (((n1.compareTo(F_salida)) <= 0) && ((F_salida.compareTo(n2)) < 0)) {
+
+                    if (auxEgr == null) {
+                        auxEgr = F_salida;
+                    } else if ((auxEgr.compareTo(F_salida)) > 0) {
+                        auxEgr = F_salida;
+                    }
+                }
+                if (((n1.compareTo(F_ingreso)) >= 0 && ((n1.compareTo(F_salida)) < 0)) && ((n2.compareTo(F_salida)) <= 0 && ((n2.compareTo(F_ingreso)) > 0))) {
                     n++;
-                    if(auxIng==null){
-                        auxIng=F_ingreso;
-                    }else if((auxIng.compareTo(F_ingreso))<0){
-                        auxIng=F_ingreso;
-                    } 
-                    
-                    if(auxEgr==null){
-                        auxEgr=F_salida;
-                    }else if((auxEgr.compareTo(F_salida))<0){
-                        auxEgr=F_salida;
+                    if (auxIng == null) {
+                        auxIng = F_ingreso;
+                    } else if ((auxIng.compareTo(F_ingreso)) < 0) {
+                        auxIng = F_ingreso;
+                    }
+
+                    if (auxEgr == null) {
+                        auxEgr = F_salida;
+                    } else if ((auxEgr.compareTo(F_salida)) < 0) {
+                        auxEgr = F_salida;
                     }
                 }
             }
         } catch (SQLException ex) {
-           JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
-        if(auxIng!=null&&auxEgr!=null){
-            javax.swing.JOptionPane.showMessageDialog(null, "Se detectó un conflicto con una reserva\ndonde inicia el dia ->"+auxIng+"\nSe detectó un conflicto con una reserva\ndonde finaliza el dia ->"+auxEgr, "", javax.swing.JOptionPane.WARNING_MESSAGE);
-                return false; 
-        }else if(auxIng!=null&&auxEgr==null){
-            javax.swing.JOptionPane.showMessageDialog(null, "Se detectó un conflicto con una reserva\ndonde inicia el dia ->"+auxIng, "", javax.swing.JOptionPane.WARNING_MESSAGE);
-                return false;
-        }else if(auxIng==null&&auxEgr!=null){
-            javax.swing.JOptionPane.showMessageDialog(null, "Se detectó un conflicto con una reserva\ndonde finaliza el dia ->"+auxEgr, "", javax.swing.JOptionPane.WARNING_MESSAGE);
-                return false;
+        if (auxIng != null && auxEgr != null) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Se detectó un conflicto con una reserva\ndonde inicia el dia ->" + auxIng + "\nSe detectó un conflicto con una reserva\ndonde finaliza el dia ->" + auxEgr, "", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return false;
+        } else if (auxIng != null && auxEgr == null) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Se detectó un conflicto con una reserva\ndonde inicia el dia ->" + auxIng, "", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return false;
+        } else if (auxIng == null && auxEgr != null) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Se detectó un conflicto con una reserva\ndonde finaliza el dia ->" + auxEgr, "", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return false;
         }
-        return true; 
+        return true;
     }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------    
-    public void eliminar(int id, boolean fisico){
-        if(fisico){
-            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM `reserva` WHERE idReserva="+id)) {
+
+    public void eliminar(int id, boolean fisico) {
+        if (fisico) {
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM `reserva` WHERE idReserva=" + id)) {
                 ps.executeUpdate();
             } catch (SQLException ex) {
-               JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             }
-        }else{
-            try (PreparedStatement ps = conn.prepareStatement("UPDATE `reserva` SET `estado`=0 WHERE idReserva="+id)) {
+        } else {
+            try (PreparedStatement ps = conn.prepareStatement("UPDATE `reserva` SET `estado`=0 WHERE idReserva=" + id)) {
                 ps.executeUpdate();
             } catch (SQLException ex) {
                 JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             }
         }
     }
-    
+
+    public String estadoHab(int id, LocalDate fecha) {
+
+        try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM reserva WHERE id_habitacion = ? AND estado = 1 AND ingreso = 1 AND fechaIngreso <= ? AND fechaSALIDA >= ?")) {
+            
+            ps.setInt(1, id);
+            ps.setDate(2, Date.valueOf(fecha));
+            ps.setDate(3, Date.valueOf(fecha));
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return "OCUPADA";
+                }else{
+                    return "LIBRE";
+                }
+
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+        }
+        
+        return "";
+
+    }
+
     public List<Reserva> buscarTodos() {
         List<Reserva> rHuespedes = new ArrayList<>();
         String sql = "SELECT * FROM reserva";
 
         try (
-                PreparedStatement ps = conn.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery();) {
+                PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery();) {
             while (rs.next()) {
                 Reserva rHue = crearReservaHuesped(rs);
                 rHuespedes.add(rHue);
@@ -127,31 +149,29 @@ public class ReservaData {
         }
         return rHuespedes;
     }
-    
+
     public List<Reserva> buscarTodos_Activos() {
         List<Reserva> rHuespedes = new ArrayList<>();
         String sql = "SELECT * FROM reserva WHERE estado=1";
 
         try (
-                PreparedStatement ps = conn.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery();) {
+                PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery();) {
             while (rs.next()) {
                 Reserva rHue = crearReservaHuesped(rs);
                 rHuespedes.add(rHue);
             }
         } catch (SQLException ex) {
-           JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return rHuespedes;
     }
-    
+
     public List<Reserva> buscarTodos_InActivos() {
         List<Reserva> rHuespedes = new ArrayList<>();
         String sql = "SELECT * FROM reserva WHERE estado=0";
 
         try (
-                PreparedStatement ps = conn.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery();) {
+                PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery();) {
             while (rs.next()) {
                 Reserva rHue = crearReservaHuesped(rs);
                 rHuespedes.add(rHue);
@@ -161,31 +181,13 @@ public class ReservaData {
         }
         return rHuespedes;
     }
-    
-    public List<Reserva> buscarPorFecha_inicioFin_Activos(LocalDate f1,LocalDate f2) {
-        List<Reserva> res =  new ArrayList<>();
-        String sql = "SELECT * FROM reserva WHERE estado=1 AND fechaIngreso>='"+f1+"' AND fechaSalida<='"+f2+"'";
-        
-        try (PreparedStatement ps = conn.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery();) {
-                 
-            while (rs.next()) {
-                Reserva rHue = crearReservaHuesped(rs);
-                res.add(rHue);
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
-        }
-        return res;
-    }
-    
-    public List<Reserva> buscarPorFecha_inicioFin_InActivos(LocalDate f1,LocalDate f2) {
+
+    public List<Reserva> buscarPorFecha_inicioFin_Activos(LocalDate f1, LocalDate f2) {
         List<Reserva> res = new ArrayList<>();
-        String sql = "SELECT * FROM reserva WHERE estado=0 AND fechaIngreso>='"+f1+"' AND fechaSalida<='"+f2+"'";
-        
-        try (PreparedStatement ps = conn.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery();) {
-                 
+        String sql = "SELECT * FROM reserva WHERE estado=1 AND fechaIngreso>='" + f1 + "' AND fechaSalida<='" + f2 + "'";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery();) {
+
             while (rs.next()) {
                 Reserva rHue = crearReservaHuesped(rs);
                 res.add(rHue);
@@ -195,11 +197,27 @@ public class ReservaData {
         }
         return res;
     }
-    
+
+    public List<Reserva> buscarPorFecha_inicioFin_InActivos(LocalDate f1, LocalDate f2) {
+        List<Reserva> res = new ArrayList<>();
+        String sql = "SELECT * FROM reserva WHERE estado=0 AND fechaIngreso>='" + f1 + "' AND fechaSalida<='" + f2 + "'";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery();) {
+
+            while (rs.next()) {
+                Reserva rHue = crearReservaHuesped(rs);
+                res.add(rHue);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+        }
+        return res;
+    }
+
     public Reserva buscarPorId(int id) {
         Reserva res = null;
         String sql = "SELECT * FROM reserva WHERE idReserva   = ?";
-        
+
         try (PreparedStatement ps = conn.prepareStatement(sql);) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
