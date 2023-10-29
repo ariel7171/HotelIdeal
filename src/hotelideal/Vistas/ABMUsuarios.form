@@ -54,9 +54,9 @@
                               <Component id="jSeparator1" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="lblApe1" alignment="1" min="-2" max="-2" attributes="0"/>
-                                      <Component id="lblNom1" alignment="1" min="-2" max="-2" attributes="0"/>
-                                      <Component id="lblApe2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblUser" alignment="1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblPass" alignment="1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblTipo" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -68,7 +68,7 @@
                               <Group type="102" alignment="1" attributes="0">
                                   <Group type="103" groupAlignment="1" attributes="0">
                                       <Component id="lblApe" alignment="1" min="-2" max="-2" attributes="0"/>
-                                      <Component id="lblDni" alignment="1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblID" alignment="1" min="-2" max="-2" attributes="0"/>
                                       <Component id="lblNom" alignment="1" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -85,7 +85,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
-                                          <Component id="lblNom2" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblRePass" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="1" attributes="0">
@@ -136,7 +136,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="lblDni" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblID" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtIdUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="cmdSearch" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -160,21 +160,21 @@
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="cmbTipos" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lblApe2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblTipo" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="txtUsername" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lblApe1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblUser" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="txtPassword" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lblNom1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblPass" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="lblNom2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblRePass" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtConfirmPass" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -200,7 +200,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="lblDni">
+        <Component class="javax.swing.JLabel" name="lblID">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
@@ -286,7 +286,7 @@
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;TipoUsuario&gt;"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblApe1">
+        <Component class="javax.swing.JLabel" name="lblUser">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
@@ -297,7 +297,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtUsername">
         </Component>
-        <Component class="javax.swing.JLabel" name="lblNom1">
+        <Component class="javax.swing.JLabel" name="lblPass">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
@@ -305,7 +305,7 @@
             <Property name="text" type="java.lang.String" value="PASSWORD"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblApe2">
+        <Component class="javax.swing.JLabel" name="lblTipo">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
@@ -314,7 +314,7 @@
             <Property name="text" type="java.lang.String" value="TIPO USUARIO"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblNom2">
+        <Component class="javax.swing.JLabel" name="lblRePass">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>

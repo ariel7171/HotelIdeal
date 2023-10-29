@@ -10,8 +10,26 @@ public class Usuario {
     private TipoUsuario tipoUsuario;
     private String usuario;
     private String password;
+    private boolean dark;
+    private String accent;
     private boolean remember;
     private boolean activo;
+
+    public Usuario(int idUsuario, String nombre, String apellido, boolean genero, TipoUsuario tipoUsuario, String usuario, String password, boolean dark, String accent, boolean remember, boolean activo) {
+        this.idUsuario = idUsuario;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.genero = genero;
+        this.tipoUsuario = tipoUsuario;
+        this.usuario = usuario;
+        this.password = password;
+        this.dark = dark;
+        this.accent = accent;
+        this.remember = remember;
+        this.activo = activo;
+    }
+    
+    
 
     public Usuario(int idUsuario, String nombre, String apellido, boolean genero, TipoUsuario tipoUsuario, String usuario, String password, boolean remember, boolean activo) {
         this.idUsuario = idUsuario;
@@ -103,6 +121,22 @@ public class Usuario {
         this.remember = remember;
     }
 
+    public boolean isDark() {
+        return dark;
+    }
+
+    public void setDark(boolean dark) {
+        this.dark = dark;
+    }
+
+    public String getAccent() {
+        return accent;
+    }
+
+    public void setAccent(String accent) {
+        this.accent = accent;
+    }
+    
     public boolean isActivo() {
         return activo;
     }

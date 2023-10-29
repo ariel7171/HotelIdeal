@@ -38,7 +38,7 @@ public class HabitacionData {
             resultado.next();
             return resultado.getBoolean(columna);
         } catch (SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Error \"SQL\" - " + ex.getMessage());
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return false;
     }
@@ -54,7 +54,7 @@ public class HabitacionData {
                 habitaciones.add(hab);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return habitaciones;
     }
@@ -81,7 +81,7 @@ public class HabitacionData {
             }
             return habitaciones;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return habitaciones;
     }
@@ -100,7 +100,7 @@ public class HabitacionData {
                 }
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return hab;
     }
@@ -133,7 +133,7 @@ public class HabitacionData {
             }
             return habitacion;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }
@@ -156,8 +156,8 @@ public class HabitacionData {
 
             return stmt.executeUpdate();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return 0;
     }
@@ -177,7 +177,7 @@ public class HabitacionData {
                 }
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return hab;
     }
@@ -193,7 +193,7 @@ public class HabitacionData {
                 }
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return habitaciones;
     }
@@ -209,7 +209,7 @@ public class HabitacionData {
                 }
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return habitaciones;
     }

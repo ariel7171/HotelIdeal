@@ -20,12 +20,11 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
-import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -45,6 +44,8 @@ private List<Reserva> reservas=new ArrayList<>();
 private Reserva reserva,r;
 private LocalDate f1,f2,hoy;
 private JDesktopPane desk;
+
+private boolean filtro=false;
     /**;
      * Creates new form gestionReservas
      */
@@ -52,10 +53,14 @@ private JDesktopPane desk;
     try {
         rData=new ReservaData();
     } catch (SQLException ex) {
-        Logger.getLogger(GestionReservas.class.getName()).log(Level.SEVERE, null, ex);
+        JOptionPane.showConfirmDialog(this, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
     }
         setBorder(new EmptyBorder(3, 3, 3, 3));
         initComponents();
+        
+        jDateChooserF1.setIcon(new ImageIcon(getClass().getResource("/icon/Calendar_16.png")));
+        jDateChooserF2.setIcon(new ImageIcon(getClass().getResource("/icon/Calendar_16.png")));
+        setFrameIcon(new ImageIcon(getClass().getResource("/icon/hotel_21.png")));
         jButtonAvanzado.setEnabled(false);
         jCheckBoxActivas.setSelected(true);
         hoy=LocalDate.now();
@@ -82,6 +87,18 @@ private JDesktopPane desk;
             }
         });
         dibujaTabla();
+        
+        mostrarInfoCampos();
+        
+    }
+    
+    private void mostrarInfoCampos() {
+
+        jRadioButtonTodo.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        jCheckBoxActivas.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        jLabel1.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        jLabel2.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        
     }
 
     /**
@@ -104,6 +121,8 @@ private JDesktopPane desk;
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jCheckBoxActivas = new javax.swing.JCheckBox();
+
+        setTitle("GESTIONAR RESERVAS");
 
         jTableReservas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -152,6 +171,7 @@ private JDesktopPane desk;
             jTableReservas.getColumnModel().getColumn(9).setMaxWidth(70);
         }
 
+        jButtonAvanzado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Advanced_16.png"))); // NOI18N
         jButtonAvanzado.setText("Avanzado");
         jButtonAvanzado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -159,6 +179,7 @@ private JDesktopPane desk;
             }
         });
 
+        jButtonSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Exit_16.png"))); // NOI18N
         jButtonSalir.setText("Salir");
         jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -166,6 +187,7 @@ private JDesktopPane desk;
             }
         });
 
+        jButtonFiltrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Filter_16.png"))); // NOI18N
         jButtonFiltrar.setText("Filtrar");
         jButtonFiltrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -173,18 +195,18 @@ private JDesktopPane desk;
             }
         });
 
-        jRadioButtonTodo.setText("Todas las reservas");
+        jRadioButtonTodo.setText("TODAS");
         jRadioButtonTodo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonTodoActionPerformed(evt);
             }
         });
 
-        jLabel1.setText("Desde:");
+        jLabel1.setText("DESDE");
 
-        jLabel2.setText("Hasta:");
+        jLabel2.setText("HASTA");
 
-        jCheckBoxActivas.setText("Activas");
+        jCheckBoxActivas.setText("ACTIVAS");
         jCheckBoxActivas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxActivasActionPerformed(evt);
@@ -196,57 +218,54 @@ private JDesktopPane desk;
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jCheckBoxActivas)
-                                    .addComponent(jRadioButtonTodo))
-                                .addGap(88, 88, 88)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jDateChooserF1, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jDateChooserF2, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(110, 110, 110)
-                                .addComponent(jButtonFiltrar))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 877, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
+                .addGap(42, 42, 42)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jCheckBoxActivas)
+                            .addComponent(jRadioButtonTodo, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jDateChooserF1, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jDateChooserF2, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(154, 154, 154)
+                        .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 877, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButtonAvanzado)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonSalir)))
-                .addContainerGap())
+                        .addComponent(jButtonSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButtonFiltrar)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1)
-                            .addComponent(jRadioButtonTodo, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jRadioButtonTodo, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(8, 8, 8)
+                        .addComponent(jCheckBoxActivas))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jDateChooserF1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jCheckBoxActivas)))
+                        .addComponent(jDateChooserF1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jDateChooserF2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonSalir)
                     .addComponent(jButtonAvanzado))
-                .addGap(12, 12, 12))
+                .addGap(25, 25, 25))
         );
 
         pack();
@@ -282,6 +301,7 @@ private JDesktopPane desk;
         // TODO add your handling code here:
         if(jRadioButtonTodo.isSelected()){
             habiliatrElementos(false, false, false);
+            
         }else{
             habiliatrElementos(true, true, true);
         }
@@ -303,6 +323,7 @@ private JDesktopPane desk;
     private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
         // TODO add your handling code here:
         if(controlarFecha()){
+            filtro=true;
             cargarTabla();
         }
     }//GEN-LAST:event_jButtonFiltrarActionPerformed
@@ -365,10 +386,14 @@ public void cargarTabla(){
             reservas=rData.buscarTodos_InActivos();
         }
     }else{
-        if(jCheckBoxActivas.isSelected()){
+        if(filtro){
+            if(jCheckBoxActivas.isSelected()){
             reservas=rData.buscarPorFecha_inicioFin_Activos(f1, f2);
-        }else{
+            }else{
             reservas=rData.buscarPorFecha_inicioFin_InActivos(f1, f2);
+            }
+        }else{
+            reservas=new ArrayList<Reserva>();
         }
     }
     for (Reserva re : reservas) {

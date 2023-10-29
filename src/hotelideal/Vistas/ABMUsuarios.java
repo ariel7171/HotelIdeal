@@ -1,5 +1,6 @@
 package hotelideal.Vistas;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.FocusAdapter;
@@ -16,6 +17,11 @@ import hotelideal.Entidades.TipoUsuario;
 import hotelideal.Entidades.Usuario;
 import hotelideal.AccesoADatos.TipoUsuarioRepositorio;
 import hotelideal.AccesoADatos.UsuarioRepositorio;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.RoundRectangle2D;
+import javax.swing.border.EmptyBorder;
 
 public class ABMUsuarios extends javax.swing.JInternalFrame {
 
@@ -30,14 +36,18 @@ public class ABMUsuarios extends javax.swing.JInternalFrame {
         ur = new UsuarioRepositorio();
         tr = new TipoUsuarioRepositorio();
         tipoSeleccionado = new TipoUsuario();
+        
+        setBorder(new EmptyBorder(3, 3, 3, 3));
 
-        setFrameIcon(new ImageIcon(getClass().getResource("/icon/logo1.png")));
+        setFrameIcon(new ImageIcon(getClass().getResource("/icon/hotel_21.png")));
 
         estado = 0;
 
         initComponents();
 
         init();
+        
+        mostrarInfoCampos();
 
         pasarFoco(txtIdUsuario);
 
@@ -326,6 +336,25 @@ public class ABMUsuarios extends javax.swing.JInternalFrame {
         chkState.setSelected(true);
 
     }
+    
+    private void mostrarInfoCampos() {
+
+        lblID.putClientProperty("FlatLaf.style", "font: bold $h2.font");
+        lblNom.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
+        lblApe.putClientProperty("FlatLaf.style", "font: bold $h2.font");
+        lblTipo.putClientProperty("FlatLaf.style", "font: bold $h2.font");
+        lblUser.putClientProperty("FlatLaf.style", "font: bold $h2.font");
+        lblPass.putClientProperty("FlatLaf.style", "font: bold $h2.font");
+        lblRePass.putClientProperty("FlatLaf.style", "font: bold $h2.font");
+
+        txtIdUsuario.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese el ID");
+        txtFirstName.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese su nombre");
+        txtLastName.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese su apellido");
+        txtUsername.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese su usuario");
+        txtPassword.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Ingrese su password");
+        txtConfirmPass.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Re-Ingrese su password");
+
+    }
 
     private boolean validarCodigo(String idMateria) {
 
@@ -345,7 +374,30 @@ public class ABMUsuarios extends javax.swing.JInternalFrame {
 
     }
 
-    private void pasarFoco(Component com) {
+    @Override
+    protected void paintComponent(Graphics g) {
+
+        int width = getWidth();
+        int height = getHeight();
+        int arc = 20; // Ajusta este valor para controlar el radio de las esquinas
+
+        Graphics2D g2d = (Graphics2D) g.create();
+
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        g2d.setColor(getBackground());
+
+        g2d.fill(new RoundRectangle2D.Float(0, 0, width, height, arc, arc));
+
+        g2d.setColor(getBackground());
+        g2d.draw(new RoundRectangle2D.Float(0, 0, width - 1, height - 1, arc, arc));
+
+        g2d.dispose();
+        super.paintComponent(g);
+
+    }
+    
+    public void pasarFoco(Component com) {
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -355,7 +407,6 @@ public class ABMUsuarios extends javax.swing.JInternalFrame {
 
             }
         });
-
     }
 
     /**
@@ -370,7 +421,7 @@ public class ABMUsuarios extends javax.swing.JInternalFrame {
         groupGender = new javax.swing.ButtonGroup();
         chkRememberMe = new javax.swing.JCheckBox();
         jPanel1 = new javax.swing.JPanel();
-        lblDni = new javax.swing.JLabel();
+        lblID = new javax.swing.JLabel();
         txtIdUsuario = new javax.swing.JTextField();
         cmdSearch = new javax.swing.JButton();
         lblApe = new javax.swing.JLabel();
@@ -383,11 +434,11 @@ public class ABMUsuarios extends javax.swing.JInternalFrame {
         optFemale = new javax.swing.JRadioButton();
         jSeparator1 = new javax.swing.JSeparator();
         cmbTipos = new javax.swing.JComboBox<>();
-        lblApe1 = new javax.swing.JLabel();
+        lblUser = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
-        lblNom1 = new javax.swing.JLabel();
-        lblApe2 = new javax.swing.JLabel();
-        lblNom2 = new javax.swing.JLabel();
+        lblPass = new javax.swing.JLabel();
+        lblTipo = new javax.swing.JLabel();
+        lblRePass = new javax.swing.JLabel();
         cmdNew = new javax.swing.JButton();
         cmdEdit = new javax.swing.JButton();
         cmdDelete = new javax.swing.JButton();
@@ -401,9 +452,9 @@ public class ABMUsuarios extends javax.swing.JInternalFrame {
 
         setTitle("USUARIOS");
 
-        lblDni.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblDni.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblDni.setText("ID");
+        lblID.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblID.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblID.setText("ID");
 
         cmdSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Search_16.png"))); // NOI18N
         cmdSearch.setText("Buscar");
@@ -433,19 +484,19 @@ public class ABMUsuarios extends javax.swing.JInternalFrame {
         groupGender.add(optFemale);
         optFemale.setText("FEMENINO");
 
-        lblApe1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblApe1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblApe1.setText("USUARIO");
+        lblUser.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblUser.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblUser.setText("USUARIO");
 
-        lblNom1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblNom1.setText("PASSWORD");
+        lblPass.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblPass.setText("PASSWORD");
 
-        lblApe2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblApe2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblApe2.setText("TIPO USUARIO");
+        lblTipo.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblTipo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblTipo.setText("TIPO USUARIO");
 
-        lblNom2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblNom2.setText("RE-PASSWORD");
+        lblRePass.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblRePass.setText("RE-PASSWORD");
 
         cmdNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/New_16.png"))); // NOI18N
         cmdNew.setText("Nuevo");
@@ -482,9 +533,9 @@ public class ABMUsuarios extends javax.swing.JInternalFrame {
                             .addComponent(jSeparator1)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lblApe1)
-                                    .addComponent(lblNom1)
-                                    .addComponent(lblApe2))
+                                    .addComponent(lblUser)
+                                    .addComponent(lblPass)
+                                    .addComponent(lblTipo))
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(cmbTipos, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -493,7 +544,7 @@ public class ABMUsuarios extends javax.swing.JInternalFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(lblApe)
-                                    .addComponent(lblDni)
+                                    .addComponent(lblID)
                                     .addComponent(lblNom))
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -506,7 +557,7 @@ public class ABMUsuarios extends javax.swing.JInternalFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(lblNom2)
+                                        .addComponent(lblRePass)
                                         .addGap(16, 16, 16))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                         .addComponent(lblEstado)
@@ -542,7 +593,7 @@ public class ABMUsuarios extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(45, 45, 45)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblDni)
+                    .addComponent(lblID)
                     .addComponent(txtIdUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmdSearch))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -562,18 +613,18 @@ public class ABMUsuarios extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbTipos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblApe2))
+                    .addComponent(lblTipo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblApe1))
+                    .addComponent(lblUser))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblNom1))
+                    .addComponent(lblPass))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblNom2)
+                    .addComponent(lblRePass)
                     .addComponent(txtConfirmPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -630,13 +681,13 @@ public class ABMUsuarios extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblApe;
-    private javax.swing.JLabel lblApe1;
-    private javax.swing.JLabel lblApe2;
-    private javax.swing.JLabel lblDni;
     private javax.swing.JLabel lblEstado;
+    private javax.swing.JLabel lblID;
     private javax.swing.JLabel lblNom;
-    private javax.swing.JLabel lblNom1;
-    private javax.swing.JLabel lblNom2;
+    private javax.swing.JLabel lblPass;
+    private javax.swing.JLabel lblRePass;
+    private javax.swing.JLabel lblTipo;
+    private javax.swing.JLabel lblUser;
     private javax.swing.JRadioButton optFemale;
     private javax.swing.JRadioButton optMale;
     private javax.swing.JPasswordField txtConfirmPass;
