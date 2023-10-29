@@ -13,18 +13,15 @@ import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import hotelideal.AccesoADatos.TipoUsuarioRepositorio;
 import hotelideal.AccesoADatos.UsuarioRepositorio;
+import hotelideal.Entidades.EnumColor;
 import hotelideal.Entidades.TipoUsuario;
 import hotelideal.Entidades.Usuario;
 import hotelideal.eventos.LoginListener;
-import java.awt.Color;
+import hotelideal.eventos.OptionListener;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.event.KeyEvent;
-import java.awt.geom.RoundRectangle2D;
 import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
@@ -32,10 +29,9 @@ import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
 
 
-public class MenuView extends javax.swing.JFrame implements LoginListener {
+public class MenuView extends javax.swing.JFrame implements LoginListener, OptionListener {
 
     static MenuView test;
 
@@ -46,6 +42,7 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
     private TipoUsuario userType;
     private int idSystemUser;
     private String tipoUser;
+    private EnumColor colorMain;
 
     public MenuView() throws SQLException {
 
@@ -101,11 +98,17 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
     }
 
     @Override
-    public void onLoginSuccess(int idUser, String username) {
+    public void onLoginSuccess(int idUser, String username, EnumColor color) {
 
         setTitle(getTitle() + " USUARIO: " + username);
         idSystemUser = idUser;
+        colorMain = color;
 
+    }
+    
+    @Override
+    public void onOptionSuccess(EnumColor color) {
+        colorMain = color;
     }
 
     @Override
@@ -424,7 +427,7 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
         // TODO add your handling code here:
         jDesktopPane1.removeAll();
         jDesktopPane1.repaint();
-        FormularioReservaView frmReseva = new FormularioReservaView();
+        FormularioReservaView frmReseva = new FormularioReservaView(colorMain);
         centrarInternalFrame(frmReseva);
         frmReseva.setVisible(true);
         jDesktopPane1.add(frmReseva);
@@ -456,6 +459,7 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
                 jDesktopPane1.removeAll();
                 jDesktopPane1.repaint();
                 TiposUsuario frmTipoUsuario = new TiposUsuario(idSystemUser);
+                frmTipoUsuario.setOptionListener((OptionListener) this);
                 centrarInternalFrame(frmTipoUsuario);
                 frmTipoUsuario.setVisible(true);
                 jDesktopPane1.add(frmTipoUsuario);

@@ -101,6 +101,7 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
         txtApellido.setText("");
         txtNombre.setText("");
         txtDomicilio.setText("");
+        txtCelular.setHorizontalAlignment(SwingConstants.RIGHT);
         txtCelular.setText("");
         txtCorreo.setText("");
         chkActivo.setSelected(true);
@@ -351,9 +352,9 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
                                     .addComponent(lblMail))
                                 .addGap(6, 6, 6)
                                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(txtCelular, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
-                                    .addComponent(txtDomicilio)
-                                    .addComponent(txtCorreo)))
+                                    .addComponent(txtDomicilio, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                                    .addComponent(txtCorreo)
+                                    .addComponent(txtCelular, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(panelLayout.createSequentialGroup()
                                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(panelLayout.createSequentialGroup()
