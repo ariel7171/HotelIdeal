@@ -219,7 +219,6 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
         txtCelular = new javax.swing.JTextField();
         lblMail = new javax.swing.JLabel();
         txtCorreo = new javax.swing.JTextField();
-        lblTitle = new javax.swing.JLabel();
         cmdNuevo = new javax.swing.JButton();
         cmdSalir = new javax.swing.JButton();
 
@@ -231,7 +230,7 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
         lblNom3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblNom3.setText("NOMBRE");
 
-        setTitle("HUESPED");
+        setTitle("HUESPEDES");
         setToolTipText("");
 
         lblDni.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -301,10 +300,6 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
         lblMail.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblMail.setText("CORREO");
 
-        lblTitle.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblTitle.setText("FORMULARIO DE HUESPED");
-
         cmdNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/New_16.png"))); // NOI18N
         cmdNuevo.setText("Nuevo");
         cmdNuevo.addActionListener(new java.awt.event.ActionListener() {
@@ -325,7 +320,6 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(panelLayout.createSequentialGroup()
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelLayout.createSequentialGroup()
@@ -380,9 +374,7 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(lblTitle)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addGap(35, 35, 35)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDni)
                     .addComponent(txtDNI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -411,7 +403,7 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblEstado)
                     .addComponent(chkActivo, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
+                .addGap(18, 18, 18)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmdEliminar)
                     .addComponent(cmdEditar)
@@ -611,6 +603,9 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
             if (op == 0) {
                 fReserva.setHuesped(hue);
                 dispose();
+            }else{
+                fReserva.setHuesped(null);
+                dispose();
             }
         } else if (reserva && hue == null) {
             Object[] botones = {"Salir", "Cancelar"};
@@ -637,7 +632,7 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
 
     private void mostrarInfoCampos() {
 
-        lblTitle.putClientProperty( "FlatLaf.style", "font: bold $h1.font" );
+        //lblTitle.putClientProperty( "FlatLaf.style", "font: bold $h1.font" );
         lblDni.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
         lblApe.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
         lblNom.putClientProperty( "FlatLaf.style", "font: bold $h2.font" );
@@ -673,7 +668,6 @@ public class FormularioHuespedView extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblNom;
     private javax.swing.JLabel lblNom1;
     private javax.swing.JLabel lblNom3;
-    private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel panel;
     private javax.swing.JTextField txtApellido;
     private javax.swing.JTextField txtCelular;

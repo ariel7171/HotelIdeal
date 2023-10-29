@@ -20,23 +20,20 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.event.KeyEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+
 
 public class MenuView extends javax.swing.JFrame implements LoginListener {
 
@@ -54,9 +51,9 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
 
         ur = new UsuarioRepositorio();
         tr = new TipoUsuarioRepositorio();
-
+        
         initComponents();
-
+       
         setSize(1280, 720);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -106,7 +103,7 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
     @Override
     public void onLoginSuccess(int idUser, String username) {
 
-        setTitle(getTitle() + " - USUARIO: " + username);
+        setTitle(getTitle() + " USUARIO: " + username);
         idSystemUser = idUser;
 
     }
@@ -133,29 +130,7 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
         }
 
     }
-
-    @Override
-    public void paintComponents(Graphics g) {
-
-        super.paintComponents(g);
-        Graphics2D g2d = (Graphics2D) g.create();
-
-        int arc = 20; // Radio del arco para redondear las esquinas
-
-        int width = getWidth();
-        int height = getHeight();
-
-        RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, width, height, arc, arc);
-        g2d.setClip(roundedRectangle);
-
-        // Puedes personalizar el fondo del JFrame aquí
-        g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, width, height);
-
-        g2d.dispose();
-
-    }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -275,8 +250,8 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
 
         mAdministrar.setText("Administrar");
 
-        menuTipoUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/UserType_16.png"))); // NOI18N
-        menuTipoUsuario.setText("Formulario Tipo Usuario");
+        menuTipoUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Option_16.png"))); // NOI18N
+        menuTipoUsuario.setText("Opciones Sistema");
         menuTipoUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuTipoUsuarioActionPerformed(evt);
@@ -374,7 +349,7 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
 
         } catch (SQLException ex) {
 
-            JOptionPane.showConfirmDialog(this, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showConfirmDialog(this, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 
         }
 
@@ -396,7 +371,7 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
 
             } catch (SQLException ex) {
 
-                JOptionPane.showConfirmDialog(this, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showConfirmDialog(this, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 
             }
 
@@ -467,7 +442,7 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
                 jDesktopPane1.add(ph);
                 jDesktopPane1.moveToFront(ph);
             } catch (SQLException ex) {
-                ex.printStackTrace();
+               JOptionPane.showConfirmDialog(this, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             }
         } else {
             JOptionPane.showConfirmDialog(this, "No tiene acceso a esta opcion", "Error", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
@@ -480,7 +455,7 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
             try {
                 jDesktopPane1.removeAll();
                 jDesktopPane1.repaint();
-                TiposUsuario frmTipoUsuario = new TiposUsuario();
+                TiposUsuario frmTipoUsuario = new TiposUsuario(idSystemUser);
                 centrarInternalFrame(frmTipoUsuario);
                 frmTipoUsuario.setVisible(true);
                 jDesktopPane1.add(frmTipoUsuario);
@@ -505,7 +480,7 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
                 jDesktopPane1.add(frmUsuario);
                 jDesktopPane1.moveToFront(frmUsuario);
             } catch (SQLException ex) {
-                JOptionPane.showConfirmDialog(this, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+               JOptionPane.showConfirmDialog(this, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             }
         } else {
             JOptionPane.showConfirmDialog(this, "No tiene acceso a esta opcion", "Error", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
@@ -543,6 +518,9 @@ public class MenuView extends javax.swing.JFrame implements LoginListener {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
+                
+                 UIManager.put("OptionPane.yesButtonText", "Si");
+                 UIManager.put("OptionPane.cancelButtonText", "Cancelar");
 
                 try {
 

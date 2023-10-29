@@ -9,6 +9,7 @@ import hotelideal.AccesoADatos.HabitacionData;
 import hotelideal.AccesoADatos.TipoHabitacionData;
 import hotelideal.Entidades.Habitacion;
 import hotelideal.Entidades.TipoHabitacion;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -21,6 +22,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -38,11 +40,12 @@ public class PlanillaHabitaciones extends javax.swing.JInternalFrame {
     private TipoHabitacion tipoHab;
     private List<TipoHabitacion> listaHabitaciones;
     private DefaultTableModel modelo;
+    TipoHabitacion tipohab;
 
     public PlanillaHabitaciones() throws SQLException {
-        
+
         setBorder(new EmptyBorder(3, 3, 3, 3));
-        
+
         initComponents();
 
         hdata = new HabitacionData();
@@ -65,7 +68,13 @@ public class PlanillaHabitaciones extends javax.swing.JInternalFrame {
 
         dibujaTabla();
         
+        jtTotalHabitaciones.setHorizontalAlignment(SwingConstants.RIGHT);
         
+        mostrarInfoCampos();
+        jtTotalHabitaciones.setEnabled(false);
+        
+        pasarFoco(jComboTipo);
+
     }
 
     public void cargaTipo() {
@@ -76,7 +85,7 @@ public class PlanillaHabitaciones extends javax.swing.JInternalFrame {
             jComboTipo.addItem(th);
         }
         if (jComboTipo.getItemCount() > 0) {
-            TipoHabitacion tipohab = (TipoHabitacion) jComboTipo.getSelectedItem();
+            tipohab = (TipoHabitacion) jComboTipo.getSelectedItem();
         }
     }
 
@@ -109,23 +118,25 @@ public class PlanillaHabitaciones extends javax.swing.JInternalFrame {
         cargarTabla();
     }
 
-public void cargarTabla() {
+    public void cargarTabla() {
         modelo = (DefaultTableModel) jTable.getModel();
         modelo.setRowCount(0);
 
-        int descripcionId = tipoHab.getId_tipoDeHabitacion();
-        List<Habitacion> habitaciones = hdata.buscaPorIdTipoHabitacion(descripcionId);
+        if (tipohab != null) {
+            int descripcionId = tipoHab.getId_tipoDeHabitacion();
+            List<Habitacion> habitaciones = hdata.buscaPorIdTipoHabitacion(descripcionId);
 //        System.out.println(habitaciones.size());
-        for (Habitacion hab : habitaciones) {
-            modelo.addRow(new Object[]{
-                hab.getId_habitacion(),
-                hab.getNroHabitacion(),
-                hab.getPiso()});
+            for (Habitacion hab : habitaciones) {
+                modelo.addRow(new Object[]{
+                    hab.getId_habitacion(),
+                    hab.getNroHabitacion(),
+                    hab.getPiso()});
+            }
         }
         jTable.setModel(modelo);
-        jtTotalHabitaciones.setText(""+ jTable.getRowCount());
+        jtTotalHabitaciones.setText("" + jTable.getRowCount());
     }
-    
+
     @Override
     protected void paintComponent(Graphics g) {
 
@@ -148,6 +159,27 @@ public void cargarTabla() {
         super.paintComponent(g);
 
     }
+    
+    private void mostrarInfoCampos() {
+
+        //lblTitle.putClientProperty("FlatLaf.style", "font: bold $h1.font");
+        lblTipo.putClientProperty("FlatLaf.style", "font: bold $h2.font");
+        lblCantidad.putClientProperty("FlatLaf.style", "font: bold $h2.font");
+
+    }
+    
+    private void pasarFoco(Component com) {
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+
+                com.requestFocusInWindow();
+
+            }
+        });
+
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -160,12 +192,13 @@ public void cargarTabla() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
+        lblTipo = new javax.swing.JLabel();
         jComboTipo = new javax.swing.JComboBox<>();
-        jLabel2 = new javax.swing.JLabel();
         jbSalir = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
+        lblCantidad = new javax.swing.JLabel();
         jtTotalHabitaciones = new javax.swing.JTextField();
+
+        setTitle("PLANILLA DE HABITACIONES");
 
         jTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -192,17 +225,13 @@ public void cargarTabla() {
         });
         jScrollPane1.setViewportView(jTable);
 
-        jLabel1.setText("Tipo De Habitacion");
+        lblTipo.setText("Tipo De Habitacion");
 
         jComboTipo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboTipoActionPerformed(evt);
             }
         });
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("PLANILLA DE HABITACIONES");
 
         jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Exit_16.png"))); // NOI18N
         jbSalir.setText("Salir");
@@ -212,7 +241,7 @@ public void cargarTabla() {
             }
         });
 
-        jLabel3.setText("Cantidad de Habitaciones");
+        lblCantidad.setText("Cantidad de Habitaciones");
 
         jtTotalHabitaciones.setEditable(false);
         jtTotalHabitaciones.addActionListener(new java.awt.event.ActionListener() {
@@ -225,17 +254,16 @@ public void cargarTabla() {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                        .addComponent(lblCantidad)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jtTotalHabitaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
+                        .addComponent(lblTipo)
                         .addComponent(jComboTipo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(42, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -247,9 +275,7 @@ public void cargarTabla() {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(35, 35, 35)
-                .addComponent(jLabel2)
-                .addGap(25, 25, 25)
-                .addComponent(jLabel1)
+                .addComponent(lblTipo)
                 .addGap(2, 2, 2)
                 .addComponent(jComboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -257,10 +283,10 @@ public void cargarTabla() {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jtTotalHabitaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(18, 18, 18)
+                    .addComponent(lblCantidad))
+                .addGap(15, 15, 15)
                 .addComponent(jbSalir)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         pack();
@@ -268,7 +294,7 @@ public void cargarTabla() {
 
     private void jComboTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboTipoActionPerformed
         tipoHab = (TipoHabitacion) jComboTipo.getSelectedItem();
-        System.out.println(tipoHab);
+        //System.out.println(tipoHab);
         cargarTabla();
     }//GEN-LAST:event_jComboTipoActionPerformed
 
@@ -282,12 +308,11 @@ public void cargarTabla() {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<TipoHabitacion> jComboTipo;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable;
     private javax.swing.JButton jbSalir;
     private javax.swing.JTextField jtTotalHabitaciones;
+    private javax.swing.JLabel lblCantidad;
+    private javax.swing.JLabel lblTipo;
     // End of variables declaration//GEN-END:variables
 }

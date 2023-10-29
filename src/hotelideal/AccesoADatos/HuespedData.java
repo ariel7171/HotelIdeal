@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -38,7 +39,7 @@ public class HuespedData {
                 huespedes.add(hue);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+           JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return huespedes;
     }
@@ -55,7 +56,7 @@ public class HuespedData {
                 }
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+           JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
 
         return hue;
@@ -73,7 +74,7 @@ public class HuespedData {
                 }
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return hue;
     }
@@ -107,7 +108,7 @@ public class HuespedData {
             }
             return huesped;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }
@@ -123,7 +124,7 @@ public class HuespedData {
             
         } catch (SQLException ex) {
             
-            ex.printStackTrace();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             return 0;
            
         }

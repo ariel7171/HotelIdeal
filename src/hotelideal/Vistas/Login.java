@@ -1,6 +1,12 @@
 package hotelideal.Vistas;
 
+//import colortheme.ToolBarAccentColor;
+import colortheme.ToolBarAccentColor;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.FocusAdapter;
@@ -15,20 +21,30 @@ import javax.swing.event.DocumentListener;
 import hotelideal.Entidades.Usuario;
 import hotelideal.AccesoADatos.*;
 import hotelideal.eventos.LoginListener;
+import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
+import java.util.Collections;
 import javax.swing.border.EmptyBorder;
 
 public class Login extends javax.swing.JInternalFrame {
 
     private LoginListener loginListener;
     private UsuarioRepositorio ur;
+    
+    private ToolBarAccentColor accent;
+    
+    private boolean isChange;
 
     public Login() throws SQLException {
+        
+        isChange = false;
 
         ur = new UsuarioRepositorio();
+        
+        accent = new ToolBarAccentColor(jPanel1);
 
         setBorder(new EmptyBorder(3, 3, 3, 3));
         
@@ -108,12 +124,51 @@ public class Login extends javax.swing.JInternalFrame {
                 txtPassword.setText(usu.getPassword());
 
             }
+            
+            EventQueue.invokeLater(() -> {
+                    
+                    FlatAnimatedLafChange.showSnapshot();
+                    
+                    if (usu.isDark()) {
+                        
+                        FlatMacDarkLaf.setup();
+                        
+                    } else {
+                        
+                        FlatMacLightLaf.setup();
+                        
+                    }
+                    
+                    FlatLaf.updateUI();
+                    FlatAnimatedLafChange.hideSnapshotWithAnimation();
+                    
+                    accent.colorAccentChanged(usu.getAccent());
+                    isChange = true;
+
+                });
 
         } else {
 
             chkRememberMe.setSelected(false);
             txtPassword.setText("");
+            
+            if (isChange) {
 
+                    EventQueue.invokeLater(() -> {
+
+                        FlatAnimatedLafChange.showSnapshot();
+                        FlatLaf.registerCustomDefaultsSource("universidadulp/theme");
+                        FlatLaf.setGlobalExtraDefaults(Collections.singletonMap("@accentColor", ("#5856D6").toString()));
+                        FlatMacDarkLaf.setup();
+                        FlatLaf.updateUI();
+                        FlatAnimatedLafChange.hideSnapshotWithAnimation();
+
+                    });
+
+                    isChange = false;
+
+                }
+            
         }
 
     }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import hotelideal.Entidades.Usuario;
 import java.sql.Connection;
+import javax.swing.JOptionPane;
 
 public class UsuarioRepositorio {
 
@@ -35,7 +36,7 @@ public class UsuarioRepositorio {
 
         } catch (SQLException ex) {
 
-            ex.getMessage();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 
         } finally {
 
@@ -60,7 +61,7 @@ public class UsuarioRepositorio {
 
         } catch (SQLException ex) {
 
-            ex.getMessage();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 
         } finally {
 
@@ -90,7 +91,7 @@ public class UsuarioRepositorio {
 
         } catch (SQLException ex) {
 
-            ex.getMessage();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 
         } finally {
 
@@ -120,7 +121,7 @@ public class UsuarioRepositorio {
 
         } catch (SQLException ex) {
 
-            ex.getMessage();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 
         } finally {
 
@@ -160,7 +161,7 @@ public class UsuarioRepositorio {
 
         } catch (SQLException ex) {
 
-            ex.getMessage();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 
         } finally {
 
@@ -176,11 +177,11 @@ public class UsuarioRepositorio {
 
         if (usuario.getIdUsuario() > 0) {
 
-            sql = "UPDATE usuario SET nombre = ?, apellido = ?, genero = ?, idtipousuario = ?, usuario = ?, password = ?, remember = ? , estado = ? WHERE idUsuario = ?";
+            sql = "UPDATE usuario SET nombre = ?, apellido = ?, genero = ?, idtipousuario = ?, usuario = ?, password = ?, remember = ? , dark = ? , accent = ?, estado = ? WHERE idUsuario = ?";
 
         } else {
 
-            sql = "INSERT INTO usuario (nombre, apellido, genero, idtipousuario, usuario, password, remember, estado) VALUES(?,?,?,?,?,?,?,?)";
+            sql = "INSERT INTO usuario (nombre, apellido, genero, idtipousuario, usuario, password, remember, dark, accent, estado) VALUES(?,?,?,?,?,?,?,?,?,?)";
 
         }
 
@@ -192,13 +193,14 @@ public class UsuarioRepositorio {
             stmt.setInt(4, usuario.getTipoUsuario().getIdTipoUsuario());
             stmt.setString(5, usuario.getUsuario());
             stmt.setString(6, usuario.getPassword());
-
             stmt.setBoolean(7, usuario.isRemember());
-            stmt.setBoolean(8, usuario.isActivo());
+            stmt.setBoolean(8, usuario.isDark());
+            stmt.setString(9, usuario.getAccent());
+            stmt.setBoolean(10, usuario.isActivo());
 
             if (usuario.getIdUsuario() > 0) {
 
-                stmt.setInt(9, usuario.getIdUsuario());
+                stmt.setInt(11, usuario.getIdUsuario());
                 stmt.executeUpdate();
 
             } else {
@@ -219,7 +221,7 @@ public class UsuarioRepositorio {
 
         } catch (SQLException ex) {
 
-            ex.getMessage();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 
         }
 
@@ -248,7 +250,7 @@ public class UsuarioRepositorio {
 
         } catch (SQLException ex) {
 
-            ex.getMessage();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 
         }
 
@@ -269,6 +271,8 @@ public class UsuarioRepositorio {
         usu.setUsuario(rs.getString("usuario"));
         usu.setPassword(rs.getString("password"));
         usu.setRemember(rs.getBoolean("remember"));
+        usu.setDark(rs.getBoolean("dark"));
+        usu.setAccent(rs.getString("accent"));
         usu.setActivo(rs.getBoolean("estado"));
 
         return usu;

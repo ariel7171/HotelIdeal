@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -39,7 +40,7 @@ public class TipoHabitacionData{
                 tipohabitaciones.add(tipoh);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return tipohabitaciones;
     }
@@ -56,7 +57,7 @@ public class TipoHabitacionData{
                 }
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return tipoh;
     }
@@ -90,7 +91,7 @@ public class TipoHabitacionData{
             }
             return tipoh;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }
@@ -116,7 +117,7 @@ public class TipoHabitacionData{
 
         } catch (SQLException ex) {
 
-            ex.getMessage();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 
         }
 

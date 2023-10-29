@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import hotelideal.Entidades.TipoUsuario;
 import java.sql.Connection;
+import javax.swing.JOptionPane;
 
 
 public class TipoUsuarioRepositorio {
@@ -38,7 +39,7 @@ public class TipoUsuarioRepositorio {
             
         } catch (SQLException ex) {
             
-             ex.getMessage();
+             JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             
         }finally{
             
@@ -68,7 +69,7 @@ public class TipoUsuarioRepositorio {
            
         } catch (SQLException ex) {
             
-            ex.getMessage();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
            
         }finally{
             
@@ -110,7 +111,7 @@ public class TipoUsuarioRepositorio {
            
         } catch (SQLException ex) {
             
-            ex.getMessage();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
            
         }finally{
             
@@ -165,7 +166,7 @@ public class TipoUsuarioRepositorio {
            
         } catch (SQLException ex) {
             
-             ex.getMessage();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             tipo = null;
             
         }finally{

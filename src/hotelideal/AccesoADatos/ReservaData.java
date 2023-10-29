@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -79,7 +80,7 @@ public class ReservaData {
                 }
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+           JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         if(auxIng!=null&&auxEgr!=null){
             javax.swing.JOptionPane.showMessageDialog(null, "Se detectó un conflicto con una reserva\ndonde inicia el dia ->"+auxIng+"\nSe detectó un conflicto con una reserva\ndonde finaliza el dia ->"+auxEgr, "", javax.swing.JOptionPane.WARNING_MESSAGE);
@@ -99,13 +100,13 @@ public class ReservaData {
             try (PreparedStatement ps = conn.prepareStatement("DELETE FROM `reserva` WHERE idReserva="+id)) {
                 ps.executeUpdate();
             } catch (SQLException ex) {
-                ex.printStackTrace();
+               JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             }
         }else{
             try (PreparedStatement ps = conn.prepareStatement("UPDATE `reserva` SET `estado`=0 WHERE idReserva="+id)) {
                 ps.executeUpdate();
             } catch (SQLException ex) {
-                ex.printStackTrace();
+                JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -122,7 +123,7 @@ public class ReservaData {
                 rHuespedes.add(rHue);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return rHuespedes;
     }
@@ -139,7 +140,7 @@ public class ReservaData {
                 rHuespedes.add(rHue);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+           JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return rHuespedes;
     }
@@ -156,7 +157,7 @@ public class ReservaData {
                 rHuespedes.add(rHue);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return rHuespedes;
     }
@@ -173,7 +174,7 @@ public class ReservaData {
                 res.add(rHue);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return res;
     }
@@ -190,7 +191,7 @@ public class ReservaData {
                 res.add(rHue);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return res;
     }
@@ -207,7 +208,7 @@ public class ReservaData {
                 }
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return res;
     }
@@ -243,7 +244,7 @@ public class ReservaData {
             }
             return rHuesped;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showConfirmDialog(null, ex.getMessage(), "Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }
